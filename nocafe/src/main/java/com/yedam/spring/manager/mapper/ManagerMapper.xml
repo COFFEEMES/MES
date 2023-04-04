@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.spring.manager.mapper.ManagerMapper">
+	<!-- 기초 코드 전체 조회 -->
+	<select id="getAllBasicCode" resultType="BasicCodeVO">
+		SELECT basic_code
+			 , basic_name
+		  FROM basic_code
+	</select>
+
+</mapper>
