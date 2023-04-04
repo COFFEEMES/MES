@@ -24,14 +24,12 @@
 		<security:authentication-provider>
 			<security:jdbc-user-service
 				data-source-ref="dataSource"
-				users-by-username-query="select LOGIN_ID, PASSWORD, 1
-										 from T_USER
-										 where LOGIN_ID = ?"
-				authorities-by-username-query="select LOGIN_ID, ROLE_NAME
-											  from T_ROLE
-											  inner join T_USER_ROLE on T_ROLE.ID = T_USER_ROLE.ROLE_ID
-											  inner join T_USER on T_USER_ROLE.USER_ID = T_USER.ID
-											  where LOGIN_ID = ?" />
+				users-by-username-query="select emp_id, emp_pw, 1
+										 from emp
+										 where emp_id = ?"
+				authorities-by-username-query="select emp_id, emp_auth
+											  from emp
+											  where emp_id = ?" />
 			<security:password-encoder hash="bcrypt" />
 		</security:authentication-provider>
 	</security:authentication-manager>
