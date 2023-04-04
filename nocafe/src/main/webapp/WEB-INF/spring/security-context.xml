@@ -11,6 +11,10 @@
 			access="permitAll()" />
 		<security:intercept-url pattern="/admin/**"
 			access="hasAuthority('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/admin/**"
+			access="hasAuthority('ROLE_SALES')" />
+		<security:intercept-url pattern="/admin/**"
+			access="hasAuthority('ROLE_MATE')" />
 		<security:intercept-url pattern="/**"
 			access="isAuthenticated()" />
 
