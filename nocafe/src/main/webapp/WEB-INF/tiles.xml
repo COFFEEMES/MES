@@ -5,6 +5,8 @@
 <tiles-definitions>
 	<definition name="mainTemplate" template="/WEB-INF/views/tiles/layout.jsp">
 		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp"/>
+		<put-attribute name="sider" value="/WEB-INF/views/tiles/sider.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp"/>
 	</definition>
 	
 	<definition name="home" extends="mainTemplate">
