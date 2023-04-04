@@ -2,7 +2,7 @@
 pageEncoding="UTF-8"%> <%@ taglib prefix="tiles"
 uri="http://tiles.apache.org/tags-tiles"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -17,20 +17,19 @@ uri="http://tiles.apache.org/tags-tiles"%>
       href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
       rel="stylesheet"
     />
-    <link href="${pageContext.request.contextPath }/resources/css/styles.css" rel="stylesheet" />
+    <link
+      href="${pageContext.request.contextPath }/resources/css/styles.css"
+      rel="stylesheet"
+    />
     <script
       src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
       crossorigin="anonymous"
     ></script>
   </head>
   <body class="sb-nav-fixed">
-    <header>
-      <tiles:insertAttribute name="header"></tiles:insertAttribute>
-    </header>
+    <tiles:insertAttribute name="header"></tiles:insertAttribute>
     <div id="layoutSidenav">
-      <sider>
-        <tiles:insertAttribute name="sider"></tiles:insertAttribute>
-      </sider>
+      <tiles:insertAttribute name="sider"></tiles:insertAttribute>
 
       <div id="layoutSidenav_content">
         <main>
