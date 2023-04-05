@@ -1,4 +1,4 @@
-package com.yedam.spring.sales.service;
+package com.yedam.spring.sales.order.service;
 
 import java.util.Date;
 

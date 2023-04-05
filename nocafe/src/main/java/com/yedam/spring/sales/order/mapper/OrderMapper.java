@@ -1,11 +1,11 @@
-package com.yedam.spring.sales.mapper;
+package com.yedam.spring.sales.order.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.yedam.spring.sales.service.OrderVO;
-import com.yedam.spring.sales.service.VendVO;
+import com.yedam.spring.sales.order.service.OrderVO;
+import com.yedam.spring.sales.order.service.VendVO;
 
 public interface OrderMapper {
 

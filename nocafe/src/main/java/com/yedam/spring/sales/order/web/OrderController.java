@@ -1,4 +1,4 @@
-package com.yedam.spring.sales.web;
+package com.yedam.spring.sales.order.web;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.spring.sales.service.OrderService;
-import com.yedam.spring.sales.service.OrderVO;
-import com.yedam.spring.sales.service.VendVO;
+import com.yedam.spring.sales.order.service.OrderService;
+import com.yedam.spring.sales.order.service.OrderVO;
+import com.yedam.spring.sales.order.service.VendVO;
 
 @Controller
 public class OrderController {

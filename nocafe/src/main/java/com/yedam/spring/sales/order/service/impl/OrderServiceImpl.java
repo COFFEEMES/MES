@@ -1,14 +1,14 @@
-package com.yedam.spring.sales.service.impl;
+package com.yedam.spring.sales.order.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yedam.spring.sales.mapper.OrderMapper;
-import com.yedam.spring.sales.service.OrderService;
-import com.yedam.spring.sales.service.OrderVO;
-import com.yedam.spring.sales.service.VendVO;
+import com.yedam.spring.sales.order.mapper.OrderMapper;
+import com.yedam.spring.sales.order.service.OrderService;
+import com.yedam.spring.sales.order.service.OrderVO;
+import com.yedam.spring.sales.order.service.VendVO;
 
 @Service
 public class OrderServiceImpl implements OrderService{
