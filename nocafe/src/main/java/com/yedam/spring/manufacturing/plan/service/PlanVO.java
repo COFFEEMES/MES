@@ -1,4 +1,4 @@
-package com.yedam.spring.manufacturing.direction.service;
+package com.yedam.spring.manufacturing.plan.service;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 @Data
-public class dirVO {
+public class PlanVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date   planDt;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

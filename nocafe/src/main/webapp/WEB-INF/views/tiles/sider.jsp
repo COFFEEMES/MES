@@ -86,7 +86,7 @@ pageEncoding="UTF-8"%>
           data-bs-parent="#sidenavAccordion"
         >
           <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link" href="layout-static.html">Static Navigation</a>
+            <a class="nav-link" href="${pageContext.request.contextPath }/mkrPlan">생산계획서 작성</a>
             <a class="nav-link" href="layout-sidenav-light.html"
               >Light Sidenav</a
             >
