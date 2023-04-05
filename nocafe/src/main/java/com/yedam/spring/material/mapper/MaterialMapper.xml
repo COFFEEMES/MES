@@ -4,6 +4,19 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.yedam.spring.material.mapper.MaterialMapper">
   
+    <!-- 자재조회 -->
+	<select id="selectMaterialList" resultType="MaterialVO">
+		SELECT rsc_cd,
+			   rsc_nm,
+			   rsc_typ,
+			   rsc_spec,
+			   rsc_unit,
+			   saf_rtc,
+			   vend_cd
+	    FROM rsc
+	    ORDER BY rsc_cd
+	</select>
+  
   <!-- 발주조회 -->
 	<select id="selectMaterialOrderList" resultType="MaterialOrderVO">
 		SELECT ordr_cd,
@@ -13,4 +26,51 @@
 	    ORDER BY ordr_cd
 	</select>
   
+  <!-- 자재입고조회 -->
+  	<select id="selectMaterialReceivingList" resultType="MaterialReceivingVO">
+  		SELECT ist_cd,
+			   rsc_cd,
+			   ist_cnt,
+			   ist_dt,
+			   ist_typ
+	    FROM rsc_ist
+	    ORDER BY ist_cd
+  </select>
+  
+  <!-- 자재출고조회 -->
+  	<select id="selectMaterialShippingList" resultType="MaterialShippingVO">
+  		SELECT rsc_oust_cd,
+			   rsc_cd,
+			   oust_dt,
+			   oust_typ,
+			   oust_cnt
+	    FROM rsc_oust
+	    ORDER BY rsc_oust_cd
+  </select>
+  
+    <!-- 자재LOT조회 -->
+  	<select id="selectMaterialLOTList" resultType="MaterialLOTVO">
+  		SELECT rsc_lot_cd,
+			   rsc_cd,
+			   rsc_insp_cd,
+			   ordr_cd,
+			   ist_cd,
+			   lot_cnt,
+			   exp_dt
+	    FROM rsc_lot
+	    ORDER BY rsc_lot_cd
+  </select>
+  
+  <!-- 자재입고검사조회 -->
+  	<select id="selectMaterialTestList" resultType="MaterialTestDetailVO">
+  		SELECT rsc_insp_cd,
+			   ordr_cd,
+			   rsc_cd,
+			   insp_cnt,
+			   insp_pass_cnt,
+			   insp_fail_cnt
+	    FROM rsc_insp_dtl
+	    ORDER BY rsc_insp_cd
+  </select>
+
   </mapper>

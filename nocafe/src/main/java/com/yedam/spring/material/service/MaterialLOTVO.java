@@ -2,6 +2,8 @@ package com.yedam.spring.material.service;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -13,5 +15,6 @@ public class MaterialLOTVO {
 	private String ordr_cd;		//발주번호
 	private String ist_cd;		//입고코드
 	private int lot_cnt;		//LOT수량
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date exp_dt;		//유통기한
 }
