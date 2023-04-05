@@ -4,29 +4,45 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="com.yedam.spring.sales.ordder.mapper.OrderMapper">
+	namespace="com.yedam.spring.sales.mapper.OrderMapper">
 
 	<!--주문서 조회 -->
 	<select id="searchOrder" resultType="OrderVO">
 		SELECT order_no,
 			   vend_cd,
 			   vend_nm,
-			   order_dt,
 			   order_sit,
-			   parrd_dt
+			   parrd_dt,
+			   order_dt
 		FROM order_sheet
 		<where>
-			<if test="#{vendNm}!=null and !#{vendNm}.equals('')">
-				vend_nm=#{vendNm} AND 
+			<if test="vendNm!=null and !vendNm.equals('')">
+				vend_nm=#{vendNm}
 			</if>
-			<if test="#{start} != null"> 
-				order_dt >= #{start} AND 
+			<if test="start != null and !start.equals('')"> 
+				 AND order_dt >= #{start} 
 			</if>
-			<if test="#{end} != null"> 
-				<![CDATA[order_dt <= #{end}]]>
+			<if test="end != null and !end.equals('')"> 
+				AND <![CDATA[order_dt <= #{end}]]>
 			</if>
 		</where>
-		ORDER BY 1
+		ORDER BY 1 DESC
 	</select>
+	
+	<!--거래처 모달창 조회 -->
+	<select id="searchVend" resultType="vendVO">
+		SELECT vendCd,
+			   vendNm
+		FROM vend
+		<where>
+			<if test="vendNm!=null and !vendNm.equals('')">
+				vend_nm=#{vendNm}
+			</if>
+		</where>
+		ORDER BY 1;
+	</select>
+
+	<!--주문서 삭제  -->
+
 	
 </mapper>
