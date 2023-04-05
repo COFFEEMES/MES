@@ -12,7 +12,7 @@ uri="http://tiles.apache.org/tags-tiles"%>
     />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Dashboard - SB Admin</title>
+    <title>No Capain No Gain</title>
     <link
       href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
       rel="stylesheet"
@@ -25,6 +25,11 @@ uri="http://tiles.apache.org/tags-tiles"%>
       src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
       crossorigin="anonymous"
     ></script>
+    <link
+      rel="stylesheet"
+      href="https://uicdn.toast.com/grid/latest/tui-grid.css"
+    />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
   </head>
   <body class="sb-nav-fixed">
     <tiles:insertAttribute name="header"></tiles:insertAttribute>
@@ -44,13 +49,13 @@ uri="http://tiles.apache.org/tags-tiles"%>
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       crossorigin="anonymous"
     ></script>
-    <script src="js/scripts.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/js/scripts.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
       crossorigin="anonymous"
     ></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/assets/demo/chart-area-demo.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/assets/demo/chart-bar-demo.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
       crossorigin="anonymous"

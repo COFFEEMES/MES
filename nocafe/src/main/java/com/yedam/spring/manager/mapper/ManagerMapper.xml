@@ -9,5 +9,16 @@
 			 , basic_name
 		  FROM basic_code
 	</select>
+	
+	<!-- 상세 코드 조회 -->
+	<select id="getDetailCode" resultType="DetailCodeVO">
+		SELECT detail_code
+			 , detail_name
+			 , detail_explain
+			 , detail_avail
+		  FROM basic_code b, detail_code d
+		 WHERE b.basic_code = d.basic_code
+		   AND d.basic_code = #{basicCode}
+	</select>
 
 </mapper>
