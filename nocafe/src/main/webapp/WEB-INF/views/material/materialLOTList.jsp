@@ -22,31 +22,33 @@
 
 <div>
 <div class = jaje>
-  <h1 class="mt-4">자재 발주</h1>
+  <h1 class="mt-4">자재LOT조회</h1>
   <ul class="breadcrumb mb-4">
     <li class="breadcrumb-item">
       <a href="/"><i class="fas fa-home"></i></a>
     </li>
     <li class="breadcrumb-item">> 자재관리</li>
-    <li class="breadcrumb-item active">> 자재발주조회</li>
+    <li class="breadcrumb-item active">> 자재LOT재고조회</li>
   </ul>
   </div>
-  <div id="codeSearch"><span>업체명</span> <input />
-  <span>발주신청일</span> <input type="date"> ~ <input type="date">
-  <input type="button" value="조회" />
-  <table class="table">
-  <thead>
+  <div id="codeSearch"><span>자재명</span> <input />
+  <input type="button" value="조회"/>
+<table class="table">
+		<thead>
 			<tr>
-				<th>No.</th>
-				<th>발주코드</th>
-				<th>거래처코드</th>
-				<th>발주신청일</th>
+				<th>LOT번호</th>
+				<th>자재코드</th>
+				<th>검사코드</th>
+				<th>발주번호</th>
+				<th>입고코드</th>
+				<th>LOT수량</th>
+				<th>유통기한</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${materialOrderList }" var="material">
+			<c:forEach items="${materialLOTList }" var="material">
 				<tr>
-					<td>${material.ordr_cd }</td>
+					<td>${material.rsc_lot_cd }</td>
 					<td>${material.vend_cd }</td>
 					<td><fmt:formatDate value="${material.ordr_req_dt }" pattern="yyyy.MM.dd"/></td>			
 				</tr>
@@ -55,6 +57,5 @@
 	</table>
 </div>
 </div>
-
 
 

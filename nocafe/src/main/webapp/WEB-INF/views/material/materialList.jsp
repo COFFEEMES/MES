@@ -6,7 +6,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
 <style>
   #codeSearch {
     width: 95%;
@@ -20,41 +19,45 @@
   }
 </style>
 
-<div>
+
 <div class = jaje>
-  <h1 class="mt-4">자재 발주</h1>
+  <h1 class="mt-4">자재재고조회</h1>
   <ul class="breadcrumb mb-4">
     <li class="breadcrumb-item">
       <a href="/"><i class="fas fa-home"></i></a>
     </li>
     <li class="breadcrumb-item">> 자재관리</li>
-    <li class="breadcrumb-item active">> 자재발주조회</li>
+    <li class="breadcrumb-item active">> 자재재고조회</li>
   </ul>
   </div>
-  <div id="codeSearch"><span>업체명</span> <input />
-  <span>발주신청일</span> <input type="date"> ~ <input type="date">
-  <input type="button" value="조회" />
+  <div id="codeSearch">
+  <p><span>조회일자</span> <input type="date"></p>
+  <p><span>자재명</span> <input />
+  <input type="button" value="조회"/></p>
   <table class="table">
-  <thead>
+		<thead>
 			<tr>
-				<th>No.</th>
-				<th>발주코드</th>
-				<th>거래처코드</th>
-				<th>발주신청일</th>
+				<th></th>
+				<th>발주번호</th>
+				<th>자재코드</th>
+				<th>검사수량</th>
+				<th>합격수량</th>
+				<th>불량수량</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${materialOrderList }" var="material">
+			<c:forEach items="${materialTestList }" var="material">
 				<tr>
+					<td>${material.rsc_insp_cd }</td>
 					<td>${material.ordr_cd }</td>
-					<td>${material.vend_cd }</td>
-					<td><fmt:formatDate value="${material.ordr_req_dt }" pattern="yyyy.MM.dd"/></td>			
+					<td>${material.rsc_cd }</td>		
+					<td>${material.insp_cnt }</td>
+					<td>${material.insp_pass_cnt }</td>
+					<td>${material.insp_insp_fail_cnt }</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-</div>
-</div>
-
-
-
+	</div>
+</body>
+</html>
