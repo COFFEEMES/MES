@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.spring.manager.mapper.ManagerMapper;
 import com.yedam.spring.manager.service.BasicCodeVO;
+import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.ManagerService;
 
 @Service
@@ -18,6 +19,11 @@ public class ManagerImpl implements ManagerService {
 	@Override
 	public List<BasicCodeVO> getAllBasicCode() {
 		return managerMapper.getAllBasicCode();
+	}
+
+	@Override
+	public DetailCodeVO getDetailCode(DetailCodeVO detailCodeVO) {
+		return managerMapper.getDetailCode(detailCodeVO);
 	}
 
 }
