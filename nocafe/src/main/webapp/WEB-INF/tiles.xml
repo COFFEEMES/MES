@@ -3,6 +3,7 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
+	
 	<definition name="mainTemplate" template="/WEB-INF/views/tiles/layout.jsp">
 		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp"/>
 		<put-attribute name="sider" value="/WEB-INF/views/tiles/sider.jsp"/>
@@ -13,8 +14,12 @@
 		<put-attribute name="main" value="/WEB-INF/views/home.jsp"/>
 	</definition>
 	
+	<definition name="modal/*" template="/WEB-INF/views/modal/layout.jsp">
+		<put-attribute name="main" value="/WEB-INF/views/modal/{1}.jsp"/>
+	</definition>
+	
 	<definition name="*/*" extends="mainTemplate">
-		<put-attribute name="main" value="/WEB-INF/views/{1}/{2}.jsp"></put-attribute>
+		<put-attribute name="main" value="/WEB-INF/views/{1}/{2}.jsp"/>
 	</definition>
 	
 </tiles-definitions>

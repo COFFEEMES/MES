@@ -4,9 +4,13 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<link rel="stylesheet" 
+	href="https://uicdn.toast.com/grid/latest/tui-grid.css" /> 
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
 
         #container {
@@ -102,7 +106,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">주문서 조회</h5>
-                        <br> <br>
+                        <br><br>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
                     <div id="modGrid" class="modal-body"></div>
@@ -115,7 +119,8 @@
             </div>
         </div>
      
-        
-</body>
+        <script>
+    
 
-</html>
+        </script>
+</body>

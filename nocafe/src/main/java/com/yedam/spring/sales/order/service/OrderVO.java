@@ -18,6 +18,7 @@ public class OrderVO {
 	private String orderSit;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date parrdDt;
+	private String planStatus;
 	
 	//Order Detail 테이블
 	private String orderDateilNo;
