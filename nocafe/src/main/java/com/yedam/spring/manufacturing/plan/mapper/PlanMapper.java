@@ -2,7 +2,7 @@ package com.yedam.spring.manufacturing.plan.mapper;
 
 import java.util.List;
 
-import com.yedam.spring.sales.order.service.OrderVO;
+import com.yedam.spring.sales.service.OrderVO;
 
 public interface PlanMapper {
 	
