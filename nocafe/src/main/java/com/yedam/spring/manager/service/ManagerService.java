@@ -5,6 +5,6 @@ import java.util.List;
 public interface ManagerService {
 
 	public List<BasicCodeVO> getAllBasicCode();
-	public DetailCodeVO getDetailCode(DetailCodeVO detailCodeVO);
+	public List<DetailCodeVO> getDetailCode(DetailCodeVO detailCodeVO);
 
 }
