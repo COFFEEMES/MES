@@ -31,18 +31,23 @@
 	
 	<!--거래처 모달창 조회 -->
 	<select id="searchVend" resultType="vendVO">
-		SELECT vendCd,
-			   vendNm
+		SELECT vend_cd,
+			   vend_nm
 		FROM vend
 		<where>
 			<if test="vendNm!=null and !vendNm.equals('')">
-				vend_nm=#{vendNm}
-			</if>
+				vend_nm LIKE '%${vendNm}%'
+		</if>
 		</where>
-		ORDER BY 1;
+		ORDER BY 1
 	</select>
 
 	<!--주문서 삭제  -->
+	<delete id = "deleteOrder" parameterType="String">
+		DELETE FROM order_sheet
+		WHERE order_no = #{str}
+	</delete>
+	
 
 	
 </mapper>

@@ -11,7 +11,7 @@ public interface OrderService {
 	public List<VendVO> searchVend(String vendNm);
 	
 	//주문서 삭제
-	public void deleteOrder(String str);
+	public int deleteOrder(String str);
 
 
 

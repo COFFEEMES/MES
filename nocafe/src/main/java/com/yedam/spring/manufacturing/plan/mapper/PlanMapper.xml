@@ -8,7 +8,17 @@
 		SELECT s.order_no, s.order_dt, s.parrd_dt, d.pro_cd, d.pro_nm
 		FROM order_sheet s JOIN order_detail d
 		ON s.order_no = d.order_no
-		WHERE s.plan_status is null OR s.plan_status='미등록'
+		WHERE d.plan_status is null OR d.plan_status='미등록'
 	</select>
-
+	
+	<select id="getPlanCd" resultType="PlanVO">
+		SELECT  'PL'||
+                TO_CHAR(TO_DATE(#{planDtFormat},'yyyy-MM-dd'),'yyMMdd')||
+                CASE
+                WHEN COUNT(*)   > 0 THEN TO_CHAR(COUNT(*)+1,'fm000')
+                ELSE '001'
+                END plan_cd
+        FROM  plans_header
+        WHERE TO_CHAR(plan_dt, 'yyyy-MM-dd') = #{planDtFormat}
+	</select>
 </mapper>

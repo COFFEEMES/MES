@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %> 
-<%@ taglib prefix="fmt" uri ="http://java.sun.com/jsp/jstl/fmt" %>
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
+="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -10,7 +10,10 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <title>주문서 관리</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <link
+      rel="stylesheet"
+      href="https://uicdn.toast.com/grid/latest/tui-grid.css"
+    />
     <style>
       .c_btn {
         color: #fff;
@@ -69,13 +72,45 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                       <td>
                         <button
                           type="button"
-                          class="btn btn-primary"
-                          id="openVend"
-                          data-bs-toggle="modal"
-                          data-bs-target="#comModal"
-                        >
+                          class="btn btn-primary"          
+                          button data-bs-toggle="modal" 
+                          id="modalBtn" 
+                          data-bs-target="#exampleModal">
                           <i class="fas fa-search"></i>
                         </button>
+                        
+                            <!-- 거래처 검색 Modal -->
+         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">거래처 조회</h5>
+                        <br><br>                    
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><br>
+                    <div>
+                    <label>거래처명</label>                    
+                     <input
+                          type="text"
+                          id="vendNmSearch"
+                          class="form-control"
+                          style="width: 150px; display:inline-block;" />
+                     <button
+                          type="button"
+                          id="searchBtn"
+                          class="btn btn-primary" style="width: 43px;">
+                          <i class="fas fa-search"></i></button>    
+                          </div>                 
+                    <div id="modGrid" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" id="confirmBtn" class="btn btn-primary"
+                            data-bs-dismiss="modal">확인</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>   
+        <!-- 거래처 검색 Modal 끝-->
                       </td>
                       <th></th>
                       <td></td>
@@ -118,94 +153,125 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       <button class="btn btn-primary" id="delBtn">
         <i class="fas fa-minus"></i> 삭제
       </button>
-      <br>
-      <br>
-            <div id="order"></div>
-    </div> 
+      <br />
+      <br />
+      <div id="order"></div>
+    </div>
   </body>
 
   <script>
-    let ordrBtn = document.getElementById("ordrBtn");
-    let openVend =  document.getElementById("openVend");
-    let DelBtn =  document.getElementById("DelBtn");
-    let start = '';
-    let end = '';
-    let vendNm = '';
+    let ordrBtn = document.getElementById("ordrBtn"); //조회버튼
+    let delBtn = document.getElementById("delBtn"); //삭제버튼
+    let searchBtn = document.getElementById("searchBtn"); //모달 거래처 검색 버튼
+    let confirmBtn = document.getElementById("confirmBtn");//거래처 모달창 확인버튼
+    let vendNmInput = document.getElementById("vendNm"); //거래처명 검색 인풋박스
+    let start = ""; //주문일자 검색
+    let end = ""; //주문일자 검색
+    let vendNm = ""; //거래처명 검색
+    let checkLen = 0; //체크박스 선택 개수
+    let vendSearch=""; //모달창 거래처명 저장변수
 
- //조회버튼 눌렀을때
+    
+   
+
+    //조회버튼 눌렀을때 
     function search() {
-    	start = document.getElementById("start").value;
-    	end = document.getElementById("end").value;
-    	vendNm = document.getElementById("vendNm").value.toUpperCase() ;
+      start = document.getElementById("start").value;
+      end = document.getElementById("end").value;
+      vendNm = document.getElementById("vendNm").value.toUpperCase();
       $.ajax({
         url: "orderSearch",
         method: "post",
         data: { start: start, end: end, vendNm: vendNm },
-        success: function(data) {  	
-        	grid.resetData(data);  //그리드 적용
+        success: function (data) {
+          grid.resetData(data); //그리드 적용
         },
         error: function (reject) {
           console.log(reject);
         },
-
       });
     }
-  
-//조회 그리드
-   var grid = new tui.Grid({
-        el: document.getElementById('order'),
-        rowHeaders: ['checkbox'],
-        columns: [
-     
-            {
-                header: '주문번호',
-                name: 'orderNo',
-            },
-            {
-                header: '거래처코드',
-                name: 'vendCd',
-            },
-            {
-                header: '거래처',
-                name: 'vendNm',
-            },
-            {
-                header: '주문일자',
-                name: 'orderDt',
-                formatter : function(data){		 	
-                	return dateChange(data.value);
-                }
-            },
-            {
-                header: '진행상황',
-                name: 'orderSit',
-            },
-            {
-                header: '납기일자',
-                name: 'parrdDt',
-                formatter : function(data){		 	
-                	return dateChange(data.value);
-                }
-            }
-        ]
-	
-    });
 
-//조회버튼 동작
-  ordrBtn.addEventListener("click", search);
+    //조회 그리드
+    var grid = new tui.Grid({
+      el: document.getElementById("order"),
+      rowHeaders: ['checkbox'],
+    	  
+      columns: [
+        {
+          header: "주문번호",
+          name: "orderNo",
+        },
+        {
+          header: "거래처코드",
+          name: "vendCd",
+        },
+        {
+          header: "거래처",
+          name: "vendNm",
+        },
+        {
+          header: "주문일자",
+          name: "orderDt",
+          formatter: function (data) {
+            return dateChange(data.value);
+          },
+        },
+        {
+          header: "진행상황",
+          name: "orderSit",
+        },
+        {
+          header: "납기일자",
+          name: "parrdDt",
+          formatter: function (data) {
+            return dateChange(data.value);
+          },
+        },
+      ],
+      pageOptions: {
+          useClient: true,
+          type: 'scroll',
+          perPage: 30
+       }
+    });
+    
+    grid.on('check', (ev) => {
+    	checkLen = grid.getCheckedRows().length;
+    	console.log('check',ev);
+    	});
+
+    	grid.on('uncheck', (ev) => {
+    		checkLen = grid.getCheckedRows().length;
+    	});
+    	
+    	grid.on('click', (ev) => {
+ 	/* 	 if(ev.targetType='cell' && ev.columnName ='orderNo')
+ 			 console.log("!"); */
+ 		  
+ 		});
+
+    	
+    //조회버튼 동작
+    ordrBtn.addEventListener("click", search);
+
+    //날짜 변환
+    function dateChange(date) {
+      let date1 = new Date(date);
+      let date2 =
+        date1.getFullYear() +
+        "-" +
+        (date1.getMonth() < 10
+          ? "0" + (date1.getMonth() + 1)
+          : date1.getMonth() + 1) +
+        "-" +
+        (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+      return date2;
+    }
  
-//날짜 변환
-   function dateChange(date) {
-	   	let date1 = new Date(date);
-		let date2 = date1.getFullYear() + '-' 
-				+ ((date1.getMonth()<10)?'0'+(date1.getMonth()+1):(date1.getMonth()+1)) + '-'
-				 + ((date1.getDate()<10)?'0'+date1.getDate():date1.getDate())	;	 	
-   	return date2;
-   }
-   
- //거래처 검색  --> 해야됨
+    //거래처 검색 모달 함수
   function searchVend() {
-	 vendNm = document.getElementById("vendNm").value.toUpperCase() ;
+	 vendNm = document.getElementById("vendNmSearch").value.toUpperCase() ;
      $.ajax({
        url: "vendSearch",
        method: "post",
@@ -218,12 +284,16 @@ uri="http://java.sun.com/jsp/jstl/core" %>
        },
 
      }); 
- } 
+ }  
  
-//거래처 검색 모달창 그리드 --> 해야됨
+ //거래처 검색 모달창 그리드 
 	  var gridVend = new tui.Grid({
-      //el: document.getElementById(''), 추가
-      rowHeaders: ['checkbox'],
+      el: document.getElementById('modGrid'),
+      rowHeaders: [
+    	    {
+    	      type: 'checkbox'
+    	    }
+    	  ],
       columns: [
    
           {
@@ -235,37 +305,59 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               name: 'vendCd',
           },
          
-      ]
+      ],
+      pageOptions: {
+          useClient: true,
+          type: 'scroll',
+          perPage: 30
+       }
 	
-  }); 
+  });  
+ 
+	  gridVend.on('check', (ev) => {
+		  vendSearch = gridVend.getCheckedRows()[0].vendNm;
+		  console.log(vendSearch);
+	    	});
+	  
+	  
 
-//거래처 검색 버튼 동작 --> 해야됨
- openVend.addEventListener("click", searchVend);
+
+//거래처 모달 검색 버튼 동작 
+searchBtn.addEventListener("click", searchVend);  
  
- 
-//삭제버튼 함수 --> 수정하기
-function orderDel() {
-	let str="";
-	for(int i=0; grid.getCheckedRows().length; i++){
-		str += grid.getCheckedRows()[i].orderNo + ",";	
-	}
+//거래처 모달창 확인버튼
+confirmBtn.addEventListener("click", function(){
+	vendNmInput.value=vendSearch;
+	console.log(vendSearch);
+	console.log(vendNmInput.value);
+}); 
+  
+
+    //삭제버튼 함수 
+    function orderDel() {
+  	let str="";
+      
+      for (let i = 0; i < checkLen; i++) {
+        str += grid.getCheckedRows()[i].orderNo + ",";
+      }
+      console.log(str);
       $.ajax({
         url: "orderDelete",
         method: "post",
-        data: {str:str},
-        success: function(data) {  	
-        	console.log(data);
+        data: { str: str },
+        success: function (data) {
+          console.log(data);
+          location.reload();
         },
         error: function (reject) {
           console.log(reject);
         },
-
       });
     }
 
-//삭제버튼 동작
- openVend.addEventListener("click", orderDel);
-
-
+    //삭제버튼 동작
+    delBtn.addEventListener("click", orderDel);
+    
+    
   </script>
 </html>

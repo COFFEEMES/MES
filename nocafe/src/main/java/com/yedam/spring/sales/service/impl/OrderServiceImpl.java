@@ -25,18 +25,23 @@ public class OrderServiceImpl implements OrderService{
 	//거래처 가져오기
 	@Override
 	public List<VendVO> searchVend(String vendNm) {
-		// TODO Auto-generated method stub
-		return null;
+		return orderMapper.searchVend(vendNm);
 	}
 
 	//삭제버튼
 	@Override
-	public void deleteOrder(String str) {
+	public int deleteOrder(String str) {
 		String[] array = str.split(",");
-		
+		int result = 0;
 		for(int i=0; i<array.length; i++) {
-			orderMapper.deleteOrder(array[0]);
-		}	
+			result += orderMapper.deleteOrder(array[i]);
+		}
+		
+		if(result > 0) {
+			return result;
+		} else {
+			return -1;
+		}
 	}
 	
 }
