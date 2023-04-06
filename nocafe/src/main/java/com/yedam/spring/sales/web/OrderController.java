@@ -43,8 +43,9 @@ public class OrderController {
 	//주문서 삭제 --> 수정
 	@PostMapping("/orderDelete") 
 	@ResponseBody
-	 public String orderDelete(@RequestParam String str){ 
-		 return "redirect:sales/order"; 
+	 public int orderDelete(@RequestParam String str){
+		 return orderService.deleteOrder(str);
+		 
 		 }
 	 
 }
