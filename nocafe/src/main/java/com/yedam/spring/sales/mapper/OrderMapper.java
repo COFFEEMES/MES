@@ -16,5 +16,5 @@ public interface OrderMapper {
 	public List<VendVO> searchVend(@Param("vendNm")String vendNm);
 	
 	//주문서 삭제
-	public void deleteOrder(@Param("str")String str);
+	public int deleteOrder(@Param("str")String str);
 }
