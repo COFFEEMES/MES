@@ -8,14 +8,19 @@ import lombok.Data;
 
 @Data
 public class PlanVO {
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date   planDt;
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date   exStartDt;
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date   exEndDt;
 	
 	private String planHdCd;
+	
+	private String planDtFormat;
 	
 	private String planManager;
 	private String oderNo;
