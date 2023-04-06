@@ -34,8 +34,7 @@
  
   <div class="codeSearch">
   <span>자재명</span> <input />
-  <span>업체명</span> <input />
-  <input type="button" value="조회"/>
+<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i class="fas fa-search"></i></button>
   <hr style="border: 1px solid #ccc;">
 <table class="table">
 		<thead>
@@ -50,49 +49,53 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${materialOrder }" var="material">
+			<c:forEach items="${materialList }" var="material">
 				<tr>
-					<td>${material.rsc_cd }</td>
-					<td>${material.rsc_nm }</td>
-					<td>${material.rsc_typ }</td>
-					<td>${material.rsc_spec }</td>
-					<td>${material.rsc_unit }</td>
-					<td>${material.saf_rtc }</td>
-					<td>${material.vend_cd }</td>		
+					<td>${material.rscCd }</td>
+					<td>${material.rscNm }</td>
+					<td>${material.rscTyp }</td>
+					<td>${material.rscSpec }</td>
+					<td>${material.rscUnit }</td>
+					<td>${material.safRtc }</td>
+					<td>${material.vendCd }</td>		
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	</div>
 	<br>
+	
+	<div class="card mb-4">
+				<div class="card-body">
+
+					<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="minusBtn"><i class="fas fa-minus"></i> 삭제</button>
+						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 발주</button>
+						<br> <br>
+					</div>
+
+					<br><br>
 	  <div class="codeSearch">
 	  <p>자재발주</p>
 <table class="table" >
 		<thead>
 			<tr>
+				<th>발주번호</th>
 				<th>자재코드</th>
-				<th>자재명</th>
-				<th>업체코드</th>
-				<th>업체명</th>
-				<th>발주코드</th>
-				<th>발주수량</th>
-				<th>현재재고</th>
-				<th>안전재고</th>
+				<th>발주량</th>
+				<th>미입고잔량</th>
 				<th>납기요청일</th>
-				
 			</tr>
 		</thead>
 		
 		<tbody>
 			<c:forEach items="${materialOrderList }" var="material">
 				<tr>
-					<td>${material.ordr_cd }</td>
-					<td>${material.rsc_cd }</td>
-					<td>${material.ordr_cnt }</td>
-					<td>${material.rmn_cnt }</td>
-					<td>${material.rsc_unit }</td>
-					<td>${material.saf_rtc }</td>
-					<td>${material.vend_cd }</td>		
+					<td>${material.ordrCd }</td>
+					<td>${material.rscCd }</td>
+					<td>${material.ordrCnt }</td>
+					<td>${material.rmnCnt }</td>
+					<td>${material.paprdCmndDt }</td>
 				</tr>
 			</c:forEach>
 		</tbody>

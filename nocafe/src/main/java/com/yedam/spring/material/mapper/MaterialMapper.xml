@@ -26,6 +26,15 @@
 	    ORDER BY ordr_cd
 	</select>
   
+  <!-- 발주디테일 -->
+  <select id="getMaterialOrderDetail" resultType="MaterialOrderDetailVO">
+		SELECT ordr_cd,
+			   ordr_req_dt,
+			   vend_cd
+	    FROM rsc_ordr
+	    ORDER BY ordr_cd
+	</select>
+  
   <!-- 자재입고조회 -->
   	<select id="selectMaterialReceivingList" resultType="MaterialReceivingVO">
   		SELECT ist_cd,

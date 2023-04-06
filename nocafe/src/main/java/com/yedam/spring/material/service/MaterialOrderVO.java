@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 public class MaterialOrderVO {
 	//자재발주
-	private String ordr_cd; 	//발주번호
+	private String ordrCd; 		//발주번호
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date ordr_req_dt;	//발주신청일
-	private String vend_cd;		//거래처코드
+	private Date ordrReqDt;		//발주신청일
+	private String vendCd;		//거래처코드
 	
 }

@@ -10,6 +10,9 @@ public interface MaterialService {
 	// 발주조회
 	public List<MaterialOrderVO> getMaterialOrderList();
 	
+	// 발주디테일
+	public MaterialOrderDetailVO getMaterialOrderDetail(MaterialOrderDetailVO materialOrderDetailVO);
+
 	//자재입고조회
 	public List<MaterialReceivingVO> getMaterialReceivingList();
 

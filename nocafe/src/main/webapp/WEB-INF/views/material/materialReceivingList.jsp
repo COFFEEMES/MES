@@ -33,9 +33,11 @@
   <div id="codeSearch">
   <p><span>검사일자</span> <input type="date"> ~ <input type="date"></p>
   <p><span>업체명</span> <input />
-  <input type="button" value="조회"/></p>
+  <button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i class="fas fa-search"></i></button>
+  </p>
   <p><span>자재명</span> <input />
-  <input type="button" value="조회"/></p>
+  <button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i class="fas fa-search"></i></button>
+  </p>
   <table class="table">
   <thead>
 			<tr>
@@ -49,11 +51,11 @@
 		<tbody>
 			<c:forEach items="${materialReceivingList }" var="material">
 				<tr>
-					<td>${material.ist_cd }</td>
-					<td>${material.rsc_cd }</td>
-					<td>${material.ist_cnt }</td>
-					<td><fmt:formatDate value="${material.ist_dt }" pattern="yyyy-MM-dd"/></td>			
-					<td>${material.ist_typ }</td>
+					<td>${material.istCd }</td>
+					<td>${material.rscCd }</td>
+					<td>${material.istCnt }</td>
+					<td><fmt:formatDate value="${material.istDt }" pattern="yyyy-MM-dd"/></td>			
+					<td>${material.istTyp }</td>
 				</tr>
 			</c:forEach>
 		</tbody>

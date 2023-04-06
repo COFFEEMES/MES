@@ -33,7 +33,8 @@
   <div id="codeSearch">
   <p><span>출고일자</span> <input type="date"> ~ <input type="date"></p>
   <p><span>자재명</span> <input />
-  <input type="button" value="조회"/></p>
+    <button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i class="fas fa-search"></i></button>
+</p>
   <table class="table">
 		<thead>
 			<tr>
@@ -47,11 +48,11 @@
 		<tbody>
 			<c:forEach items="${materialShippingList }" var="material">
 				<tr>
-					<td>${material.rsc_oust_cd }</td>
-					<td>${material.rsc_cd }</td>
-					<td>${material.oust_cnt }</td>
-					<td><fmt:formatDate value="${material.oust_dt }" pattern="yyyy-MM-dd"/></td>			
-					<td>${material.oust_typ }</td>
+					<td>${material.rscOustCd }</td>
+					<td>${material.rscCd }</td>
+					<td>${material.oustCnt }</td>
+					<td><fmt:formatDate value="${material.oustDt }" pattern="yyyy-MM-dd"/></td>			
+					<td>${material.oustTyp }</td>
 				</tr>
 			</c:forEach>
 		</tbody>
