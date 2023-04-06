@@ -17,10 +17,6 @@ uri="http://tiles.apache.org/tags-tiles"%>
       href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
       rel="stylesheet"
     />
-    <link
-      href="${pageContext.request.contextPath }/resources/css/styles.css"
-      rel="stylesheet"
-    />
     <script
       src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
       crossorigin="anonymous"
@@ -30,6 +26,10 @@ uri="http://tiles.apache.org/tags-tiles"%>
       href="https://uicdn.toast.com/grid/latest/tui-grid.css"
     />
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <link
+      href="${pageContext.request.contextPath }/resources/css/styles.css"
+      rel="stylesheet"
+    />
   </head>
   <body class="sb-nav-fixed">
     <tiles:insertAttribute name="header"></tiles:insertAttribute>
@@ -50,12 +50,6 @@ uri="http://tiles.apache.org/tags-tiles"%>
       crossorigin="anonymous"
     ></script>
     <script src="${pageContext.request.contextPath }/resources/js/scripts.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="${pageContext.request.contextPath }/resources/assets/demo/chart-area-demo.js"></script>
-    <script src="${pageContext.request.contextPath }/resources/assets/demo/chart-bar-demo.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
       crossorigin="anonymous"

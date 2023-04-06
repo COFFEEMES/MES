@@ -22,7 +22,7 @@ public class ManagerImpl implements ManagerService {
 	}
 
 	@Override
-	public DetailCodeVO getDetailCode(DetailCodeVO detailCodeVO) {
+	public List<DetailCodeVO> getDetailCode(DetailCodeVO detailCodeVO) {
 		return managerMapper.getDetailCode(detailCodeVO);
 	}
 

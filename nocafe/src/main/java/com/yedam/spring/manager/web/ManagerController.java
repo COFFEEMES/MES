@@ -1,5 +1,7 @@
 package com.yedam.spring.manager.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +26,7 @@ public class ManagerController {
 	
 	@PostMapping("/getDetailCode")
 	@ResponseBody
-	public DetailCodeVO getDetailCode(DetailCodeVO detailCodeVO) {
+	public List<DetailCodeVO> getDetailCode(DetailCodeVO detailCodeVO) {
 		return managerService.getDetailCode(detailCodeVO);
 	}
 
