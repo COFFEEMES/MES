@@ -9,4 +9,6 @@ public interface PlanService {
 //	미등록 주문서 조회
 	public List<OrderVO> getOrderlist();
 	
+//	생산계획 코드 생성
+	public PlanVO getPlanCd(PlanVO planVO);
 }

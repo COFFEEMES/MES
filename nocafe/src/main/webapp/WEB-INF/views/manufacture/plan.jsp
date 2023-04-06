@@ -57,7 +57,7 @@
             <div id="pDate">
                 <!--<div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
 	                <label>생산계획일자</label>
-                    <input type="date" id="tui-date-picker-target" name="tui-date-picker-target" class="form-control" style="width: 150px">
+                    <input type="date" id="tui-date-picker-target" name="tui-date-picker-target" class="form-control" style="width: 150px" >
                     <!--<span class="tui-ico-date"></span>-->
                 	<!--<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>-->
                 <!--</div>-->
@@ -120,7 +120,145 @@
         </div>
      
         <script>
-    
+//         //초기화
+//     	$("#clearBtn").on("click", function(){
+// 	   		grid.clear()
+// 	   		grid2.clear()
+// 	   		grid3.clear()
+// 	   		grid4.clear()
+// 	   		grid5.clear()
+// 	   	}) 
+		let code
+		$(modalBtn).on("click",function(e){
+// 			계획일자 받을 변수	
+			let planDt
+// 			생성된 계획 코드 변수
+			
+			
+			planDt = $("#tui-date-picker-target").val();
+			
+			console.log(planDt);
+			
+// 			modGrid.on('dblclick', ev => {
+//    				modGrid.check(ev.rowKey);
+//        			//$("#exampleModal").modal('hide')	
+//  			})  
+
+// 			↓↓↓↓↓ 계획번호 생성
+			$.ajax({
+				url : 'getPlanCd',
+				method : 'GET',
+				data : {planDt: planDt},
+				success: function (result){
+					code = result.planCd;
+					
+// 					↓↓↓↓주문서정보 모달창으로 조회
+					$.ajax({
+						url : 'orderListModal',
+						method : 'GET',
+						dataType : 'JSON',
+						success : function(res){
+							if(res==null){
+								
+								alert("정보가 없습니다.");
+							}
+// 								↓↓↓↓모달창 리셋
+								modGrid.resetData(res);
+								setTimeout(()=> modGrid.refreshLayout() , 300);
+						}
+					
+					})
+				},
+				error: function(err){
+					console.log(err);
+				}
+			})
+			
+		})
+		
+		$("#confirmBtn").on("click", function(e){
+			let oderInfo = modGrid.getCheckedRows();
+			oderInfo[0].planCd = code;
+			// 			grid.setValue('planCd',code);
+			
+			grid.resetData(oderInfo);
+// 			grid2.resetData(oderInfo);
+			console.log(oderInfo);
+			console.log(code);
+		})
+
+
+
+ 		const modGrid = new tui.Grid({
+			el : document.getElementById('modGrid'),
+ 			rowHeaders : [ 'checkbox' ],
+ 			columns : [ {
+ 				header : '주문번호',
+ 				name : 'orderNo'
+			}, {
+ 				header : '납기일자',
+				name : 'parrdDt'
+ 			}, {
+ 				header : '제품번호',
+				name : 'proCd'
+ 			} 				
+ 			], 
+               					
+ 		});
+ 		
+ 		const gridData = [];
+		const grid = new tui.Grid({
+			el : document.getElementById('grid'),
+			data : gridData,
+			columns : [{
+				header 	: '계획코드',
+				name	: 'planCd',
+				align	: 'center'
+			},
+			{
+				header 	: '주문번호',
+				name	: 'orderNo',
+				align	: 'center'
+			},
+			{
+				header 	: '납기 일자',
+				name	: 'parrdDt',
+				align	: 'center'
+			},
+			{
+				header 	: '시작 일자',
+				name	: 'ex_start_dt',
+				align	: 'center',
+				editor: {
+				      type: 'datePicker',
+				      options: {
+				        format: 'yyyy-MM-dd'
+				      }
+			},
+			{
+				header 	: '종료 일자',
+				name	: 'ex_end_dt',
+				align	: 'center',
+				editor: {
+				      type: 'datePicker',
+				      options: {
+				        format: 'yyyy-MM-dd'
+				      }
+			},
+			],
+			header:{
+				height : 'auto',
+				complexColumns: [
+					{
+						header 	: '예상 생산기간',
+						name	: 'period',
+						childNames : ['ex_start_dt','ex_end_dt']
+					}
+				]
+			},
+			
+		
+		})
 
         </script>
 </body>
