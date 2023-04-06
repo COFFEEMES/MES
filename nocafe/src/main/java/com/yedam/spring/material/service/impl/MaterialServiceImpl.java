@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.spring.material.mapper.MaterialMapper;
 import com.yedam.spring.material.service.MaterialLOTVO;
+import com.yedam.spring.material.service.MaterialOrderDetailVO;
 import com.yedam.spring.material.service.MaterialOrderVO;
 import com.yedam.spring.material.service.MaterialReceivingVO;
 import com.yedam.spring.material.service.MaterialService;
@@ -31,6 +32,12 @@ public class MaterialServiceImpl implements MaterialService {
 	public List<MaterialOrderVO> getMaterialOrderList() {
 		return materialMapper.selectMaterialOrderList();
 	}
+	
+	//발주디테일
+	@Override
+	public MaterialOrderDetailVO getMaterialOrderDetail(MaterialOrderDetailVO materialOrderDetailVO) {
+		return materialMapper.getMaterialOrderDetail(materialOrderDetailVO);
+	}
 
 	//자재입고조회
 	@Override
@@ -53,6 +60,8 @@ public class MaterialServiceImpl implements MaterialService {
 	public List<MaterialTestDetailVO> getMaterialTestList() {
 		return materialMapper.selectMaterialTestList();
 	}
+
+
 
 
 }

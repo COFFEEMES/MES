@@ -17,7 +17,6 @@ public class MaterialController {
 	@GetMapping("/materialOrder")
 	public String getMaterialOrder(Model model) {
 		model.addAttribute("materialList", materialService.getMaterialList());
-		model.addAttribute("materialOrderList", materialService.getMaterialOrderList());
 		return "material/materialOrder";
 	}
 	
@@ -35,6 +34,7 @@ public class MaterialController {
 		return "material/materialOrderList";
 	}
 	
+	
 	//자재입고조회
 	@GetMapping("/materialReceivingList")
 	public String getMaterialReceivingList(Model model) {
@@ -45,7 +45,7 @@ public class MaterialController {
 	//자재출고조회
 	@GetMapping("/materialShippingList")
 	public String getMaterialShippingList(Model model) {
-		model.addAttribute("materialShippingList", materialService.getMaterialReceivingList());
+		model.addAttribute("materialShippingList", materialService.getMaterialShippingList());
 		return "material/materialShippingList";
 	}
 	

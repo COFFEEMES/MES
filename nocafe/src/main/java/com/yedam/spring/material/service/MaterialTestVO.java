@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class MaterialTestVO {
 	//자재입고검사
-	private String insp_cd;		//검사코드
-	private Date insp_dt;		//검사일자
-	private String insp_tstr;	//검사자
+	private String inspCd;		//검사코드
+	private Date inspDt;		//검사일자
+	private String inspTstr;	//검사자
 }

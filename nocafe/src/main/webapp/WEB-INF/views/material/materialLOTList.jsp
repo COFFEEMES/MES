@@ -32,7 +32,7 @@
   </ul>
   </div>
   <div id="codeSearch"><span>자재명</span> <input />
-  <input type="button" value="조회"/>
+   <button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i class="fas fa-search"></i></button>
 <table class="table">
 		<thead>
 			<tr>
@@ -48,9 +48,13 @@
 		<tbody>
 			<c:forEach items="${materialLOTList }" var="material">
 				<tr>
-					<td>${material.rsc_lot_cd }</td>
-					<td>${material.vend_cd }</td>
-					<td><fmt:formatDate value="${material.ordr_req_dt }" pattern="yyyy.MM.dd"/></td>			
+					<td>${material.rscLotCd }</td>
+					<td>${material.rscCd }</td>
+					<td>${material.rscInspCd }</td>
+					<td>${material.ordrCd }</td>
+					<td>${material.istCd }</td>
+					<td>${material.lotCnt }</td>
+					<td><fmt:formatDate value="${material.expDt }" pattern="yyyy-MM-dd"/></td>			
 				</tr>
 			</c:forEach>
 		</tbody>

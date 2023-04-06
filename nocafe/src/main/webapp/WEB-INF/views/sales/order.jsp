@@ -132,7 +132,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     let end = '';
     let vendNm = '';
 
- //조회버튼 눌렀을때 
+ //조회버튼 눌렀을때
     function search() {
     	start = document.getElementById("start").value;
     	end = document.getElementById("end").value;
