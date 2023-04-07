@@ -43,5 +43,22 @@ public class OrderServiceImpl implements OrderService{
 			return -1;
 		}
 	}
+
+	//주문서 상세조회
+	@Override
+	public List<OrderVO> orderDetail(String orderNo) {
+		return orderMapper.orderDetail(orderNo);
+	}
+
+	//수정 
+	@Override
+	public int saveOrder(List<OrderVO> orderVO) { 
+		int result = 0;
+		for(int i=0 ; i<orderVO.size(); i++) {
+			orderMapper.saveOrder(orderVO.get(i));
+			result ++;
+		}
+		return result;
+	}
 	
 }

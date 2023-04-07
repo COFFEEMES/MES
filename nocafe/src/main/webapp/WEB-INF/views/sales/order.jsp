@@ -47,7 +47,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                   <i class="fas fa-file"></i> 초기화
                 </button>
               </div>
-              <form name="searchFrm" id="searchFrm">
+              <form name="searchFrm" id="searchFrm" onsubmit="return false">
                 <table class="table" style="vertical-align: middle">
                   <colgroup>
                     <col style="width: 150px" />
@@ -89,7 +89,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
                     <div>
-                    <label>거래처명</label>                    
+                    <label style="margin-left: 20px;">거래처명</label>                    
                      <input
                           type="text"
                           id="vendNmSearch"
@@ -100,12 +100,13 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                           id="searchBtn"
                           class="btn btn-primary" style="width: 43px;">
                           <i class="fas fa-search"></i></button>    
-                          </div>                 
+                          </div>   
+                          <br>             
                     <div id="modGrid" class="modal-body"></div>
                     <div class="modal-footer">
                         <button type="button" id="confirmBtn" class="btn btn-primary"
                             data-bs-dismiss="modal">확인</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" id="clearBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
@@ -113,19 +114,20 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
         <!-- 거래처 검색 Modal 끝-->
         
         <!-- 상세조회 Modal -->
-         <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">주문서 상세조회</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">주문서 상세 목록</h5>
                         <br><br>                    
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div><br>               
-                    <div id="modGrid" class="modal-body"></div>
+                    </div><br>
+                    <div>                                    
+                    <div id="modGridDetail" class="modal-body"></div>
                     <div class="modal-footer">
-                        <button type="button" id="confirmBtn" class="btn btn-primary"
-                            data-bs-dismiss="modal">확인</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                     <button class="btn btn-primary" id="okBtn">
+        					<i class="fas fa-save"></i> 저장
+                        <button type="button" id="clearBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
@@ -167,8 +169,8 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       <button class="btn btn-primary" id="addBtn">
         <i class="fas fa-plus"></i> 추가
       </button>
-      <button class="btn btn-primary" id="okBtn">
-        <i class="fas fa-save"></i> 저장
+<!--       <button class="btn btn-primary" id="okBtn">
+        <i class="fas fa-save"></i> 저장 -->
       </button>
       <button class="btn btn-primary" id="delBtn">
         <i class="fas fa-minus"></i> 삭제
@@ -223,19 +225,18 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
           name: "orderNo",
         },
         {
-          header: "거래처코드",
-          name: "vendCd",
-        },
-        {
           header: "거래처",
           name: "vendNm",
+        
         },
         {
           header: "주문일자",
           name: "orderDt",
           formatter: function (data) {
-            return dateChange(data.value);
-          },
+              return dateChange(data.value);
+            },
+        
+        
         },
         {
           header: "진행상황",
@@ -247,6 +248,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
           formatter: function (data) {
             return dateChange(data.value);
           },
+     
         },
       ],
       pageOptions: {
@@ -258,26 +260,47 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     
     grid.on('check', (ev) => {
     	checkLen = grid.getCheckedRows().length;
-    	console.log('check',ev);
+    
     	});
 
     	grid.on('uncheck', (ev) => {
     		checkLen = grid.getCheckedRows().length;
     	});
     	
-    	//상세주문
-    	grid.on('click', (ev) => {
- 	 	 if(ev.targetType=='cell' && ev.columnName =='orderNo')
- 			 //그리드 동작
- 			 console.log("ㄴㅇㄹㄴㅇ");
- 	 	 $('#myModal').show();
- 		  
- 		});
+    	grid.on('checkAll', (ev) => {
+    		checkLen = grid.getCheckedRows().length;
+    		console.log(checkLen);
+    	});
+    	
+    	
+    	//상세주문 조회
+     	grid.on('click', (ev) => {
+ 	 	 if(ev.targetType=='cell' && ev.columnName =='orderNo') {
+ 	 	let orderNo = grid.getData()[ev.rowKey].orderNo;
+ 	 
+ 			$.ajax({
+      			 url: "orderDetail",
+      			 method: "post",
+       			data: {orderNo: orderNo },
+      			success: function(data) { 
+      				
+      				 $('#detailModal').modal('show');
+    	   			gridDetail.resetData(data);
+       				},
+       			error: function (reject) {
+         			console.log(reject);
+       				},
+     			}); 
+ 	 	 }
+ 		}); 
 
     	
     //조회버튼 동작
     ordrBtn.addEventListener("click", search);
-
+	window.onload = search;
+		
+	
+    
     //날짜 변환
     function dateChange(date) {
       let date1 = new Date(date);
@@ -337,25 +360,21 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
 	
   });  
  
-	  gridVend.on('check', (ev) => {
-		  vendSearch = gridVend.getCheckedRows()[0].vendNm;
-		  console.log(vendSearch);
-	    	});
+ // 선택시 거래처명 변경
+	 gridVend.on('check', (ev) => {
+		 vendSearch = gridVend.getCheckedRows()[0].vendNm; 
+	    });
 	  
-	  
-
-
 //거래처 모달 검색 버튼 동작 
 searchBtn.addEventListener("click", searchVend);  
  
 //거래처 모달창 확인버튼
 confirmBtn.addEventListener("click", function(){
 	vendNmInput.value=vendSearch;
-	console.log(vendSearch);
-	console.log(vendNmInput.value);
+	gridVend.clear();
+	vendNmSearch.value="";
 }); 
   
-
     //삭제버튼 함수 
     function orderDel() {
   	let str="";
@@ -369,8 +388,8 @@ confirmBtn.addEventListener("click", function(){
         method: "post",
         data: { str: str },
         success: function (data) {
-          console.log(data);
-          location.reload();
+       
+        	search();
         },
         error: function (reject) {
           console.log(reject);
@@ -378,9 +397,73 @@ confirmBtn.addEventListener("click", function(){
       });
     }
 
-    //삭제버튼 동작
-    delBtn.addEventListener("click", orderDel);
+  //삭제버튼 동작
+ delBtn.addEventListener("click", orderDel);
     
-    
+ //주문서 상세 목록 그리드
+   var gridDetail = new tui.Grid({
+      el: document.getElementById('modGridDetail'),
+      columns: [
+   
+          {
+              header: '주문상세코드',
+              name: 'orderDetailNo',
+          },
+          {
+              header: '제품명',
+              name: 'proNm',
+              editor: 'text',
+          },
+          {
+              header: '주문량',
+              name: 'orderCnt',
+              editor: 'text',
+          },
+          {
+              header: '진행상황',
+              name: 'orderSitDetail',
+          }
+         
+      ],
+      pageOptions: {
+          useClient: true,
+          type: 'scroll',
+          perPage: 30
+       }
+	
+  });  
+
+//모달창 닫기 버튼 클릭시 초기화 
+        $("#clearBtn").on("click", function(){
+        	gridVend.clear();
+        	gridDetail.clear();
+       
+           })
+    	
+//상세조회 저장버튼
+ document.getElementById('okBtn')
+			.addEventListener('click', saveOrder); 
+
+    	
+ //주문서 저장
+ function saveOrder() {
+	 let dataa = gridDetail.getData();
+	 //console.log("dataa:" + dataa);
+    $.ajax({
+        url: "saveOrder",
+        method: "post",
+        dataType : 'json',
+        contentType : 'application/json',
+        data: JSON.stringify(gridDetail.getData()),
+        success: function (data) {
+        console.log(data);
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });
+} 
+  
+
   </script>
 </html>

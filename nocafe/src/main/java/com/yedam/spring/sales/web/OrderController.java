@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -40,12 +41,25 @@ public class OrderController {
 	}
 	
 	
-	//주문서 삭제 --> 수정
+	//주문서 삭제 
 	@PostMapping("/orderDelete") 
 	@ResponseBody
 	 public int orderDelete(@RequestParam String str){
 		 return orderService.deleteOrder(str);
 		 
-		 }
-	 
+	 }
+	
+	//주문서 상세 조회 모달창
+	@PostMapping("/orderDetail")
+	@ResponseBody
+	public List<OrderVO> orderDetail(@RequestParam String orderNo) {
+		return orderService.orderDetail(orderNo);
+	}
+	
+	//주문서 수정
+	@PostMapping("/saveOrder")
+	@ResponseBody
+	public int saveOrder(@RequestBody List<OrderVO> orderVO) {
+		return orderService.saveOrder(orderVO);
+	} 
 }
