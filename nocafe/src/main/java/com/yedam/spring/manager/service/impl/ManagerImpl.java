@@ -9,6 +9,7 @@ import com.yedam.spring.manager.mapper.ManagerMapper;
 import com.yedam.spring.manager.service.BasicCodeVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.ManagerService;
+import com.yedam.spring.sales.service.VendVO;
 
 @Service
 public class ManagerImpl implements ManagerService {
@@ -24,6 +25,23 @@ public class ManagerImpl implements ManagerService {
 	@Override
 	public List<DetailCodeVO> getDetailCode(DetailCodeVO detailCodeVO) {
 		return managerMapper.getDetailCode(detailCodeVO);
+	}
+
+	@Override
+	public void upsertDetailCode(List<DetailCodeVO> detailCodeVO) {
+		for(DetailCodeVO temp : detailCodeVO) {
+			managerMapper.upsertDetailCode(temp);
+		}
+	}
+
+	@Override
+	public int insertBasicCode(BasicCodeVO basicCodeVO) {
+		return managerMapper.insertBasicCode(basicCodeVO);
+	}
+
+	@Override
+	public List<VendVO> getAllVend() {
+		return managerMapper.getAllVend();
 	}
 
 }

@@ -8,8 +8,9 @@
 		SELECT basic_code
 			 , basic_name
 		  FROM basic_code
+		 ORDER BY basic_code
 	</select>
-	
+
 	<!-- 상세 코드 조회 -->
 	<select id="getDetailCode" resultType="DetailCodeVO">
 		SELECT detail_code
@@ -19,6 +20,32 @@
 		  FROM basic_code b, detail_code d
 		 WHERE b.basic_code = d.basic_code
 		   AND d.basic_code = #{basicCode}
+		 ORDER BY detail_code
+	</select>
+
+	<!-- 공통 코드 추가 -->
+	<insert id="insertBasicCode" parameterType="BasicCodeVO">
+		INSERT INTO basic_code
+		VALUES ( #{basicCode}, #{basicName} )
+	</insert>
+
+	<!-- 상세 코드 추가 or 수정 -->
+	<update id="upsertDetailCode" statementType="CALLABLE" parameterType="DetailCodeVO">
+		{ CALL upsert_detail_code(
+			  #{detailCode}
+			, #{basicCode}
+			, #{detailName}
+			, #{detailExplain}
+			, #{detailAvail}
+		  )
+		}
+	</update>
+
+	<!-- 거래처 전체 조회 -->
+	<select id="getAllVend" resultType="VendVO">
+		SELECT *
+		  FROM vend
+		 ORDER BY vend_cd
 	</select>
 
 </mapper>
