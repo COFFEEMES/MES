@@ -111,6 +111,26 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
             </div>
         </div>   
         <!-- 거래처 검색 Modal 끝-->
+        
+        <!-- 상세조회 Modal -->
+         <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">주문서 상세조회</h5>
+                        <br><br>                    
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><br>               
+                    <div id="modGrid" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" id="confirmBtn" class="btn btn-primary"
+                            data-bs-dismiss="modal">확인</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>   
+        <!-- 상세조회 Modal 끝-->
                       </td>
                       <th></th>
                       <td></td>
@@ -245,9 +265,12 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     		checkLen = grid.getCheckedRows().length;
     	});
     	
+    	//상세주문
     	grid.on('click', (ev) => {
- 	/* 	 if(ev.targetType='cell' && ev.columnName ='orderNo')
- 			 console.log("!"); */
+ 	 	 if(ev.targetType=='cell' && ev.columnName =='orderNo')
+ 			 //그리드 동작
+ 			 console.log("ㄴㅇㄹㄴㅇ");
+ 	 	 $('#myModal').show();
  		  
  		});
 
