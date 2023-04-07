@@ -49,5 +49,29 @@
 	</delete>
 	
 
+	<!--주문서 상세 목록 모달 --> 
+	<select id="orderDetail" resultType="OrderVO">
+		SELECT order_detail_no,
+			   pro_nm,
+			   order_sit_detail,
+			   order_cnt
+		FROM order_detail
+		WHERE order_no=#{orderNo}
+		ORDER BY 1 
+	</select>
+	
+	
+	<!-- 주문서 수정 추가  -->
+	<update id="saveOrder" parameterType="OrderVO">
+	update order_detail
+	set pro_nm=#{proNm} ,
+		order_cnt=#{orderCnt},
+		pro_cd= (
+				select pro_cd
+				from edcts
+				where pro_nm=#{proNm}
+		)
+  	WHERE order_detail_no = #{orderDetailNo}
+	</update>
 	
 </mapper>

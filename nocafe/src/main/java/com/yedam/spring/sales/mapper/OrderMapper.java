@@ -17,4 +17,10 @@ public interface OrderMapper {
 	
 	//주문서 삭제
 	public int deleteOrder(@Param("str")String str);
+	
+	//주문서 상세 목록 모달
+	public List<OrderVO> orderDetail(@Param("orderNo")String orderNo);
+	
+	//주문서 수정입력
+	public int saveOrder(OrderVO orderVO);
 }
