@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.OrderService;
 import com.yedam.spring.sales.service.OrderVO;
 import com.yedam.spring.sales.service.VendVO;
@@ -60,6 +61,14 @@ public class OrderController {
 	@PostMapping("/saveOrder")
 	@ResponseBody
 	public int saveOrder(@RequestBody List<OrderVO> orderVO) {
+		System.out.println(orderVO);
 		return orderService.saveOrder(orderVO);
 	} 
+	
+	//제품명 조회 모달창
+	@PostMapping("/proSearch")
+	@ResponseBody
+	public List<EdctsVO> proSearch(@RequestParam(required = false) String proNm) {
+		return orderService.searchPro(proNm);
+		}
 }

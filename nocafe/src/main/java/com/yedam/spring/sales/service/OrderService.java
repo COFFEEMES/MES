@@ -20,5 +20,8 @@ public interface OrderService {
 
 	//주문서 수정
 	public int saveOrder(List<OrderVO> orderVO);
+	
+	//제품명 목록 조회 모달창
+	public List<EdctsVO> searchPro(String proNm);
 
 }

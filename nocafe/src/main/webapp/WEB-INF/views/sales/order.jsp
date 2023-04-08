@@ -125,14 +125,51 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                     <div>                                    
                     <div id="modGridDetail" class="modal-body"></div>
                     <div class="modal-footer">
+                     <button class="btn btn-primary" id="addBtnDetail">
+        					<i class="fas fa-plus"></i> 추가 </button>   
                      <button class="btn btn-primary" id="okBtn">
-        					<i class="fas fa-save"></i> 저장
+        					<i class="fas fa-save"></i> 저장 </button>
                         <button type="button" id="clearBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
         </div>   
         <!-- 상세조회 Modal 끝-->
+        
+        <!-- 제품명 Modal -->
+ <div class="modal fade" id="proModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">제품명 조회</h5>
+                        <br><br>                    
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><br>
+                    <div>
+                    <label style="margin-left: 20px;">제품명</label>                    
+                     <input
+                          type="text"
+                          id="proNmSearch"
+                          class="form-control"
+                          style="width: 150px; display:inline-block;" />
+                     <button
+                          type="button"
+                          id="proSearchBtn"
+                          class="btn btn-primary" style="width: 43px;">
+                          <i class="fas fa-search"></i></button>    
+                          </div>   
+                          <br>         
+                    <div id="proSpace" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" id="proBtn" class="btn btn-primary"
+                            data-bs-dismiss="modal">확인</button>
+                       <button type="button" id="clearBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        <!-- 제품명 Modal 끝-->
+        
                       </td>
                       <th></th>
                       <td></td>
@@ -187,14 +224,16 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     let searchBtn = document.getElementById("searchBtn"); //모달 거래처 검색 버튼
     let confirmBtn = document.getElementById("confirmBtn");//거래처 모달창 확인버튼
     let vendNmInput = document.getElementById("vendNm"); //거래처명 검색 인풋박스
+    let proNmSearch = document.getElementById("proNmSearch"); //제품명 인풋박스
     let start = ""; //주문일자 검색
     let end = ""; //주문일자 검색
     let vendNm = ""; //거래처명 검색
     let checkLen = 0; //체크박스 선택 개수
     let vendSearch=""; //모달창 거래처명 저장변수
+    let row =0; //제품명 선택시 바뀔 행의 번호
+    let val = ""; //선택된 제품명
+    let gridDetailData = []; //상세조회 데이터 담은 변수
 
-    
-   
 
     //조회버튼 눌렀을때 
     function search() {
@@ -260,32 +299,36 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     
     grid.on('check', (ev) => {
     	checkLen = grid.getCheckedRows().length;
-    
     	});
 
-    	grid.on('uncheck', (ev) => {
-    		checkLen = grid.getCheckedRows().length;
+    grid.on('uncheck', (ev) => {
+    	checkLen = grid.getCheckedRows().length;
     	});
     	
-    	grid.on('checkAll', (ev) => {
-    		checkLen = grid.getCheckedRows().length;
-    		console.log(checkLen);
+    grid.on('checkAll', (ev) => {
+    	checkLen = grid.getCheckedRows().length;
+    	console.log(checkLen);
     	});
-    	
-    	
-    	//상세주문 조회
-     	grid.on('click', (ev) => {
- 	 	 if(ev.targetType=='cell' && ev.columnName =='orderNo') {
+    
+    //창 뜨자마자 조회 됨
+    window.onload = search;
+    
+    //버튼 누르면 조회
+    ordrBtn.addEventListener("click", search);
+    
+    //상세주문 조회
+     grid.on('click', (ev) => {
+ 	 	if(ev.targetType=='cell' && ev.columnName =='orderNo') {
  	 	let orderNo = grid.getData()[ev.rowKey].orderNo;
  	 
  			$.ajax({
       			 url: "orderDetail",
       			 method: "post",
        			data: {orderNo: orderNo },
-      			success: function(data) { 
-      				
-      				 $('#detailModal').modal('show');
+      			success: function(data) { 			
+      				$('#detailModal').modal('show');
     	   			gridDetail.resetData(data);
+    	   			gridDetailData = data;
        				},
        			error: function (reject) {
          			console.log(reject);
@@ -294,27 +337,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
  	 	 }
  		}); 
 
-    	
-    //조회버튼 동작
-    ordrBtn.addEventListener("click", search);
-	window.onload = search;
-		
-	
-    
-    //날짜 변환
-    function dateChange(date) {
-      let date1 = new Date(date);
-      let date2 =
-        date1.getFullYear() +
-        "-" +
-        (date1.getMonth() < 10
-          ? "0" + (date1.getMonth() + 1)
-          : date1.getMonth() + 1) +
-        "-" +
-        (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
-      return date2;
-    }
- 
+
     //거래처 검색 모달 함수
   function searchVend() {
 	 vendNm = document.getElementById("vendNmSearch").value.toUpperCase() ;
@@ -433,13 +456,91 @@ confirmBtn.addEventListener("click", function(){
 	
   });  
 
-//모달창 닫기 버튼 클릭시 초기화 
-        $("#clearBtn").on("click", function(){
-        	gridVend.clear();
-        	gridDetail.clear();
-       
-           })
-    	
+ //상세조회에서 추가 버튼 누르면
+  document.getElementById('addBtnDetail').addEventListener('click', addDetail);
+ function addDetail() {
+	gridDetail.appendRow();
+	gridDetailData.push({orderDetailNo:"", proNm:"", orderCnt:"", orderSitDetail:"" });
+ }
+ 
+ //제품명 클릭하면
+    gridDetail.on('click', (ev) => {
+	 	if(ev.targetType=='cell' && ev.columnName =='proNm') {
+	 		$('#proModal').modal('show');
+	 		row = ev.rowKey;
+	 		console.log(row);
+/*   	 	let proNm = proNmSearch.value;
+ 	 
+			$.ajax({
+     			 url: "proSearch",
+     			 method: "post",
+      			data: {proNm: proNm },
+     			success: function(data) { 			
+     				$('#proModal').modal('show');
+     				//gridPro.resetData(data);
+      				},
+      			error: function (reject) {
+        			console.log(reject);
+      				},
+    			})  */  
+	 	 } 
+		});    
+ 
+//제품명 모달창에서 검색버튼 누르면
+ document.getElementById('proSearchBtn').addEventListener('click', searchPro); 
+    
+function searchPro() {
+	
+	let proNm = proNmSearch.value;
+	$.ajax({
+		 url: "proSearch",
+		 method: "post",
+			data: {proNm: proNm },
+		success: function(data) { 			
+			//$('#proModal').modal('show');
+			gridPro.resetData(data);
+				},
+			error: function (reject) {
+			console.log(reject);
+				},
+		})	
+}   
+
+//제품명 모달창에서 확인버튼 누르면
+ document.getElementById('proBtn').addEventListener('click', savePro); 
+
+function savePro() {
+	val = gridPro.getCheckedRows()[0].proNm;
+	gridDetailData[row].proNm = val;
+	gridDetail.resetData(gridDetailData);
+	gridPro.clear();
+	
+}
+ 
+   //제품명 검색 그리드
+   var gridPro = new tui.Grid({
+      el: document.getElementById('proSpace'),
+      rowHeaders: ['checkbox'],
+      columns: [
+   
+          {
+              header: '제품코드',
+              name: 'proCd',
+          },
+          {
+              header: '제품명',
+              name: 'proNm',
+          },
+      ],
+      pageOptions: {
+          useClient: true,
+          type: 'scroll',
+          perPage: 30
+       }
+	
+  });
+ 
+ 
 //상세조회 저장버튼
  document.getElementById('okBtn')
 			.addEventListener('click', saveOrder); 
@@ -456,14 +557,36 @@ confirmBtn.addEventListener("click", function(){
         contentType : 'application/json',
         data: JSON.stringify(gridDetail.getData()),
         success: function (data) {
-        console.log(data);
+        	console.log(data);
+        gridDetail.resetData(data);
         },
         error: function (reject) {
           console.log(reject);
         },
       });
+    
+	
 } 
   
 
+ //날짜 변환
+ function dateChange(date) {
+   let date1 = new Date(date);
+   let date2 =
+     date1.getFullYear() + "-" + 
+     (date1.getMonth() < 10 ? "0" + (date1.getMonth() + 1): date1.getMonth() + 1) +"-" +
+     (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+   return date2;
+ }
+ 
+
+//모달창 닫기 버튼 클릭시 초기화 
+       $("#clearBtn").on("click", function(){
+       	gridVend.clear();
+       	gridDetail.clear();
+       	gridPro.clear();
+       	console.log("~");
+      
+          })
   </script>
 </html>
