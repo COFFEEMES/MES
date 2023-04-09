@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.OrderVO;
 import com.yedam.spring.sales.service.VendVO;
 
@@ -23,4 +24,7 @@ public interface OrderMapper {
 	
 	//주문서 수정입력
 	public int saveOrder(OrderVO orderVO);
+	
+	//제품명 검색 모달창 
+	public List<EdctsVO> searchPro(@Param("proNm")String proNm);
 }

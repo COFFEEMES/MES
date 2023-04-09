@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.spring.sales.mapper.OrderMapper;
+import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.OrderService;
 import com.yedam.spring.sales.service.OrderVO;
 import com.yedam.spring.sales.service.VendVO;
@@ -59,6 +60,12 @@ public class OrderServiceImpl implements OrderService{
 			result ++;
 		}
 		return result;
+	}
+
+	//제품명 가져오기
+	@Override
+	public List<EdctsVO> searchPro(String proNm) {
+		return orderMapper.searchPro(proNm);
 	}
 	
 }
