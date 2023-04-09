@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
 	namespace="com.yedam.spring.manufacturing.plan.mapper.PlanMapper">
+<!-- 	↓↓↓↓↓ 모달창에 주문서 불러오기 -->
 	<select id="selectOrderList" resultType="OrderVO">
 		SELECT s.order_no, s.order_dt, s.parrd_dt, d.pro_cd, d.pro_nm, d.order_cnt
 		FROM order_sheet s JOIN order_detail d
@@ -12,6 +13,7 @@
 		ORDER BY 4
 	</select>
 	
+<!-- 	↓↓↓↓↓ 생산계획코드 생성 -->
 	<select id="getPlanCd" resultType="PlanVO">
 		SELECT  'PL'||
                 TO_CHAR(TO_DATE(#{planDtFormat},'yyyy-MM-dd'),'yyMMdd')||
@@ -23,5 +25,11 @@
         WHERE TO_CHAR(plan_dt, 'yyyy-MM-dd') = #{planDtFormat}
 	</select>
 	
+<!-- 	↓↓↓↓↓ 제품 재고수량 조회 -->
+	<select id="getLotRestore" resultType="PlanVO">
+	 SELECT sum(lot_cnt) as stock_cnt
+    from pro_stc
+    where pro_cd = #{proCd}
+	</select>
 	
 </mapper>

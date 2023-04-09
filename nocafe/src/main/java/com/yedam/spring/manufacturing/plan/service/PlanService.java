@@ -11,4 +11,7 @@ public interface PlanService {
 	
 //	생산계획 코드 생성
 	public PlanVO getPlanCd(PlanVO planVO);
+	
+//	총재고수량 조회
+	public PlanVO getStock(PlanVO planVO);
 }

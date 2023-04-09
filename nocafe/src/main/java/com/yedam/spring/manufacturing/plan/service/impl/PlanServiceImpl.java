@@ -27,5 +27,10 @@ public class PlanServiceImpl implements PlanService {
 		return planMapper.getPlanCd(planVO);
 	}
 
+	@Override
+	public PlanVO getStock(PlanVO planVO) {
+		return planMapper.getLotRestore(planVO);
+	}
+
 	
 }
