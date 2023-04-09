@@ -21,7 +21,7 @@ public class OrderVO {
 	
 	
 	//Order Detail 테이블
-	private String orderDateilNo;
+	private String orderDetailNo;
 	//private String orderNo;
 	private String proCd;
 	private String proNm;

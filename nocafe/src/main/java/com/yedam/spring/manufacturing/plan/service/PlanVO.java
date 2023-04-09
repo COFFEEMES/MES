@@ -20,6 +20,7 @@ public class PlanVO {
 	
 	private String planHdCd;
 	
+//	날짜를 스트링으로 받아서 보내 줄 필드
 	private String planDtFormat;
 	
 	private String planManager;
@@ -27,4 +28,14 @@ public class PlanVO {
 	private String planCd;
 	private int	   planCnt;
 	private String proCd;
+
+//	총 재고수량
+	private int stockCnt;
+	
+	
+//	자재 정보 받아올 field
+	private String rscNm;
+	private String exUsed;
+	
+
 }

@@ -49,5 +49,46 @@
 	</delete>
 	
 
+	<!--주문서 상세 목록 모달 --> 
+	<select id="orderDetail" resultType="OrderVO">
+		SELECT order_detail_no,
+			   pro_nm,
+			   order_sit_detail,
+			   order_cnt
+		FROM order_detail
+		WHERE order_no=#{orderNo}
+		ORDER BY 1 
+	</select>
+	
+	
+	<!-- 주문서 수정 추가  -->
+	<update id="saveOrder" parameterType="OrderVO">
+	<selectKey keyProperty="orderDetailNo" resultType="String" order="BEFORE">	
+		select SUBSTR(ORDER_DETAIL_NO,0,10) || TO_CHAR(NVL(MAX(TO_NUMBER(SUBSTR(order_detail_no,-3))),0)+1)
+			from 
+				(SELECT * FROM ORDER_DETAIL ORDER BY ORDER_DETAIL_NO DESC)
+		WHERE ROWNUM = 1
+		AND order_no =  SUBSTR(ORDER_DETAIL_NO,0,11)
+		GROUP BY ORDER_DETAIL_NO
+	</selectKey>
+  	MERGE INTO order_detail o
+	USING DUAL ON (o.order_detail_no = 'PCP0002040403') WHEN MATCHED THEN 
+	UPDATE SET pro_nm=#{proNm}, order_cnt=#{orderCnt}, pro_cd= ( select pro_cd from edcts where pro_nm=#{proNm} 
+	) WHEN NOT MATCHED THEN INSERT(order_detail_no, pro_nm, order_cnt, pro_cd, order_sit_detail) 
+	values(#{orderDetailNo},#{proNm}, #{orderCnt}, ( select pro_cd from edcts where pro_nm=#{proNm}), '준비중')
+	</update>
+	
+	<!--제품명 모달창 조회 -->
+	<select id="searchPro" resultType="EdctsVO">
+		SELECT pro_cd,
+			   pro_nm
+		FROM edcts
+		<where>
+			<if test="proNm!=null and !proNm.equals('')">
+				pro_nm LIKE '%${proNm}%'
+		</if>
+		</where>
+		ORDER BY 1
+	</select>
 	
 </mapper>

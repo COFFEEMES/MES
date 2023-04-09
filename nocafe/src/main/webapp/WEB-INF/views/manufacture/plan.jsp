@@ -6,13 +6,14 @@
     <meta charset="UTF-8">
 <link rel="stylesheet" 
 	href="https://uicdn.toast.com/grid/latest/tui-grid.css" /> 
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
-
         #container {
             width: 98%;
             margin: 0 auto;
@@ -120,20 +121,38 @@
         </div>
      
         <script>
-//         //초기화
-//     	$("#clearBtn").on("click", function(){
-// 	   		grid.clear()
-// 	   		grid2.clear()
-// 	   		grid3.clear()
-// 	   		grid4.clear()
-// 	   		grid5.clear()
-// 	   	}) 
+        let date = new Date();
+
+	    let day = date.getDate();
+	    let month = date.getMonth() + 1;
+	    let year = date.getFullYear();
+
+	    if (month < 10) month = "0" + month;
+	    if (day < 10) day = "0" + day;
+
+	    let today = year + "-" + month + "-" + day;   
+	    let endday = year + "-" + (month + 3)+ "-" + day
+// 		↓↓↓↓↓input date에 오늘 날짜 담기
+		$(document).ready(function() {
+		    $("#tui-date-picker-target").attr("value", today);
+
+		});
+
+        //초기화
+    	$("#clearBtn").on("click", function(){
+	   		grid.clear()
+	   		grid2.clear()
+	   		grid3.clear()
+	   		grid4.clear()
+	   		grid5.clear()
+	   	}) 
 		let code
 		$(modalBtn).on("click",function(e){
 // 			계획일자 받을 변수	
 			let planDt
 // 			생성된 계획 코드 변수
-			
+			console.log(Date.now()+8032500)
+			console.log(Date.now())
 			
 			planDt = $("#tui-date-picker-target").val();
 			
@@ -152,7 +171,7 @@
 				success: function (result){
 					code = result.planCd;
 					
-// 					↓↓↓↓주문서정보 모달창으로 조회
+// 					↓↓↓↓ 생산미계획 주문서정보 모달창으로 조회
 					$.ajax({
 						url : 'orderListModal',
 						method : 'GET',
@@ -176,19 +195,47 @@
 			
 		})
 		
+		
+		//			↓↓↓↓↓↓모달 확인 버튼 클릭시 화면에 뿌려주는 동작
 		$("#confirmBtn").on("click", function(e){
 			let oderInfo = modGrid.getCheckedRows();
 			oderInfo[0].planCd = code;
-			// 			grid.setValue('planCd',code);
-			
-			grid.resetData(oderInfo);
-// 			grid2.resetData(oderInfo);
 			console.log(oderInfo);
-			console.log(code);
-		})
+			let proCd = oderInfo[0].proCd;
+			
+			$.ajax({
+				url : 'getStock',
+				method : 'GET',
+				data : {proCd : proCd},
+				success: function(result){
+				  	console.log(result.stockCnt);
+					for(let i = 0;i<oderInfo.length;i++){
+					  oderInfo[i].stockCnt = result.stockCnt;
+				  }
+					console.log(oderInfo);
+					grid.resetData(oderInfo);
+					grid2.resetData(oderInfo);
+				}
+			});
+
+	        console.log(oderInfo);
+			
+			//console.log(grid2.getData()[0].proCd);
+			console.log(oderInfo);
+			//console.log(code);
+		});
+	
+	
+	
+// 		$('#grid2').on("keyup", function(key){
+// // 		 	let edctsCd = grid2.getData()[0].proCd;
+// 		 	console.log(grid2.getData()[0].proCd);
+			
+			
+// 		})
 
 
-
+// 		↓↓↓↓↓모달 grid
  		const modGrid = new tui.Grid({
 			el : document.getElementById('modGrid'),
  			rowHeaders : [ 'checkbox' ],
@@ -197,19 +244,29 @@
  				name : 'orderNo'
 			}, {
  				header : '납기일자',
-				name : 'parrdDt'
+				name : 'parrdDt',
+				formatter: function(data) {
+		            return dateChange(data.value);
+		          },
  			}, {
- 				header : '제품번호',
-				name : 'proCd'
+ 				header : '제품명',
+				name : 'proNm'
  			} 				
  			], 
                					
  		});
  		
+ 		let todayForgrid = new Date();
+		let threeMonthsLater = new Date();
+		threeMonthsLater.setMonth(todayForgrid.getMonth() + 3);
+ 		
+//  	↓↓↓↓↓계획서 개요 grid
  		const gridData = [];
 		const grid = new tui.Grid({
 			el : document.getElementById('grid'),
 			data : gridData,
+			scrollX : false,
+			scrollY : false,
 			columns : [{
 				header 	: '계획코드',
 				name	: 'planCd',
@@ -223,42 +280,189 @@
 			{
 				header 	: '납기 일자',
 				name	: 'parrdDt',
-				align	: 'center'
+				align	: 'center',
+				formatter: function(data) {
+		            return dateChange(data.value);
+		          },
 			},
 			{
 				header 	: '시작 일자',
 				name	: 'ex_start_dt',
-				align	: 'center',
-				editor: {
+				 editor: {
 				      type: 'datePicker',
 				      options: {
-				        format: 'yyyy-MM-dd'
+				        format: 'yyyy/MM/dd',
+				        selectableRanges: [[todayForgrid,threeMonthsLater ]]
 				      }
+				    }
 			},
 			{
 				header 	: '종료 일자',
 				name	: 'ex_end_dt',
-				align	: 'center',
-				editor: {
+				 editor: {
 				      type: 'datePicker',
 				      options: {
-				        format: 'yyyy-MM-dd'
+				        format: 'yyyy/MM/dd',
+				        selectableRanges: [[todayForgrid,threeMonthsLater ]]
 				      }
+				    }
 			},
 			],
-			header:{
-				height : 'auto',
-				complexColumns: [
-					{
-						header 	: '예상 생산기간',
-						name	: 'period',
-						childNames : ['ex_start_dt','ex_end_dt']
-					}
-				]
+		});
+		
+		const gridData2 = [];
+		const grid2 = new tui.Grid({
+			el : document.getElementById('grid2'),
+			data : gridData2,
+			scrollX : false,
+			scrollY : false,
+			columns : [{
+				header 	: '제품명',
+				name	: 'proNm',
+				align	: 'center'
+			},
+		
+			{
+				header 	: '생산 수량',
+				name	: 'orderCnt', 
+				align	: 'right'
+			},
+			{
+				header 	: '현재 제품 재고양',
+				name	: 'stockCnt',
+				align	: 'right'
+			},
+			{
+				header 	: '제품 코드',
+				name	: 'proCd', 
+				hidden : 'true'
+			},
+			],
+			onGridUpdated(ev){
+				console.log(ev);
+				
+				let proCd = grid2.getData()[0].proCd
+				console.log(proCd);
+// 				grid2.resetData
+			}
+		});
+
+		
+		const gridData3 = [];
+		const grid3 = new tui.Grid({
+			el : document.getElementById('grid3'),
+			data : gridData3,
+			scrollX : false,
+			scrollY : false,
+			columns : [{
+				header 	: '공정이름',
+				name	: 'prcsNm',
+				align	: 'center'
+			},
+			{
+				header 	: '자재이름',
+				name	: 'rscNm',
+				align	: 'center'
+			},
+			{
+				header 	: 'bom코드',
+				name	: 'bomCd',
+				align	: 'center',
+			},
+			{
+				header 	: '불량률',
+				name	: 'orderNo',
+				align	: 'center'
 			},
 			
+			],
+		});
 		
-		})
+		const gridData4 = [];
+		const grid4 = new tui.Grid({
+			el : document.getElementById('grid4'),
+			data : gridData4,
+			columns : [{
+				header 	: '자재명',
+				name	: 'proNm',
+				align	: 'center'
+			},
+			{
+				header 	: '자재 LOT',
+				name	: 'rscLotCd',
+				align	: 'center'
+			},
+			{
+				header 	: '사용가능 수량',
+				name	: 'parrdDt',
+				align	: 'center',
+			},
+			{
+				header 	: '예상사용량',
+				name	: 'orderNo',
+				align	: 'center'
+			},
+			
+			],
+		});
+		
+		const gridData5 = [];
+		const grid5 = new tui.Grid({
+			el : document.getElementById('grid5'),
+			data : gridData5,
+			columns : [{
+				header 	: '자재명',
+				name	: 'proNm',
+				align	: 'center'
+			},
+			{
+				header 	: '자재 LOT',
+				name	: 'rscLotCd',
+				align	: 'center'
+			},
+			{
+				header 	: '사용가능 수량',
+				name	: 'parrdDt',
+				align	: 'center',
+			},
+			{
+				header 	: '예상사용량',
+				name	: 'orderNo',
+				align	: 'center'
+			},
+			
+			],
+		});
+		
+// 		↓↓↓↓↓↓↓날짜 포맷 적용함수
+		function dateChange(date) {
+		      let date1 = new Date(date);
+		      let date2 =
+		        date1.getFullYear() +
+		        "-" +
+		        (date1.getMonth() < 10
+		          ? "0" + (date1.getMonth() + 1)
+		          : date1.getMonth() + 1) +
+		        "-" +
+		        (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+		      return date2;
+		    };
+		
+// 		    ↓↓↓↓↓↓↓제품 공정 받아오는 Ajax
+		function getProc(data){
+			$.ajax({
+				url : 'getBom',
+				method : 'GET',
+				data : {proCd : data},
+				success : function(result){
+					console.log(result);
+				},error: function(err){
+					console.log(err);
+				}
+			})
+};
+		    
+
 
         </script>
 </body>
