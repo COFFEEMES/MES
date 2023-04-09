@@ -48,7 +48,7 @@ public class ManagerController {
 	
 	@GetMapping("/vendManage")
 	public String getAllvend(Model model) {
-		model.addAttribute("vend", managerService.getAllVend());
+		model.addAttribute("vendList", managerService.getAllVend());
 		return "manager/vendManager";
 	}
 
