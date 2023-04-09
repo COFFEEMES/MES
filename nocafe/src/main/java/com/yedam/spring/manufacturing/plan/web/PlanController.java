@@ -37,7 +37,7 @@ public class PlanController {
 	@ResponseBody
 	public PlanVO getPlanCd(PlanVO planVO) {
 		System.out.println(planVO);
-		planVO.setPlanDtFormat(date.format(planVO.getPlanDt()));
+//		planVO.setPlanDtFormat(date.format(planVO.getPlanDt()));
 		System.out.println(planVO);
 		return planService.getPlanCd(planVO);
 	}

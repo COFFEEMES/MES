@@ -280,11 +280,13 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   var selectedRowKey2 = null;
   grid2.on('click', (ev) => {
     const { columnName, rowKey } = ev;
-    if (columnName == 'detailCode' && rowKey < rowCount - 1) {
-      alert('이미 저장된 코드ID는 변경할 수 없습니다.');
-      return;
+    if (columnName == 'detailCode') {
+      if (grid2.getModifiedRows().createdRows.length == 0 || rowKey < rowCount - 1 ) {
+        alert('이미 저장된 코드ID는 변경할 수 없습니다.');
+        return;
+      }
     }
-
+    
     if (selectedRowKey2 != ev.rowKey) {
       grid2.removeRowClassName(selectedRowKey2, 'highlight2');
     }
