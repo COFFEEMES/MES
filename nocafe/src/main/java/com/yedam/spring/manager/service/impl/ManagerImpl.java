@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.spring.manager.mapper.ManagerMapper;
 import com.yedam.spring.manager.service.BasicCodeVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
+import com.yedam.spring.manager.service.EmpVO;
 import com.yedam.spring.manager.service.ManagerService;
 import com.yedam.spring.sales.service.VendVO;
 
@@ -42,6 +43,21 @@ public class ManagerImpl implements ManagerService {
 	@Override
 	public List<VendVO> getAllVend() {
 		return managerMapper.getAllVend();
+	}
+
+	@Override
+	public void mergeVend(VendVO vendVO) {
+		managerMapper.mergeVend(vendVO);
+	}
+
+	@Override
+	public void delVend(VendVO vendVO) {
+		managerMapper.delVend(vendVO);
+	}
+
+	@Override
+	public List<EmpVO> getEmpList() {
+		return managerMapper.getEmpList();
 	}
 
 }

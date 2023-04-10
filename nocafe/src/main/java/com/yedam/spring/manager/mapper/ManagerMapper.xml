@@ -47,5 +47,34 @@
 		  FROM vend
 		 ORDER BY vend_cd
 	</select>
+	
+	<!-- 거래처 추가or수정 -->
+	<update id="mergeVend" statementType="CALLABLE" parameterType="VendVO">
+		{ CALL upsert_vend(
+			  #{vendCd}
+			, #{vendNm}
+			, #{bizno}
+			, #{telno}
+			, #{vendAddr}
+			, #{empCode}
+			, #{vendTyp}
+		  )
+		}
+	</update>
+	
+	<!-- 거래처 삭제 -->
+	<update id="delVend" statementType="CALLABLE" parameterType="VendVO">
+		{ CALL delete_vend(
+			  #{vendCd}
+		  )
+		}
+	</update>
+	
+	<!-- 담당사원 검색 -->
+	<select id="getEmpList" resultType="EmpVO">
+		SELECT *
+		  FROM emp e, detail_code d
+		 WHERE e.emp_code = d.basic_code||d.detail_code
+	</select>
 
 </mapper>

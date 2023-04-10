@@ -21,6 +21,7 @@ uri="http://tiles.apache.org/tags-tiles"%>
       src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
     <link
       rel="stylesheet"
       href="https://uicdn.toast.com/grid/latest/tui-grid.css"
