@@ -23,7 +23,7 @@ public class PlanController {
 	@GetMapping("/mkrPlan")
 	public String dirList() {
 		return "manufacture/plan";
-	}
+	};
 	
 	
 //	외부모달
@@ -31,20 +31,48 @@ public class PlanController {
 	@ResponseBody
 	public List<OrderVO> loginModal() {
 		return planService.getOrderlist();
-	}
+	};
 	
+//	계획 코드 생성
 	@GetMapping("getPlanCd")
 	@ResponseBody
 	public PlanVO getPlanCd(PlanVO planVO) {
 		planVO.setPlanDtFormat(date.format(planVO.getPlanDt()));
+		System.out.println(planVO);
 		return planService.getPlanCd(planVO);
-	}
+	};
 	
+//	제품제고 조회
 	@GetMapping("getStock")
 	@ResponseBody
 	public PlanVO getStock(PlanVO planVO) {
-		System.out.println(planVO);
 		return planService.getStock(planVO);
+	};
+	
+//	bom코드 
+	@GetMapping("getBom")
+	@ResponseBody
+	public List<PlanVO> getBom(PlanVO planVO) {
+		return planService.getBomCd(planVO);
+	};
+	
+//	불량률 조회
+	@GetMapping("getInfer")
+	@ResponseBody
+	public List<PlanVO> getInfer(PlanVO planVO){
+		return planService.getInferPct(planVO);
+	};
+	
+	@GetMapping("getRsc")
+	@ResponseBody
+	public List<PlanVO>getRsc(PlanVO planVO){
+		return planService.getRsc(planVO);
+	}
+	
+	@GetMapping("getRscLot")
+	@ResponseBody
+	public List<PlanVO>getLot(PlanVO planVO){
+		return planService.getRscDetail(planVO);
 	}
 	
 //	/*

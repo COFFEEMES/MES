@@ -32,5 +32,25 @@ public class PlanServiceImpl implements PlanService {
 		return planMapper.getLotRestore(planVO);
 	}
 
+	@Override
+	public List<PlanVO> getBomCd(PlanVO planVO) {
+		return planMapper.getBomCd(planVO);
+	}
+
+	@Override
+	public List<PlanVO> getInferPct(PlanVO planVO) {
+		return planMapper.getInferPct(planVO);
+	}
+
+	@Override
+	public List<PlanVO> getRsc(PlanVO planVO) {
+		return planMapper.getRscNeed(planVO);
+	}
+
+	@Override
+	public List<PlanVO> getRscDetail(PlanVO planVO) {
+		return planMapper.getRscDetil(planVO);
+	}
+
 	
 }
