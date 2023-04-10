@@ -1,126 +1,143 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+	pageEncoding="utf-8"%>
 
 
 <head>
-    <meta charset="UTF-8">
-<link rel="stylesheet" 
-	href="https://uicdn.toast.com/grid/latest/tui-grid.css" /> 
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<meta charset="UTF-8">
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+<script
+	src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-        #container {
-            width: 98%;
-            margin: 0 auto;
-        }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<style>
 
-        .col {
-            width: 100%
-        }
+#container {
+	width: 98%;
+	margin: 0 auto;
+}
 
-        .linelist {
-            float: right;
-            margin: 0 20px 20px 0;
+.col {
+	width: 100%
+}
 
-        }
+.linelist {
+	float: right;
+	margin: 0 20px 20px 0;
+}
 
-        #pDate {
-            float: left;
-        }
+#pDate {
+	float: left;
+}
 
-
-        .tui-datepicker {
-            z-index: 99;
-        }
-    </style>
+.tui-datepicker {
+	z-index: 99;
+}
+</style>
 </head>
 
 <body>
-    <!-- 본문내용 -->
-        <!-- 헤더부분 -->
-        <div class="container-fluid px-4">
-            <h1 class="mt-4">생산계획</h1>
-            <ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
-				<li class="breadcrumb-item">> 생산관리</li>
-				<li class="breadcrumb-item active">> 생산계획</li>
-	  		</ol>
-        </div>
-        <!-- 헤더부분 -->
-        <div id="container">
-         <div class="card mb-4">
+	<!-- 본문내용 -->
+	<!-- 헤더부분 -->
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">생산계획</h1>
+		<ol class="breadcrumb mb-4">
+			<li class="breadcrumb-item"><a href="home.do"><i
+					class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item">> 생산관리</li>
+			<li class="breadcrumb-item active">> 생산계획</li>
+		</ol>
+	</div>
+	<!-- 헤더부분 -->
+	<div id="container">
+		<div class="card mb-4">
 			<div class="card-body">
-            <div id="pDate">
-                <!--<div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
-	                <label>생산계획일자</label>
-                    <input type="date" id="tui-date-picker-target" name="tui-date-picker-target" class="form-control" style="width: 150px" >
-                    <!--<span class="tui-ico-date"></span>-->
-                	<!--<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>-->
-                <!--</div>-->
-            </div>
-            <div class="linelist">
-            	<button id="clearBtn" class="btn btn-primary" form=""><i class="fas fa-file"></i> 초기화</button>
-                <button data-bs-toggle="modal" class="btn btn-primary" id="modalBtn" data-bs-target="#exampleModal"
-                  ><i class="fas fa-search"></i> 주문서</button>
-                <button class="btn btn-primary" id="regiBtn"><i class="fas fa-file"></i> 새계획</button>
-                <button class="btn btn-primary"id="osBtn"><i class="fas fa-save"></i> 저장</button>
-            </div>
+				<div id="pDate">
+					<!--<div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
+					<label>생산계획일자</label> <input type="date"
+						id="tui-date-picker-target" name="tui-date-picker-target"
+						class="form-control" style="width: 150px">
+					<!--<span class="tui-ico-date"></span>-->
+					<!--<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>-->
+					<!--</div>-->
+				</div>
+				<div class="linelist">
+					<button id="clearBtn" class="btn btn-primary" form="">
+						<i class="fas fa-file"></i> 초기화
+					</button>
+					<button data-bs-toggle="modal" class="btn btn-primary"
+						id="modalBtn" data-bs-target="#exampleModal">
+						<i class="fas fa-search"></i> 주문서
+					</button>
+					<button class="btn btn-primary" id="regiBtn">
+						<i class="fas fa-file"></i> 새계획
+					</button>
+					<button class="btn btn-primary" id="osBtn">
+						<i class="fas fa-save"></i> 저장
+					</button>
+				</div>
 			</div>
+		</div>
+		<div class="card mb-4">
+			<div class="card-body">
+				<div id="grid"></div>
 			</div>
-			<div class="card mb-4">
+		</div>
+		<br>
+		<div class="card mb-4">
 			<div class="card-body">
-            <div id="grid"></div>
-            </div>
-            </div>
-            <br>
-            <div class="card mb-4">
+				<div class="d-flex flex-row justify-content-between">
+					<div id="grid2" style="width: 1000px;">제품</div>
+					<div id="grid3" style="width: 500px;">제품공정확인</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="card mb-4">
 			<div class="card-body">
-            <div class="d-flex flex-row justify-content-between">
-                <div id="grid2" style="width: 1000px;">제품</div>
-                <div id="grid3" style="width: 500px;">제품공정확인</div>
-            </div>
-            </div>
-            </div>
-            <br>
-            <div class="card mb-4">
-			<div class="card-body">
-            <div class="d-flex flex-row justify-content-between">
-                <div id="grid4" style="width: 1000px;">사용가능자재</div>
-                <div id="grid5" style="width: 500px;">자재확인</div>
-            </div>
-            </div>
-            </div>
+				<div class="d-flex flex-row justify-content-between">
+					<div id="grid4" style="width: 1000px;">사용가능자재</div>
+					<div id="grid5" style="width: 500px;">자재확인</div>
+				</div>
+			</div>
+		</div>
 
 
-            <div id="tui-date-picker-container" style="margin-top: -1px;"></div>
-            <br>
-        </div>
+		<div id="tui-date-picker-container" style="margin-top: -1px;"></div>
+		<br>
+	</div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">주문서 조회</h5>
-                        <br><br>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div><br>
-                    <div id="modGrid" class="modal-body"></div>
-                    <div class="modal-footer">
-                        <button type="button" id="confirmBtn" class="btn btn-primary"
-                            data-bs-dismiss="modal">확인</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-     
-        <script>
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">주문서 조회</h5>
+					<br> <br>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<br>
+				<div id="modGrid" class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" id="confirmBtn" class="btn btn-primary"
+						data-bs-dismiss="modal">확인</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
         let date = new Date();
 
 	    let day = date.getDate();
@@ -131,7 +148,13 @@
 	    if (day < 10) day = "0" + day;
 
 	    let today = year + "-" + month + "-" + day;   
-	    let endday = year + "-" + (month + 3)+ "-" + day
+	    let endday = year + "-" + (month + 3)+ "-" + day;
+	    
+// 	    ↓↓↓↓↓bom 으로 가져온 공정
+	    let bom;
+	    let planDt = $("#tui-date-picker-target").val();
+	    
+	    
 // 		↓↓↓↓↓input date에 오늘 날짜 담기
 		$(document).ready(function() {
 		    $("#tui-date-picker-target").attr("value", today);
@@ -140,36 +163,23 @@
 
         //초기화
     	$("#clearBtn").on("click", function(){
-	   		grid.clear()
-	   		grid2.clear()
-	   		grid3.clear()
-	   		grid4.clear()
-	   		grid5.clear()
+	   		grid.clear();
+	   		grid2.clear();
+	   		grid3.clear();
+	   		grid4.clear();
+	   		grid5.clear();
 	   	}) 
 		let code
 		$(modalBtn).on("click",function(e){
 // 			계획일자 받을 변수	
-			let planDt
 // 			생성된 계획 코드 변수
-			console.log(Date.now()+8032500)
-			console.log(Date.now())
-			
-			planDt = $("#tui-date-picker-target").val();
-			
+// 			console.log(Date.now()+8032500)
+// 			console.log(Date.now())
+			let planDt = $("#tui-date-picker-target").val();
 			console.log(planDt);
-			
-// 			modGrid.on('dblclick', ev => {
-//    				modGrid.check(ev.rowKey);
-//        			//$("#exampleModal").modal('hide')	
-//  			})  
-
+		
 // 			↓↓↓↓↓ 계획번호 생성
-			$.ajax({
-				url : 'getPlanCd',
-				method : 'GET',
-				data : {planDt: planDt},
-				success: function (result){
-					code = result.planCd;
+			getPlanCd(planDt);
 					
 // 					↓↓↓↓ 생산미계획 주문서정보 모달창으로 조회
 					$.ajax({
@@ -184,23 +194,19 @@
 // 								↓↓↓↓모달창 리셋
 								modGrid.resetData(res);
 								setTimeout(()=> modGrid.refreshLayout() , 300);
+						},error: function(err){
+							console.log(err);
 						}
-					
 					})
-				},
-				error: function(err){
-					console.log(err);
-				}
-			})
-			
-		})
+    			})
 		
 		
-		//			↓↓↓↓↓↓모달 확인 버튼 클릭시 화면에 뿌려주는 동작
+		//	↓↓↓↓↓↓모달 확인 버튼 클릭시 화면에 뿌려주는 동작
 		$("#confirmBtn").on("click", function(e){
 			let oderInfo = modGrid.getCheckedRows();
-			oderInfo[0].planCd = code;
-			console.log(oderInfo);
+			for(let i = 0 ; i<oderInfo.length;i++){
+			oderInfo[i].planCd = code;
+			};
 			let proCd = oderInfo[0].proCd;
 			
 			$.ajax({
@@ -208,31 +214,19 @@
 				method : 'GET',
 				data : {proCd : proCd},
 				success: function(result){
-				  	console.log(result.stockCnt);
 					for(let i = 0;i<oderInfo.length;i++){
 					  oderInfo[i].stockCnt = result.stockCnt;
 				  }
-					console.log(oderInfo);
 					grid.resetData(oderInfo);
 					grid2.resetData(oderInfo);
 				}
 			});
 
-	        console.log(oderInfo);
+// 	        console.log(oderInfo);
 			
-			//console.log(grid2.getData()[0].proCd);
-			console.log(oderInfo);
-			//console.log(code);
 		});
 	
-	
-	
-// 		$('#grid2').on("keyup", function(key){
-// // 		 	let edctsCd = grid2.getData()[0].proCd;
-// 		 	console.log(grid2.getData()[0].proCd);
-			
-			
-// 		})
+
 
 
 // 		↓↓↓↓↓모달 grid
@@ -328,7 +322,7 @@
 				align	: 'right'
 			},
 			{
-				header 	: '현재 제품 재고양',
+				header 	: '재고량',
 				name	: 'stockCnt',
 				align	: 'right'
 			},
@@ -339,11 +333,10 @@
 			},
 			],
 			onGridUpdated(ev){
-				console.log(ev);
 				
 				let proCd = grid2.getData()[0].proCd
-				console.log(proCd);
-// 				grid2.resetData
+				
+				getPrcs(proCd);
 			}
 		});
 
@@ -371,11 +364,17 @@
 			},
 			{
 				header 	: '불량률',
-				name	: 'orderNo',
-				align	: 'center'
+				name	: 'inferPct',
+				align	: 'right'
 			},
 			
 			],
+			onGridUpdated(ev){
+				console.log(grid3.getData()[0].bomCd);
+				let data=grid3.getData()[0].bomCd;
+				getRscInfo(data);
+		
+			}
 		});
 		
 		const gridData4 = [];
@@ -384,22 +383,17 @@
 			data : gridData4,
 			columns : [{
 				header 	: '자재명',
-				name	: 'proNm',
+				name	: 'rscNm',
 				align	: 'center'
 			},
 			{
-				header 	: '자재 LOT',
-				name	: 'rscLotCd',
-				align	: 'center'
-			},
-			{
-				header 	: '사용가능 수량',
-				name	: 'parrdDt',
+				header 	: '재고량',
+				name	: 'lotCnt',
 				align	: 'center',
 			},
 			{
 				header 	: '예상사용량',
-				name	: 'orderNo',
+				name	: 'exCnt',
 				align	: 'center'
 			},
 			
@@ -412,7 +406,7 @@
 			data : gridData5,
 			columns : [{
 				header 	: '자재명',
-				name	: 'proNm',
+				name	: 'rscNm',
 				align	: 'center'
 			},
 			{
@@ -422,7 +416,7 @@
 			},
 			{
 				header 	: '사용가능 수량',
-				name	: 'parrdDt',
+				name	: 'lotCnt',
 				align	: 'center',
 			},
 			{
@@ -433,6 +427,34 @@
 			
 			],
 		});
+		
+		grid4.on('dblclick',(ev)=>{
+			console.log(ev);
+			if(ev.rowKey == null){
+				Swal.fire({
+				      icon: 'error',
+				      title: '값이 없습니다.',
+				      text: '값을 조회 후 사용가능합니다.',
+				    });
+			};
+			console.log(ev.rowKey);
+		 	let data = grid4.getData()[ev.rowKey].rscCd;
+		 	$.ajax({
+		 		url : 'getRscLot',
+		 		method : 'GET',
+		 		data : {rscCd : data},
+		 		success : function(result){
+		 			console.log(result);
+		 			grid5.resetData(result);
+		 		},error : function(err){
+		 			console.log(err);
+		 		}
+		 		
+		 	})
+		 	
+		});
+		
+		
 		
 // 		↓↓↓↓↓↓↓날짜 포맷 적용함수
 		function dateChange(date) {
@@ -449,19 +471,71 @@
 		    };
 		
 // 		    ↓↓↓↓↓↓↓제품 공정 받아오는 Ajax
-		function getProc(data){
+		function getPrcs(data){
 			$.ajax({
 				url : 'getBom',
 				method : 'GET',
 				data : {proCd : data},
 				success : function(result){
-					console.log(result);
+					
+					bom=result;
+					
+					$.ajax({
+						url : 'getInfer',
+						method : 'GET',
+						data : {proCd : data},
+						success : function(res){
+							
+							for(let i=0;i<bom.length;i++){
+								bom[i].inferPct = res[i].inferPct;
+							}
+							console.log(bom);
+							grid3.resetData(bom);
+						}
+					})
 				},error: function(err){
 					console.log(err);
 				}
 			})
 };
+		    function getPlanCd(data){
+//	 			↓↓↓↓↓ 계획번호 생성
+				$.ajax({
+					url : 'getPlanCd',
+					method : 'GET',
+					data : {planDt: data},
+					success: function (result){
+						code = result.planCd;
+					},
+					error: function(err){
+						console.log(err);
+					}
+				})
+		    };
 		    
+		    function getRscInfo(data){
+		    	$.ajax({
+					url : 'getRsc',
+					method : 'GET',
+					data : {bomCd: data},
+					success: function (result){
+						let proCnt=0;
+						for(let i=0;i<grid2.getData().length;i++){
+							proCnt += grid2.getData()[i].orderCnt;
+						};
+						let bom = grid3.getData();
+						console.log(result, bom, proCnt);
+						for(let i = 0; i<result.length;i++){
+							console.log(bom[i]);
+							result[i].exCnt = (bom[i].useCnt)*proCnt;
+						};
+						grid4.resetData(result);
+					},
+					error: function(err){
+						console.log(err);
+					}
+				})
+		    };
 
 
         </script>

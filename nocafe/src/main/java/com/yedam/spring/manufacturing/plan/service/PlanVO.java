@@ -36,6 +36,23 @@ public class PlanVO {
 //	자재 정보 받아올 field
 	private String rscNm;
 	private String exUsed;
+	private String lotCnt;
+	private String rscLotCd;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date exp_dt;
+	
+	
+//	받아올 공정정보
+	private int useCnt;
+	private String bomCd;
+	private int bomSq;
+	private String prcsCd;
+	private String rscCd;
+	private String prcsNm;
+	private String inferPct;
+	
+	
+	
 	
 
 }
