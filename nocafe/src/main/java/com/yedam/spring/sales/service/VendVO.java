@@ -11,4 +11,6 @@ public class VendVO {
 	private String vendAddr;
 	private String empCode;
 	
+	private String vendTyp;
+	
 }

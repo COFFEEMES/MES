@@ -1,72 +1,107 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<script src="https://code.jquery.com/jquery-3.6.4.js"
-	integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-	crossorigin="anonymous"></script>
+pageEncoding="UTF-8"%> <%@ taglib prefix="c"
+uri="http://java.sun.com/jsp/jstl/core"%>
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"
+></script>
 <div class="container-fluid px-4">
-	<h1 class="mt-4">공통코드관리</h1>
-	<ol class="breadcrumb mb-4">
-		<li class="breadcrumb-item"><a href="/"><i
-				class="fas fa-home"></i></a></li>
-		<li class="breadcrumb-item">> 기준정보관리</li>
-		<li class="breadcrumb-item active">> 공통코드관리</li>
-	</ol>
-	<div class="row">
-		<div class="card col-xl-11">
-			<div class="card-body">
-				<label for="" autofocus="autofocus">코드명</label> <input type="text"
-					class="form-control" id="searchBcode" name="searchBcode"
-					style="width: 150px" />
-				<button class="btn btn-primary" id="searchBtn">
-					<i class="fas fa-search"></i> 검색
-				</button>
-			</div>
-		</div>
-	</div>
+  <h1 class="mt-4">자재관리</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item">
+      <a href="/"><i class="fas fa-home"></i></a>
+    </li>
+    <li class="breadcrumb-item">> 기준정보관리</li>
+    <li class="breadcrumb-item active">> 자재관리</li>
+  </ol>
+  <div class="row">
+    <div class="card col-xl-11">
+      <div class="card-body">
+        <select class="dataTable-selector" name="searchParam" id="searchParam">
+          <option selected value="">==등록시필수선택==</option>
+          <option value="SAL">매입처</option>
+          <option value="PUR">납품처</option>
+          <option value="TRA">운송업체</option>
+        </select>
+        <input
+          type="text"
+          class="form-control"
+          id="searchBcode"
+          name="searchBcode"
+          style="width: 150px"
+        />
+        <button class="btn btn-primary" id="searchBtn">
+          <i class="fas fa-search"></i> 검색
+        </button>
+      </div>
+    </div>
+  </div>
 
-	<div class="row">
-		<div class="card col-xl-4">
-			<div class="linelist" style="margin-top: 16px">
-				<h3 style="width: 100px; display: inline; padding-left: 15px">
-					공통 코드</h3>
-				<div style="width: 100%; padding: 0 15px; margin-top: 5px">
-					<form id="BcodeInfo" name="BcodeInfo" onsubmit="return false">
-						<button class="btn btn-primary" id="saveBcode"
-							style="float: right; width: 28%; height: 81px">
-							<i class="fas fa-save"></i> 추가
-						</button>
-						<input type="text" class="form-control" id="newBcode"
-							name="basicCode" style="width: 70%" placeholder="공통 코드" />
-						<input type="text" class="form-control" id="newBname"
-							name="basicName" style="width: 70%; margin-top: 5px"
-							placeholder="코드명" />
-					</form>
-				</div>
-			</div>
-			<div class="card-body">
-				<div id="grid"></div>
-			</div>
-		</div>
+  <div class="row">
+    <div class="card col-xl-4">
+      <div class="linelist" style="margin-top: 16px">
+        <h3 style="width: 100px; display: inline; padding-left: 15px">
+          공통 코드
+        </h3>
+        <div style="width: 100%; padding: 0 15px; margin-top: 5px">
+          <form id="BcodeInfo" name="BcodeInfo" onsubmit="return false">
+            <button
+              class="btn btn-primary"
+              id="saveBcode"
+              style="float: right; width: 28%; height: 81px"
+            >
+              <i class="fas fa-save"></i> 추가
+            </button>
+            <input
+              type="text"
+              class="form-control"
+              id="newBcode"
+              name="basicCode"
+              style="width: 70%"
+              placeholder="공통 코드"
+            />
+            <input
+              type="text"
+              class="form-control"
+              id="newBname"
+              name="basicName"
+              style="width: 70%; margin-top: 5px"
+              placeholder="코드명"
+            />
+          </form>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="grid"></div>
+      </div>
+    </div>
 
-		<div class="card col-xl-7">
-			<div class="linelist" style="margin-top: 16px">
-				<h3 style="width: 100px; display: inline; padding-left: 15px">
-					상세 코드</h3>
-				<button class="btn btn-primary" id="saveDcode"
-					style="float: right; margin-left: 16px">
-					<i class="fas fa-save"></i> 저장
-				</button>
-				<button class="btn btn-primary" id="newDcode"
-					style="float: right; margin-left: 16px">
-					<i class="fas fa-save"></i> 추가
-				</button>
-			</div>
-			<div class="card-body">
-				<div id="grid2"></div>
-			</div>
-		</div>
-	</div>
+    <div class="card col-xl-7">
+      <div class="linelist" style="margin-top: 16px">
+        <h3 style="width: 100px; display: inline; padding-left: 15px">
+          상세 코드
+        </h3>
+        <button
+          class="btn btn-primary"
+          id="saveDcode"
+          style="float: right; margin-left: 16px"
+        >
+          <i class="fas fa-save"></i> 저장
+        </button>
+        <button
+          class="btn btn-primary"
+          id="newDcode"
+          style="float: right; margin-left: 16px"
+        >
+          <i class="fas fa-save"></i> 추가
+        </button>
+      </div>
+      <div class="card-body">
+        <div id="grid2"></div>
+      </div>
+    </div>
+  </div>
 </div>
 <script language="Javascript">
   let gridData = [

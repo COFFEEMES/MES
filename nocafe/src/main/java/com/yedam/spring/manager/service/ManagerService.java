@@ -11,5 +11,8 @@ public interface ManagerService {
 	public void upsertDetailCode(List<DetailCodeVO> detailCodeVO);
 	public int insertBasicCode(BasicCodeVO basicCodeVO);
 	public List<VendVO> getAllVend();
+	public void mergeVend(VendVO vendVO);
+	public void delVend(VendVO vendVO);
+	public List<EmpVO> getEmpList();
 
 }

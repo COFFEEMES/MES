@@ -28,10 +28,9 @@ pageEncoding="UTF-8"%>
           data-bs-parent="#sidenavAccordion"
         >
           <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link" href="layout-static.html">Static Navigation</a>
-            <a class="nav-link" href="layout-sidenav-light.html"
-              >Light Sidenav</a
-            >
+            <a class="nav-link" href="basicCodeManage">공통 코드 관리</a>
+            <a class="nav-link" href="vendManage">거래처 관리</a>
+            <a class="nav-link" href="matManage">자재 관리</a>
           </nav>
         </div>
         <a
