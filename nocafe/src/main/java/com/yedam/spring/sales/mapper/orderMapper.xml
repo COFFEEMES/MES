@@ -61,21 +61,9 @@
 	</select>
 	
 	
-	<!-- 주문서 수정 추가  -->
-	<update id="saveOrder" parameterType="OrderVO">
-	<selectKey keyProperty="orderDetailNo" resultType="String" order="BEFORE">	
-		select SUBSTR(ORDER_DETAIL_NO,0,10) || TO_CHAR(NVL(MAX(TO_NUMBER(SUBSTR(order_detail_no,-3))),0)+1)
-			from 
-				(SELECT * FROM ORDER_DETAIL ORDER BY ORDER_DETAIL_NO DESC)
-		WHERE ROWNUM = 1
-		AND order_no =  SUBSTR(ORDER_DETAIL_NO,0,11)
-		GROUP BY ORDER_DETAIL_NO
-	</selectKey>
-  	MERGE INTO order_detail o
-	USING DUAL ON (o.order_detail_no = 'PCP0002040403') WHEN MATCHED THEN 
-	UPDATE SET pro_nm=#{proNm}, order_cnt=#{orderCnt}, pro_cd= ( select pro_cd from edcts where pro_nm=#{proNm} 
-	) WHEN NOT MATCHED THEN INSERT(order_detail_no, pro_nm, order_cnt, pro_cd, order_sit_detail) 
-	values(#{orderDetailNo},#{proNm}, #{orderCnt}, ( select pro_cd from edcts where pro_nm=#{proNm}), '준비중')
+	<!-- 주문서 디테일 수정 추가  -->
+	<update id="saveOrder" statementType="CALLABLE" parameterType="OrderVO">
+  	{ CALL order_detail_save(#{orderDetailNo},#{proNm}, #{orderCnt}, #{orderNo}) }
 	</update>
 	
 	<!--제품명 모달창 조회 -->
@@ -90,5 +78,10 @@
 		</where>
 		ORDER BY 1
 	</select>
+	
+		<!-- 주문서 전체 추가  -->
+	<update id="saveOrderTotal" statementType="CALLABLE" parameterType="OrderVO">
+  	{ CALL order_save(#{vendNm},#{orderDt}, #{parrdDt}, #{orderNo}) }
+	</update>
 	
 </mapper>

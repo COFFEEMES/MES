@@ -51,13 +51,15 @@ public class OrderServiceImpl implements OrderService{
 		return orderMapper.orderDetail(orderNo);
 	}
 
-	//수정 
+	//주문서 디테일 수정 
 	@Override
 	public int saveOrder(List<OrderVO> orderVO) { 
 		int result = 0;
 		for(int i=0 ; i<orderVO.size(); i++) {
+			System.out.println(orderVO.get(i));
 			orderMapper.saveOrder(orderVO.get(i));
 			result ++;
+			
 		}
 		return result;
 	}
@@ -66,6 +68,19 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public List<EdctsVO> searchPro(String proNm) {
 		return orderMapper.searchPro(proNm);
+	}
+
+	//주문서 수정
+	@Override
+	public int saveOrderTotal(List<OrderVO> orderVO) {
+		int result = 0;
+		for(int i=0 ; i<orderVO.size(); i++) {
+			System.out.println(orderVO.get(i));
+			orderMapper.saveOrderTotal(orderVO.get(i));
+			result ++;
+			
+		}
+		return result;
 	}
 	
 }
