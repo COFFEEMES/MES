@@ -57,11 +57,11 @@ public class OrderController {
 		return orderService.orderDetail(orderNo);
 	}
 	
-	//주문서 수정
+	//주문서 디테일 수정
 	@PostMapping("/saveOrder")
 	@ResponseBody
 	public int saveOrder(@RequestBody List<OrderVO> orderVO) {
-		System.out.println(orderVO);
+		//System.out.println(orderVO);
 		return orderService.saveOrder(orderVO);
 	} 
 	
@@ -71,4 +71,12 @@ public class OrderController {
 	public List<EdctsVO> proSearch(@RequestParam(required = false) String proNm) {
 		return orderService.searchPro(proNm);
 		}
+	
+	//주문서 전체수정
+		@PostMapping("/saveOrderTotal")
+		@ResponseBody
+		public int saveOrderTotal(@RequestBody List<OrderVO> orderVO) {
+			//System.out.println(orderVO);
+			return orderService.saveOrderTotal(orderVO);
+		} 
 }

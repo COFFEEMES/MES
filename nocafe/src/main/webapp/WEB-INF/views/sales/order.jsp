@@ -580,14 +580,15 @@ function savePro() {
    //전체조회에서 추가 버튼 누르면
    document.getElementById('addBtn').addEventListener('click', addRow);
   function addRow() {
-	  const rowData = grid.getRow(grid.getData().length-1);
+	 /*  const rowData = grid.getRow(grid.getData().length-1);
 	  rowData.orderNo="";
 	  rowData.vendCd="";
 	  rowData.vendNm="";
 	  rowData.orderDt=getToday();
 	  rowData.orderSit="";
 	  rowData.parrdDt=getToday();
-	  grid.appendRow(rowData);
+	  grid.appendRow(rowData); */
+	  grid.appendRow();
 	  gridData.push({orderNo:"", vendCd:"", vendNm:"", orderDt:"", orderSit:"", parrdDt:"" });
 	  
  	
