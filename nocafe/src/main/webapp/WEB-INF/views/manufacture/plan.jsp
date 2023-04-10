@@ -345,8 +345,8 @@
 		const grid3 = new tui.Grid({
 			el : document.getElementById('grid3'),
 			data : gridData3,
-			scrollX : false,
-			scrollY : false,
+			scrollX : true,
+			scrollY : true,
 			columns : [{
 				header 	: '공정이름',
 				name	: 'prcsNm',
@@ -402,7 +402,7 @@
 		
 		const gridData5 = [];
 		const grid5 = new tui.Grid({
-			el : document.getElementById('grid5'),
+			el : $("#grid5")[0],
 			data : gridData5,
 			columns : [{
 				header 	: '자재명',
