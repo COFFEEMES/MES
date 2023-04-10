@@ -22,9 +22,12 @@ public interface OrderMapper {
 	//주문서 상세 목록 모달
 	public List<OrderVO> orderDetail(@Param("orderNo")String orderNo);
 	
-	//주문서 수정입력
+	//주문서 디테일 수정입력
 	public int saveOrder(OrderVO orderVO);
 	
 	//제품명 검색 모달창 
 	public List<EdctsVO> searchPro(@Param("proNm")String proNm);
+	
+	//주문서 수정입력
+	public int saveOrderTotal(OrderVO orderVO);
 }

@@ -8,12 +8,17 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
   <head>
     <meta charset="UTF-8" />
     <title>주문서 관리</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <link
       rel="stylesheet"
       href="https://uicdn.toast.com/grid/latest/tui-grid.css"
     />
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<link rel="stylesheet"
+    href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    
     <style>
       .c_btn {
         color: #fff;
@@ -106,7 +111,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                     <div class="modal-footer">
                         <button type="button" id="confirmBtn" class="btn btn-primary"
                             data-bs-dismiss="modal">확인</button>
-                        <button type="button" id="clearBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" id="clearBtn2" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
@@ -129,7 +134,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
         					<i class="fas fa-plus"></i> 추가 </button>   
                      <button class="btn btn-primary" id="okBtn">
         					<i class="fas fa-save"></i> 저장 </button>
-                        <button type="button" id="clearBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" id="clearBtn3" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
@@ -206,8 +211,8 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       <button class="btn btn-primary" id="addBtn">
         <i class="fas fa-plus"></i> 추가
       </button>
-<!--       <button class="btn btn-primary" id="okBtn">
-        <i class="fas fa-save"></i> 저장 -->
+      <button class="btn btn-primary" id="okBtnTotal">
+        <i class="fas fa-save"></i> 저장
       </button>
       <button class="btn btn-primary" id="delBtn">
         <i class="fas fa-minus"></i> 삭제
@@ -233,6 +238,9 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     let row =0; //제품명 선택시 바뀔 행의 번호
     let val = ""; //선택된 제품명
     let gridDetailData = []; //상세조회 데이터 담은 변수
+    let orderNo = "";//주문번호
+    let dataa = {}; //getData;
+    let gridData = [];//전체조회 데이터 담을 변수
 
 
     //조회버튼 눌렀을때 
@@ -246,6 +254,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
         data: { start: start, end: end, vendNm: vendNm },
         success: function (data) {
           grid.resetData(data); //그리드 적용
+          gridData = data;
         },
         error: function (reject) {
           console.log(reject);
@@ -261,12 +270,12 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       columns: [
         {
           header: "주문번호",
-          name: "orderNo",
+          name: "orderNo"
         },
         {
           header: "거래처",
           name: "vendNm",
-        
+          editor: 'text',
         },
         {
           header: "주문일자",
@@ -274,6 +283,13 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
           formatter: function (data) {
               return dateChange(data.value);
             },
+            editor: {
+                type: 'datePicker',
+                options: {
+                  format: 'yyyy/MM/dd',
+                  //selectableRanges: [[todayForgrid,threeMonthsLater ]]
+                }
+              }
         
         
         },
@@ -287,6 +303,13 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
           formatter: function (data) {
             return dateChange(data.value);
           },
+          editor: {
+              type: 'datePicker',
+              options: {
+                format: 'yyyy/MM/dd',
+                //selectableRanges: [[todayForgrid,threeMonthsLater ]]
+              }
+            }
      
         },
       ],
@@ -319,7 +342,8 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     //상세주문 조회
      grid.on('click', (ev) => {
  	 	if(ev.targetType=='cell' && ev.columnName =='orderNo') {
- 	 	let orderNo = grid.getData()[ev.rowKey].orderNo;
+ 	 	orderNo = grid.getData()[ev.rowKey].orderNo;
+ 	 	//console.log(orderNo);
  	 
  			$.ajax({
       			 url: "orderDetail",
@@ -445,7 +469,7 @@ confirmBtn.addEventListener("click", function(){
           {
               header: '진행상황',
               name: 'orderSitDetail',
-          }
+          },
          
       ],
       pageOptions: {
@@ -539,26 +563,88 @@ function savePro() {
        }
 	
   });
+   
+   //오늘날짜로
+   const getToday = () => {
+       const date = new Date();
+       const hours = String(date.getHours()).padStart(2, "0");
+       const minutes = String(date.getMinutes()).padStart(2, "0");
+       const seconds = String(date.getSeconds()).padStart(2, "0");
+       const years = date.getFullYear();
+       const month = String(date.getMonth() + 1).padStart(2, "0");
+       const day = String(date.getDate()).padStart(2, "0");
+       
+       return years + "-" + month + "-" + day;
+    } 
  
- 
+   //전체조회에서 추가 버튼 누르면
+   document.getElementById('addBtn').addEventListener('click', addRow);
+  function addRow() {
+	  const rowData = grid.getRow(grid.getData().length-1);
+	  rowData.orderNo="";
+	  rowData.vendCd="";
+	  rowData.vendNm="";
+	  rowData.orderDt=getToday();
+	  rowData.orderSit="";
+	  rowData.parrdDt=getToday();
+	  grid.appendRow(rowData);
+	  gridData.push({orderNo:"", vendCd:"", vendNm:"", orderDt:"", orderSit:"", parrdDt:"" });
+	  
+ 	
+ 	
+  }
+     
+   
+//전체조회 저장버튼
+ document.getElementById('okBtnTotal')
+			.addEventListener('click', saveOrderTotal); 
+   
+ //주문서 저장
+ function saveOrderTotal() {
+
+    $.ajax({
+        url: "saveOrderTotal",
+        method: "post",
+        dataType : 'json',
+        contentType : 'application/json',
+        data: JSON.stringify(grid.getData()),
+        success: function (data) {
+        	console.log(data);
+       		 grid.resetData(data);
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });
+    
+	
+} 
+  
+   
 //상세조회 저장버튼
  document.getElementById('okBtn')
 			.addEventListener('click', saveOrder); 
 
     	
- //주문서 저장
+ //상세 주문서 저장
  function saveOrder() {
-	 let dataa = gridDetail.getData();
-	 //console.log("dataa:" + dataa);
+	dataa = gridDetail.getData();
+	
+	for(let i=0; i<dataa.length; i++) {
+		dataa[i].orderNo = orderNo;
+	}
+	
+	console.log(dataa);
+	
     $.ajax({
         url: "saveOrder",
         method: "post",
         dataType : 'json',
         contentType : 'application/json',
-        data: JSON.stringify(gridDetail.getData()),
+        data: JSON.stringify(dataa),
         success: function (data) {
         	console.log(data);
-        gridDetail.resetData(data);
+       		 //gridDetail.resetData(data);
         },
         error: function (reject) {
           console.log(reject);
@@ -582,11 +668,13 @@ function savePro() {
 
 //모달창 닫기 버튼 클릭시 초기화 
        $("#clearBtn").on("click", function(){
-       	gridVend.clear();
-       	gridDetail.clear();
-       	gridPro.clear();
-       	console.log("~");
-      
+       		gridPro.clear();
+          }) 
+        $("#clearBtn2").on("click", function(){
+       		gridVend.clear();
           })
+        $("#clearBtn3").on("click", function(){
+       		gridDetail.clear();
+              })
   </script>
 </html>
