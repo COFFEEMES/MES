@@ -44,8 +44,10 @@
 	<!-- 거래처 전체 조회 -->
 	<select id="getAllVend" resultType="VendVO">
 		SELECT *
-		  FROM vend
-		 ORDER BY vend_cd
+		  FROM detail_code d, vend v
+		 WHERE v.vend_cd = d.basic_code||d.detail_code
+		   AND detail_avail = 'Y'
+		 ORDER BY detail_code
 	</select>
 	
 	<!-- 거래처 추가or수정 -->
@@ -64,10 +66,9 @@
 	
 	<!-- 거래처 삭제 -->
 	<update id="delVend" statementType="CALLABLE" parameterType="VendVO">
-		{ CALL delete_vend(
-			  #{vendCd}
-		  )
-		}
+		UPDATE detail_code
+		   SET detail_avail = 'N'
+		 WHERE basic_code||detail_code = #{vendCd};
 	</update>
 	
 	<!-- 담당사원 검색 -->
@@ -76,5 +77,53 @@
 		  FROM emp e, detail_code d
 		 WHERE e.emp_code = d.basic_code||d.detail_code
 	</select>
+	
+	<!-- 자재 전체 조회 -->
+	<select id="getAllMat" resultType="DetailCodeVO">
+		SELECT *
+		  FROM detail_code
+		 WHERE basic_code = 'RSC'
+		   AND detail_avail = 'Y'
+		 ORDER BY detail_code
+	</select>
+	
+	<!-- 자재 구분 조회 -->
+	<select id="getMatType" resultType="DetailCodeVO">
+		SELECT DISTINCT(detail_name)
+			 , SUBSTR(detail_code, 1, LENGTH(detail_code) - 3) detail_code
+		  FROM detail_code
+		 WHERE basic_code = 'RSC'
+		 ORDER BY 1
+	</select>
+	
+	<!-- 자재 상세 정보 조회 -->
+	<select id="getRsc" resultType="RscVO">
+		SELECT *
+		  FROM rsc
+		 WHERE rsc_cd = #{rscCd}
+		 ORDER BY rsc_cd
+	</select>
+	
+	<!-- 자재 상세 정보 추가/수정 -->
+	<update id="mergeRsc" statementType="CALLABLE" parameterType="RscVO">
+		{ CALL merge_rsc(
+			  #{rscCd}
+			, #{rscNm}
+			, #{rscTyp}
+			, #{rscSpec}
+			, #{rscUnit}
+			, #{safRtc}
+			, #{rscAvail}
+			, #{hInput}
+		  )
+		}
+	</update>
+	
+	<!-- 자재 삭제 -->
+	<update id="delRsc" parameterType="RscVO">
+		UPDATE detail_code
+		   SET detail_avail = 'N'
+		 WHERE basic_code||detail_code = #{rscCd};
+	</update>
 
 </mapper>

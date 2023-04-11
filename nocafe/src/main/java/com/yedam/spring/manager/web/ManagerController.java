@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.spring.manager.service.BasicCodeVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.ManagerService;
+import com.yedam.spring.manager.service.RscVO;
 import com.yedam.spring.sales.service.VendVO;
 
 @Controller
@@ -68,9 +69,31 @@ public class ManagerController {
 		return managerService.getAllVend();
 	}
 	
-	@GetMapping("/matManage")
+	@GetMapping("/rscManage")
 	public String getAllMat(Model model) {
-		return "manager/MatManager";
+		model.addAttribute("matList", managerService.getAllMat());
+		model.addAttribute("matType", managerService.getMatType());
+		return "manager/rscManager";
+	}
+	
+	@PostMapping("/getRsc")
+	@ResponseBody
+	public RscVO getRsc(RscVO rscVO){
+		return managerService.getRsc(rscVO);
+	}
+	
+	@PostMapping("/mergeRsc")
+	@ResponseBody
+	public List<DetailCodeVO> mergeRsc(RscVO rscVO){
+		managerService.mergeRsc(rscVO);
+		return managerService.getAllMat();
+	}
+	
+	@PostMapping("/delRsc")
+	@ResponseBody
+	public List<DetailCodeVO> delRsc(RscVO rscVO){
+		managerService.delRsc(rscVO);
+		return managerService.getAllMat();
 	}
 
 }

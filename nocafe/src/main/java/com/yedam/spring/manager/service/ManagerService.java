@@ -14,5 +14,10 @@ public interface ManagerService {
 	public void mergeVend(VendVO vendVO);
 	public void delVend(VendVO vendVO);
 	public List<EmpVO> getEmpList();
+	public List<DetailCodeVO> getAllMat();
+	public List<DetailCodeVO> getMatType();
+	public RscVO getRsc(RscVO rscVO);
+	public void mergeRsc(RscVO rscVO);
+	public void delRsc(RscVO rscVO);
 
 }
