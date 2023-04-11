@@ -346,7 +346,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     	
     grid.on('checkAll', (ev) => {
     	checkLen = grid.getCheckedRows().length;
-    	console.log(checkLen);
+    	//console.log(checkLen);
     	});
     
     //창 뜨자마자 조회 됨
@@ -376,7 +376,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     	 clickEvent="gridClick";
   	 	if(ev.targetType=='cell' && ev.columnName =='vendNm') {
   	 		vendRow = ev.rowKey;
-  	 		console.log(vendRow);
+  	 		//console.log(vendRow);
   	 		$('#exampleModal').modal('show');	
   	 	//orderNo = grid.getData()[ev.rowKey].orderNo;
 
@@ -464,7 +464,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       pageOptions: {
           useClient: true,
           type: 'scroll',
-          perPage: 10	
+          perPage: 30	
        }
 	
   });  
@@ -521,7 +521,7 @@ searchBtn.addEventListener("click", searchVend);
       for (let i = 0; i < checkLen; i++) {
         str += grid.getCheckedRows()[i].orderNo + ",";
       }
-      console.log(str);
+      //console.log(str);
       $.ajax({
         url: "orderDelete",
         method: "post",
@@ -613,7 +613,7 @@ searchBtn.addEventListener("click", searchVend);
 	 	if(ev.targetType=='cell' && ev.columnName =='proNm') {
 	 		$('#proModal').modal('show');
 	 		row = ev.rowKey;
-	 		console.log(row);
+	 		//console.log(row);
 /*   	 	let proNm = proNmSearch.value;
  	 
 			$.ajax({
@@ -679,11 +679,11 @@ $('#proModal').on('hidden.bs.modal', function (e) {
  gridPro.on('dblclick', (ev) => {
 	gridDetailData[row].proNm = gridPro.getData()[ev.rowKey].proNm;
 	gridDetail.resetData(gridDetailData);
-	console.log('gridDetail', gridDetail.getData());
+	//console.log('gridDetail', gridDetail.getData());
 	gridPro.clear();
 	proNmSearch.value="";
 	$('#proModal').modal('hide');
-	console.log('더블클릭', gridDetailData);
+	//console.log('더블클릭', gridDetailData);
 	}); 
 	
    //오늘날짜로
@@ -722,10 +722,14 @@ $('#proModal').on('hidden.bs.modal', function (e) {
         contentType : 'application/json',
         data: JSON.stringify(grid.getData()),
         success: function (data) {
-        	console.log(data);
-       		 //grid.resetData(data);
-       		 location.reload();
-        	//toastr.success("주문서가 저장되었습니다.");
+			/* console.log(data);*/ 
+/*         	 setTimeout(function () {
+	    		   grid.refreshLayout()
+	    		   }, 100);  */ 
+        	// grid.resetData(data);
+        	toastr.success("주문서가 저장되었습니다.");
+        	 location.reload();
+
         },
         error: function (reject) {
           console.log(reject);
@@ -751,7 +755,7 @@ $('#proModal').on('hidden.bs.modal', function (e) {
 		dataa[i].orderNo = orderNo;
 	}
 	
-	console.log(dataa);
+	//console.log(dataa);
 	
     $.ajax({
         url: "saveOrder",
@@ -760,9 +764,14 @@ $('#proModal').on('hidden.bs.modal', function (e) {
         contentType : 'application/json',
         data: JSON.stringify(dataa),
         success: function (data) {
-        	console.log(data);
-       		 //gridDetail.resetData(data);
-        	//toastr.success("주문서가 저장되었습니다.");
+        	//console.log(data);
+        	//gridDetail.resetData(data);
+        	toastr.success("주문서가 저장되었습니다.");
+/*            	 setTimeout(function () {
+	    		   gridDetail.refreshLayout()
+	    		   }, 100); 
+          	  */
+
         },
         error: function (reject) {
           console.log(reject);
@@ -802,7 +811,7 @@ $('#proModal').on('hidden.bs.modal', function (e) {
     	   document.getElementById("vendNm").value="";
     	   document.getElementById("start").value="";
     	   document.getElementById("end").value="";
-    	   console.log("!");
+    	  // console.log("!");
          }) 
               
   </script>

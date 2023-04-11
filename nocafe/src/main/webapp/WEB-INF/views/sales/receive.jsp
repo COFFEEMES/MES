@@ -25,7 +25,7 @@
                                            
                         </div>
 				<div class="linelist" style="float:right;">
-                           <button type="button" class="btn btn-primary" id="dtSearchBtn"><i class="fas fa-search"></i> 조회</button>
+                          <!--  <button type="button" class="btn btn-primary" id="dtSearchBtn"><i class="fas fa-search"></i> 조회</button> -->
                            <button type="button" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 등록</button>
                            <button class="btn btn-primary" id="ReBtn"><i class="fas fa-file"></i> 초기화</button>
                        </div> 
@@ -120,5 +120,66 @@
 		    </div>
 		  </div>
 		</div> <!-- 모달 div끝 -->
+		
+		<div id="complete"  style="margin: 30px;"></div>
 </body>
+<script>
+//조회 그리드
+var gridCom = new tui.Grid({
+  el: document.getElementById("complete"),
+
+  columns: [
+    {
+      header: "입고번호",
+      name: "proIstNo"
+    },
+    {
+      header: "LOT번호",
+      name: "proLotNo",
+      editor: 'text',
+    },
+    {
+        header: "제품명",
+        name: "proNm",
+      },
+   
+    {
+      header: "입고수량",
+      name: "proIstCnt",
+    },
+    {
+        header: "입고일자",
+        name: "proIstDt",
+       /*  formatter: function (data) {
+      	  let dateVal = '';
+      	  if(data.value != null ){
+      		  dateVal = dateChange(data.value);
+      	  }else{
+      		  dateVal = getToday();
+      	  }
+            return dateVal;
+          },
+          editor: {
+              type: 'datePicker',
+              options: {
+                format: 'yyyy-MM-dd',
+                //selectableRanges: [[todayForgrid,threeMonthsLater ]]
+          	  date : getToday()
+              }
+            } */
+      
+      
+      },
+
+  ],
+  bodyHeight: 300,
+  pageOptions: {
+      useClient: true,
+      type: 'scroll',
+      perPage: 30
+   }
+});
+
+
+</script>
 </html>
