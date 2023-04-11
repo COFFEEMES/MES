@@ -68,7 +68,7 @@
 	<update id="delVend" statementType="CALLABLE" parameterType="VendVO">
 		UPDATE detail_code
 		   SET detail_avail = 'N'
-		 WHERE basic_code||detail_code = #{vendCd};
+		 WHERE basic_code||detail_code = #{vendCd}
 	</update>
 	
 	<!-- 담당사원 검색 -->
@@ -123,7 +123,7 @@
 	<update id="delRsc" parameterType="RscVO">
 		UPDATE detail_code
 		   SET detail_avail = 'N'
-		 WHERE basic_code||detail_code = #{rscCd};
+		 WHERE basic_code||detail_code = #{rscCd}
 	</update>
 
 </mapper>
