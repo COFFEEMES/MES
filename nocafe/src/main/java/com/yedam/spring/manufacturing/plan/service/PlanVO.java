@@ -39,7 +39,7 @@ public class PlanVO {
 	private String lotCnt;
 	private String rscLotCd;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date exp_dt;
+	private Date expDt;
 	
 	
 //	받아올 공정정보
@@ -50,7 +50,7 @@ public class PlanVO {
 	private String rscCd;
 	private String prcsNm;
 	private String inferPct;
-	
+	private String proNm;
 	
 	
 	

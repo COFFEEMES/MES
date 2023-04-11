@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.spring.manufacturing.plan.service.PlanService;
@@ -69,9 +71,11 @@ public class PlanController {
 		return planService.getRsc(planVO);
 	}
 	
-	@GetMapping("getRscLot")
+	@PostMapping("getRscLot")
 	@ResponseBody
-	public List<PlanVO>getLot(PlanVO planVO){
+	public List<PlanVO>getLot(@RequestParam String rscNm, @RequestParam String bomCd ,PlanVO planVO){
+		planVO.setRscNm(rscNm);
+		planVO.setBomCd(bomCd);
 		return planService.getRscDetail(planVO);
 	}
 	

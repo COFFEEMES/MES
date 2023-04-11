@@ -29,24 +29,16 @@
 }
 
 .linelist {
-	display : inline-block;
 	float: right;
 	margin: 0 20px 20px 0;
 }
-#lineb{
-	display : inline-block;
-}
 
-#pDate #planDate {
+#pDate {
 	float: left;
 }
 
 .tui-datepicker {
 	z-index: 99;
-}
-label {
-	width : 150px;
-	
 }
 </style>
 </head>
@@ -67,18 +59,14 @@ label {
 	<div id="container">
 		<div class="card mb-4">
 			<div class="card-body">
-				<div id="lineb">
 				<div id="pDate">
-					<label>작성일자</label> <input type="date"
+					<!--<div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
+					<label>생산계획일자</label> <input type="date"
 						id="tui-date-picker-target" name="tui-date-picker-target"
 						class="form-control" style="width: 150px">
-				</div>
-				<br>
-				<div id="planDate">
-					<label>생산계획일자</label> 
-					<input type="date"	id="ex-strat" name="tui-date-picker-target"	class="form-control tragetDate" style="width: 150px">
-					- <input type="date" id="ex-end" name="tui-date-picker-target"	class="form-control tragetDate" style="width: 150px">
-				</div>
+					<!--<span class="tui-ico-date"></span>-->
+					<!--<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>-->
+					<!--</div>-->
 				</div>
 				<div class="linelist">
 					<button id="clearBtn" class="btn btn-primary" form="">
@@ -95,7 +83,6 @@ label {
 						<i class="fas fa-save"></i> 저장
 					</button>
 				</div>
-				
 			</div>
 		</div>
 		<div class="card mb-4">
@@ -139,7 +126,6 @@ label {
 						aria-label="Close"></button>
 				</div>
 				<br>
-				<div style="margin-left : 30px;">미계획 주문서</div>
 				<div id="modGrid" class="modal-body"></div>
 				<div class="modal-footer">
 					<button type="button" id="confirmBtn" class="btn btn-primary"
@@ -152,48 +138,29 @@ label {
 	</div>
 
 	<script>
-	let dt = new Date();
-	console.log(dt);
-// //		계획일자 받을 변수	
-// //		생성된 계획 코드 변수
-// //		console.log(Date.now()+8032500)
-// //		console.log(Date.now())
-// 	let planDt = $("#tui-date-picker-target").val();
-// 	console.log(planDt);
-
-// //		↓↓↓↓↓ 계획번호 생성
-// 	getPlanCd(planDt);		
+				
 	
-//         let date = new Date();
+        let date = new Date();
 
-// 	    let day = date.getDate();
-// 	    let month = date.getMonth() + 1;
-// 	    let year = date.getFullYear();
+	    let day = date.getDate();
+	    let month = date.getMonth() + 1;
+	    let year = date.getFullYear();
 
-// 	    if (month < 10) month = "0" + month;
-// 	    if (day < 10) day = "0" + day;
+	    if (month < 10) month = "0" + month;
+	    if (day < 10) day = "0" + day;
 
-// 	    let today = year + "-" + month + "-" + day;   
-// 	    let endday = year + "-" + (month + 3)+ "-" + day;
+	    let today = year + "-" + month + "-" + day;   
+	    let endday = year + "-" + (month + 3)+ "-" + day;
 	    
 // 	    ↓↓↓↓↓bom 으로 가져온 공정
 	    let bom;
 	    let planDt = $("#tui-date-picker-target").val();
-//		↓↓↓↓↓오늘 날짜
- 		let todayForgrid = new Date();
-        console.log(todayForgrid);
-		let threeMonthsLater = new Date();
-		threeMonthsLater.setMonth(todayForgrid.getMonth() + 3);
-	
-	    let today = dateChange(todayForgrid);
-	    let after = dateChange(threeMonthsLater);
+	    
+	    
 // 		↓↓↓↓↓input date에 오늘 날짜 담기
 		$(document).ready(function() {
 		    $("#tui-date-picker-target").attr("value", today);
-			$(".targetDate").attr({"max":after,
-								  "min":today})
-			
-			
+
 		});
 
         //초기화
@@ -205,7 +172,10 @@ label {
 	   		grid5.clear();
 	   	}) 
 		let code
-
+//		↓↓↓↓↓오늘 날짜
+ 		let todayForgrid = new Date();
+		let threeMonthsLater = new Date();
+		threeMonthsLater.setMonth(todayForgrid.getMonth() + 3);
 		const gridData = [];
 // 		↓↓↓↓↓수정가능한 컬럼 모듈
 		const options = {
@@ -262,7 +232,15 @@ label {
 		
 		
 		$(modalBtn).on("click",function(e){
-
+// 			계획일자 받을 변수	
+// 			생성된 계획 코드 변수
+// 			console.log(Date.now()+8032500)
+// 			console.log(Date.now())
+			let planDt = $("#tui-date-picker-target").val();
+			console.log(planDt);
+		
+// 			↓↓↓↓↓ 계획번호 생성
+			getPlanCd(planDt);
 					
 // 					↓↓↓↓ 생산미계획 주문서정보 모달창으로 조회
 					$.ajax({
@@ -321,21 +299,17 @@ label {
  			columns : [ {
  				header : '주문번호',
  				name : 'orderNo'
-			}, 
-			{
- 				header : '주문일자',
-				name : 'orderDt',
-				formatter: function(data) {
-		            return dateChange(data.value);
-		          },
- 			},
-			{
+			}, {
  				header : '납기일자',
 				name : 'parrdDt',
 				formatter: function(data) {
 		            return dateChange(data.value);
 		          },
- 			}  	
+ 			},
+ 			{
+ 				header : '제품명',
+				name : 'proNm'
+ 			} 	  	
  			], 
                					
  		});

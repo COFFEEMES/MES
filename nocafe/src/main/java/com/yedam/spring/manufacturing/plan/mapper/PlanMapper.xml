@@ -6,28 +6,27 @@
 	namespace="com.yedam.spring.manufacturing.plan.mapper.PlanMapper">
 	<!-- ↓↓↓↓↓ 모달창에 주문서 불러오기 -->
 	<select id="selectOrderList" resultType="OrderVO">
-		SELECT s.order_no,
-		s.order_dt, s.parrd_dt, d.pro_cd, d.pro_nm, d.order_cnt
-		FROM
-		order_sheet s JOIN order_detail d
-		ON s.order_no = d.order_no
-		WHERE
-		d.plan_status is null OR d.plan_status='미등록'
-		ORDER BY 4
+		SELECT  s.order_no,
+				s.order_dt, 
+				s.parrd_dt, 
+				s.vend_nm
+		FROM	order_sheet s JOIN order_detail d
+		ON 		s.order_no = d.order_no
+		WHERE	d.plan_status is null OR d.plan_status='미등록'
+		ORDER BY 3
 	</select>
 
 	<!-- ↓↓↓↓↓ 생산계획코드 생성 -->
 	<select id="getPlanCd" resultType="PlanVO">
 		SELECT 'PL'||
-		TO_CHAR(TO_DATE(#{planDtFormat},'yyyy-MM-dd'),'yyMMdd')||
-		CASE
-		WHEN
-		COUNT(*) > 0 THEN TO_CHAR(COUNT(*)+1,'fm000')
-		ELSE '001'
-		END plan_cd
-		FROM plans_header
-		WHERE TO_CHAR(plan_dt, 'yyyy-MM-dd') =
-		#{planDtFormat}
+				TO_CHAR(TO_DATE(#{planDtFormat},'yyyy-MM-dd'),'yyMMdd')||
+				CASE
+				WHEN
+				COUNT(*) > 0 THEN TO_CHAR(COUNT(*)+1,'fm000')
+				ELSE '001'
+				END plan_cd
+		FROM 	plans_header
+		WHERE 	TO_CHAR(plan_dt, 'yyyy-MM-dd') = #{planDtFormat}
 	</select>
 
 	<!-- ↓↓↓↓↓ 제품 재고수량 조회 -->
@@ -35,49 +34,71 @@
 		SELECT sum(lot_cnt) as
 		stock_cnt
 		from pro_stc
-		where pro_cd = #{proCd}
+		where pro_cd = (select pro_cd from detail_code where detail_name = #{proNm})
 	</select>
 
 
 	<!-- ↓↓↓↓↓bom통해서 필요 자재 호출 -->
 	<select id="getBomCd" resultType="PlanVO">
-		SELECT b.bom_cd, b.bom_sq,b.pro_cd, NVL(b.rsc_cd,'이전 공정 결과물')AS rsc_cd,b.prcs_cd, b.use_cnt,	NVL(d.detail_name,'이전 공정의 결과물') AS rsc_nm , e.detail_name
-		AS prcs_nm
-		FROM bom b LEFT OUTER Join detail_code d
-		ON b.rsc_cd = d.detail_code
-						JOIN detail_code e
-						ON b.prcs_cd = e.detail_code
-		WHERE b.pro_cd = #{proCd}
+		SELECT  b.bom_cd, 
+				b.bom_sq,
+				b.pro_cd, 
+				NVL(b.rsc_cd,'이전 공정 결과물')AS rsc_cd,
+				b.prcs_cd, 
+				b.use_cnt,	
+				NVL(d.detail_name,'이전 공정의 결과물') AS rsc_nm ,
+				e.detail_name
+		AS 		prcs_nm
+		FROM 	bom b LEFT OUTER Join detail_code d
+		ON	 	b.rsc_cd = d.detail_code
+								 JOIN detail_code e
+								 ON b.prcs_cd = e.detail_code
+		WHERE 	b.pro_cd = (select b.pro_cd from detail_code where detail_name = #{proNm})
 		ORDER BY 2
 	</select>
-
+	
+<!-- 	↓↓↓↓↓↓불량률 조회 -->
 	<select id="getInferPct" resultType="PlanVO">
-		SELECT b.bom_sq, p.prcs_cd, TRUNC(AVG((p.infer_cnt/p.prod_cnt)*100),0)||'%' as
-		infer_pct
-		FROM prcs_result p join bom b
-		ON p.prcs_cd = b.prcs_cd
-		WHERE b.pro_cd = #{proCd}
+		SELECT  b.bom_sq, 
+				p.prcs_cd, 
+				TRUNC(AVG((p.infer_cnt/p.prod_cnt)*100),0)||'%' as infer_pct
+		FROM 	prcs_result p join bom b
+		ON 		p.prcs_cd = b.prcs_cd
+		WHERE 	b.pro_cd = (select p.pro_cd from detail_code where detail_name = #{proNm})
 		GROUP BY b.bom_sq, p.prcs_cd
 		ORDER BY 1 
 	</select>
 	
+<!-- 	↓↓↓↓↓필요재료 조회 -->
 	<select id="getRscNeed" resultType="PlanVO">
-		SELECT d.detail_name rsc_nm, d.detail_code rsc_cd, SUM(r.lot_cnt) lot_cnt, b.bom_sq
-		From detail_code d JOIN rsc_lot r
-		ON  d.detail_code = r.rsc_cd
-		                            JOIN bom b
-		                            ON r.rsc_cd = b.rsc_cd
-		Where d.detail_code in (SELECT rsc_cd
-		                        FROM   bom
-		                        WHERE bom_cd = #{bomCd})
+		SELECT  d.detail_name rsc_nm, 
+			 	d.detail_code rsc_cd, 
+			 	SUM(r.lot_cnt) lot_cnt, 
+			 	b.bom_sq
+		From 	detail_code d JOIN rsc_lot r
+		ON  	d.detail_code = r.rsc_cd
+		                            	JOIN bom b
+		                            	ON r.rsc_cd = b.rsc_cd
+		Where 	d.detail_code in (SELECT rsc_cd
+		                          FROM   bom
+		                       	  WHERE bom_cd = #{bomCd})
 		GROUP BY d.detail_name, d.detail_code, b.bom_sq
 		ORDER BY 4
 	</select>
 	
+<!-- ↓↓↓↓↓↓↓필요재고 LOT조회 -->
 	<select id="getRscDetil" resultType="PlanVO">
-		select rsc_lot_cd, lot_cnt, exp_dt, (select detail_name from detail_code where detail_code = #{rscCd})AS rsc_nm
-		from rsc_lot
-		where rsc_cd = #{rscCd}
+		select      rsc_lot_cd, 
+		            lot_cnt, 
+		            exp_dt,
+					#{rscNm} as rscNm
+	    from 		rsc_lot
+	    where 		rsc_cd =(select rsc_cd
+		                     from   (select b.rsc_cd, d.detail_name
+		                                from bom b join detail_code d
+		                                on  b.rsc_cd = d.detail_code
+		                                where b.bom_cd = #{bomCd}) 
+		                     where detail_name LIKE '%${rscNm}%')
 		order by 3
 	</select>
 
