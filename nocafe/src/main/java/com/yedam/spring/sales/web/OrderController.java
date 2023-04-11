@@ -18,6 +18,8 @@ import com.yedam.spring.sales.service.VendVO;
 @Controller
 public class OrderController {
 
+	//주문서 관리 
+	
 	@Autowired
 	OrderService orderService;
 	
@@ -79,4 +81,14 @@ public class OrderController {
 			//System.out.println(orderVO);
 			return orderService.saveOrderTotal(orderVO);
 		} 
+		
+	
+	//제품 입고 
+		
+	//제품입고 페이지
+	@GetMapping("/receiveList")
+	public String receiveList() {
+		return "sales/receive";
+	}
+		
 }
