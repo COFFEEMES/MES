@@ -10,6 +10,7 @@ import com.yedam.spring.manager.service.BasicCodeVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.EmpVO;
 import com.yedam.spring.manager.service.ManagerService;
+import com.yedam.spring.manager.service.RscVO;
 import com.yedam.spring.sales.service.VendVO;
 
 @Service
@@ -58,6 +59,32 @@ public class ManagerImpl implements ManagerService {
 	@Override
 	public List<EmpVO> getEmpList() {
 		return managerMapper.getEmpList();
+	}
+
+	@Override
+	public List<DetailCodeVO> getAllMat() {
+		return managerMapper.getAllMat();
+	}
+
+	@Override
+	public List<DetailCodeVO> getMatType() {
+		return managerMapper.getMatType();
+	}
+
+	@Override
+	public RscVO getRsc(RscVO rscVO) {
+		return managerMapper.getRsc(rscVO);
+	}
+
+	@Override
+	public void mergeRsc(RscVO rscVO) {
+		managerMapper.mergeRsc(rscVO);
+		
+	}
+
+	@Override
+	public void delRsc(RscVO rscVO) {
+		managerMapper.delRsc(rscVO);
 	}
 
 }

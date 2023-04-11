@@ -3,6 +3,10 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core"%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <style>
+  .modal {
+    --bs-modal-width: none !important;
+  }
+
   #vendUl {
     list-style: none;
     padding: 0;
@@ -38,6 +42,19 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   </ol>
   <div class="card mb-4">
     <div class="card-body">
+      <div class="linelist" style="float: left">
+        <input
+          type="text"
+          class="form-control"
+          id="searchVend"
+          name="searchVend"
+          style="width: 150px; margin-top: 0px"
+          placeholder="거래처명"
+        />
+        <button class="btn btn-primary" id="searchVendBtn">
+          <i class="fas fa-search"></i> 검색
+        </button>
+      </div>
       <div class="linelist" style="float: right">
         <button class="btn btn-primary" id="searchBtn">
           <i class="fas fa-search"></i> 조회
@@ -65,7 +82,6 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
-        style="-bs-modal-width: none"
       >
         <div
           class="modal-dialog"
@@ -163,7 +179,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 <i class="fas fa-save"></i> 저장
               </button>
               <button class="btn btn-primary" id="delBtn">
-                <i class="fas fa-trash"></i> 삭제
+                <i class="fas fa-trash"></i> 비활성화
               </button>
             </div>
           </div>
@@ -178,7 +194,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog" role="document" style="width: 500px">
           <div class="modal-content">
             <div class="modal-header">
               <input
@@ -229,6 +245,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     </c:forEach>
   ];
 
+  let searchGrid = [];
+
   //전체 거래처 그리드
   const grid = new tui.Grid({
     el: document.getElementById("grid"),
@@ -269,6 +287,19 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       },
     ],
   });
+
+  //검색버튼
+  $('#searchVendBtn').click(ev => {
+    search();
+  })
+
+  function search() {
+    var keyword = $('#searchVend').val()
+    searchGrid = gridData.filter( function (Vend) {
+      return Vend.vendNm.indexOf(keyword) != -1
+    })
+    grid.resetData(searchGrid);
+  }
 
   //새 자료 모달창
   $('#newBtn').on('click', openModal);
