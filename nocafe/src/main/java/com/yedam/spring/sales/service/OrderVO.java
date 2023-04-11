@@ -29,4 +29,5 @@ public class OrderVO {
 	private int orderCnt;
 	private String planStatus;
 	
+	
 }

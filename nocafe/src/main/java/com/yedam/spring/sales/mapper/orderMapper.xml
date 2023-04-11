@@ -26,7 +26,7 @@
 				AND <![CDATA[order_dt <= #{end}]]>
 			</if>
 		</where>
-		ORDER BY 1 DESC
+		ORDER BY order_sit DESC
 	</select>
 	
 	<!--거래처 모달창 조회 -->
