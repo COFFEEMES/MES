@@ -43,13 +43,13 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   <div class="card mb-4">
     <div class="card-body">
       <div class="linelist" style="float: left">
+        <label for="" autofocus="autofocus">거래처명</label>
         <input
           type="text"
           class="form-control"
           id="searchVend"
           name="searchVend"
           style="width: 150px; margin-top: 0px"
-          placeholder="거래처명"
         />
         <button class="btn btn-primary" id="searchVendBtn">
           <i class="fas fa-search"></i> 검색
@@ -399,7 +399,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         data: $("#dataForm").serialize(),
         dataType: "json",
         success: function (result) {
-          alert("정상적으로 삭제되었습니다.");
+          alert("비활성화되었습니다.");
           grid.resetData(result);
           closeModal();
         },
@@ -439,7 +439,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         align: "center",
       },
       {
-        header: "사운명",
+        header: "사원명",
         name: "empName",
         align: "center",
       },

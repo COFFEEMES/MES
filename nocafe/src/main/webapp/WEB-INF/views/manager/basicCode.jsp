@@ -114,7 +114,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     el: document.getElementById('grid'),
     data: gridData,
        scrollY: true,
-       bodyHeight: 500,
+       bodyHeight: 480,
        rowHeaders: ['rowNum'],
        columns: [
          {
@@ -143,7 +143,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   const grid2 = new tui.Grid({
     el: document.getElementById('grid2'),
     scrollY: false,
-    bodyHeight: 500,
+    bodyHeight: 480,
     rowHeaders: ['checkbox'],
     columns: [
       {

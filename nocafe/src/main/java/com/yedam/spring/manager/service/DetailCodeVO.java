@@ -11,4 +11,5 @@ public class DetailCodeVO {
 	private String detailExplain;
 	private String detailAvail;
 	private String result;
+	private String fullCode;
 }

@@ -3,9 +3,11 @@ package com.yedam.spring.manager.mapper;
 import java.util.List;
 
 import com.yedam.spring.manager.service.BasicCodeVO;
+import com.yedam.spring.manager.service.BomVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.EmpVO;
 import com.yedam.spring.manager.service.RscVO;
+import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.VendVO;
 
 public interface ManagerMapper {
@@ -23,5 +25,10 @@ public interface ManagerMapper {
 	public RscVO getRsc(RscVO rscVO);
 	public void mergeRsc(RscVO rscVO);
 	public void delRsc(RscVO rscVO);
+	public List<DetailCodeVO> getAllPro();
+	public EdctsVO getPro(EdctsVO edctsVO);
+	public void mergePro(EdctsVO edctsVO);
+	public void delPro(EdctsVO edctsVO);
+	public List<BomVO> getPrcs(EdctsVO edctsVO);
 
 }
