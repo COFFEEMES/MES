@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -35,6 +36,14 @@ public class PlanController {
 		return planService.getOrderlist();
 	};
 	
+//	주문서 => 제품 , 생산량 , 재고
+	@PostMapping("getOrderPro")
+	@ResponseBody
+	public List<PlanVO>getProCnt(@RequestBody String[] orderListAry){
+		return planService.getOrderPro(orderListAry);
+	}
+	
+	
 //	계획 코드 생성
 	@GetMapping("getPlanCd")
 	@ResponseBody
@@ -43,13 +52,8 @@ public class PlanController {
 		System.out.println(planVO);
 		return planService.getPlanCd(planVO);
 	};
-	
-//	제품제고 조회
-	@GetMapping("getStock")
-	@ResponseBody
-	public PlanVO getStock(PlanVO planVO) {
-		return planService.getStock(planVO);
-	};
+//-----------------------------------------------------------------------------------	사용중
+
 	
 //	bom코드 
 	@GetMapping("getBom")

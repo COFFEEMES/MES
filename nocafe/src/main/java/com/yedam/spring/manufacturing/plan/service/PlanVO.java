@@ -31,7 +31,8 @@ public class PlanVO {
 
 //	총 재고수량
 	private int stockCnt;
-	
+//	주문량
+	private int orderCnt;
 	
 //	자재 정보 받아올 field
 	private String rscNm;
