@@ -12,6 +12,7 @@ import com.yedam.spring.material.service.MaterialVO;
 
 
 public interface MaterialMapper {
+	
 	//자재관리
 	public List<MaterialVO> selectMaterialList();
 	

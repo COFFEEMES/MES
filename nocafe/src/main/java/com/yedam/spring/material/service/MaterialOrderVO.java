@@ -14,4 +14,11 @@ public class MaterialOrderVO {
 	private Date ordrReqDt;		//발주신청일
 	private String vendCd;		//거래처코드
 	
+	
+	private String rscCd;
+	private String rscNm;
+	
+	private String ordrCnt;
+	private String paprdCmndDt;
+	
 }

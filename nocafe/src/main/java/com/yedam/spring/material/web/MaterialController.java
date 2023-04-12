@@ -13,11 +13,11 @@ public class MaterialController {
 	@Autowired
 	MaterialService materialService;
 	
-	//발주관리
+	//발주관리페이지
 	@GetMapping("/materialOrder")
 	public String getMaterialOrder(Model model) {
-		model.addAttribute("materialList", materialService.getMaterialList());
-		model.addAttribute("matetiOrderList", materialService.getMaterialOrderList());
+		model.addAttribute("materialList", materialService.getMaterialLOTList());
+		model.addAttribute("materialOrderList", materialService.getMaterialOrderList());
 		return "material/materialOrder";
 	}
 	
@@ -35,7 +35,7 @@ public class MaterialController {
 		return "material/materialOrderList";
 	}
 	
-	
+
 	//자재입고조회
 	@GetMapping("/materialReceivingList")
 	public String getMaterialReceivingList(Model model) {
@@ -50,12 +50,6 @@ public class MaterialController {
 		return "material/materialShippingList";
 	}
 	
-	//자재LOT조회
-	@GetMapping("/materialLOTList")
-	public String getMaterialLOTList(Model model) {
-		model.addAttribute("materialLOTList", materialService.getMaterialLOTList());
-		return "material/materialLOTList";
-	}
 	//자재입고검사조회
 	@GetMapping("/materialTestList")
 	public String getMaterialTestList(Model model) {
