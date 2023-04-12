@@ -6,6 +6,7 @@
   <mapper
   		namespace="com.yedam.spring.sales.mapper.ReceiveMapper">
   
+  <!-- 입고 모달창 조회 -->
 	<select id="testComplete" resultType="ReceiveVO">
 		SELECT prcs_tbl_cd, output, o.pro_cd , e.pro_nm
         FROM process_tbl T, pr_order o, edcts e
@@ -22,10 +23,23 @@
 		ORDER BY pr_end_dt
 	</select>
   
-  	<!-- 주문서 디테일 수정 추가  -->
-	<update id="signUp" statementType="CALLABLE" parameterType="ReveiceVO">
+  	<!-- 입고 처리  -->
+	<update id="signUp" statementType="CALLABLE" parameterType="ReceiveVO">
   	{ CALL receive_sign_up(#{proCd},#{proIstCnt},#{prcsTblCd}) }
 	</update>
   
+  
+    <!-- 입고 조회 -->
+	<select id="search" resultType="ReceiveVO">
+	SELECT pro_ist_no, pro_ist_dt, 
+	      (SELECT pro_nm 
+	       FROM edcts 
+	       WHERE pro_cd = e.pro_cd) AS "pro_nm", pro_ist_cnt, 
+	      (SELECT pro_lot_no 
+	      FROM pro_stc 
+	      WHERE pro_ist_no = e.pro_ist_no) AS "pro_ist_no"
+	FROM edcts_ist e
+	WHERE TO_CHAR(pro_ist_dt,'yyyyMMdd') = TO_CHAR( sysdate, 'yyyymmdd');
+	</select>
   
   </mapper>
