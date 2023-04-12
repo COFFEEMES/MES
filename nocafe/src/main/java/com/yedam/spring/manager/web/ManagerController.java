@@ -129,5 +129,26 @@ public class ManagerController {
 	public List<BomVO> getPrcs(EdctsVO edctsVO){
 		return managerService.getPrcs(edctsVO);
 	}
+	
+	@PostMapping("/getUseRcs")
+	@ResponseBody
+	public List<BomVO> getUseRcs(EdctsVO edctsVO){
+		return managerService.getUseRcs(edctsVO);
+	}
+	
+	@PostMapping("/getPrcsRcs")
+	@ResponseBody
+	public List<BomVO> getPrcsRcs(BomVO bomVO){
+		return managerService.getPrcsRcs(bomVO);
+	}
+	
+	@PostMapping("/delPrcs")
+	@ResponseBody
+	public List<BomVO> delPrcs(@RequestBody List<BomVO> list){
+		managerService.delPrcs(list);
+		EdctsVO edctsVO = new EdctsVO();
+		edctsVO.setProCd(list.get(0).getProCd());
+		return managerService.getPrcs(edctsVO);
+	}
 
 }

@@ -451,6 +451,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     ],
   });
 
+  //담당사원 선택시 값 입력, 모달창 종료
   grid2.on('click', (ev) => {
     $("#empCode").val(grid2.getValue(ev.rowKey, "empCode"));
     $('#empModal').modal('hide');

@@ -23,7 +23,7 @@
 	</select>
   
   	<!-- 주문서 디테일 수정 추가  -->
-	<update id="signUp" statementType="CALLABLE" parameterType="ReveiceVO">
+	<update id="signUp" statementType="CALLABLE" parameterType="ReceiveVO">
   	{ CALL receive_sign_up(#{proCd},#{proIstCnt},#{prcsTblCd}) }
 	</update>
   
