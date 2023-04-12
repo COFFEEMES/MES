@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.spring.manager.mapper.ManagerMapper;
 import com.yedam.spring.manager.service.BasicCodeVO;
+import com.yedam.spring.manager.service.BomVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.EmpVO;
 import com.yedam.spring.manager.service.ManagerService;
 import com.yedam.spring.manager.service.RscVO;
+import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.VendVO;
 
 @Service
@@ -85,6 +87,31 @@ public class ManagerImpl implements ManagerService {
 	@Override
 	public void delRsc(RscVO rscVO) {
 		managerMapper.delRsc(rscVO);
+	}
+
+	@Override
+	public List<DetailCodeVO> getAllPro() {
+		return managerMapper.getAllPro();
+	}
+
+	@Override
+	public EdctsVO getPro(EdctsVO edctsVO) {
+		return managerMapper.getPro(edctsVO);
+	}
+
+	@Override
+	public void mergePro(EdctsVO edctsVO) {
+		managerMapper.mergePro(edctsVO);
+	}
+
+	@Override
+	public void delPro(EdctsVO edctsVO) {
+		managerMapper.delPro(edctsVO);
+	}
+
+	@Override
+	public List<BomVO> getPrcs(EdctsVO edctsVO) {
+		return managerMapper.getPrcs(edctsVO);
 	}
 
 }

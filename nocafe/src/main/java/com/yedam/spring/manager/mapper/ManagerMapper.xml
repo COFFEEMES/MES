@@ -125,5 +125,52 @@
 		   SET detail_avail = 'N'
 		 WHERE basic_code||detail_code = #{rscCd}
 	</update>
+	
+	<!-- 제품 전체 조회 -->
+	<select id="getAllPro" resultType="DetailCodeVO">
+		SELECT *
+		  FROM detail_code d, edcts e
+		 WHERE d.full_code = e.pro_cd
+		   AND basic_code = 'PRO'
+		   AND detail_avail = 'Y'
+		 ORDER BY detail_code
+	</select>
+	
+	<!-- 제품 상세 조회 -->
+	<select id="getPro" resultType="EdctsVO">
+		SELECT *
+		  FROM edcts
+		 WHERE pro_cd = #{proCd}
+		 ORDER BY pro_cd
+	</select>
+	
+	<!-- 제품 상세 정보 추가/수정 -->
+	<update id="mergePro" statementType="CALLABLE" parameterType="RscVO">
+		{ CALL merge_pro(
+			  #{proCd}
+			, #{proNm}
+			, #{proSpec}
+			, #{proUnit}
+			, #{safRtc}
+			, #{proTyp}
+		  )
+		}
+	</update>
+	
+	<!-- 제품 삭제 -->
+	<update id="delPro" parameterType="EdctsVO">
+		UPDATE detail_code
+		   SET detail_avail = 'N'
+		 WHERE basic_code||detail_code = #{proCd}
+	</update>
+	
+	<!-- 공정 순서 조회 -->
+	<select id="getPrcs" resultType="BomVO">
+		SELECT *
+		  FROM bom b, detail_code d
+		 WHERE b.prcs_cd = d.full_code
+		   AND b.pro_cd = #{proCd}
+		 ORDER BY b.pro_cd, b.bom_sq
+	</select>
 
 </mapper>

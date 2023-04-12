@@ -7,43 +7,38 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   crossorigin="anonymous"
 ></script>
 <div class="container-fluid px-4">
-  <h1 class="mt-4">자재관리</h1>
+  <h1 class="mt-4">BOM관리</h1>
   <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item">
       <a href="/"><i class="fas fa-home"></i></a>
     </li>
     <li class="breadcrumb-item">> 기준정보관리</li>
-    <li class="breadcrumb-item active">> 자재관리</li>
+    <li class="breadcrumb-item active">> BOM관리</li>
   </ol>
   <div class="row">
     <div class="card col-xl-11">
       <div class="card-body">
-        <select class="dataTable-selector" name="searchParam" id="searchParam">
-          <option selected value="">전체</option>
-          <option value="matTyp">구분</option>
-          <option value="matNm">자재명</option>
-          <option value="matCd">자재코드</option>
-        </select>
+        <label for="" autofocus="autofocus">제품명</label>
         <input
           type="text"
           class="form-control"
-          id="searchMat"
-          name="searchMat"
+          id="searchPro"
+          name="searchPro"
           style="width: 150px"
         />
-        <button class="btn btn-primary" id="searchBtn">
+        <button class="btn btn-primary" id="searchProBtn">
           <i class="fas fa-search"></i> 검색
         </button>
         <button
           class="btn btn-primary"
-          id="saveRsc"
+          id="savePro"
           style="float: right; margin-left: 16px"
         >
           <i class="fas fa-save"></i> 저장
         </button>
         <button
           class="btn btn-primary"
-          id="newRsc"
+          id="newPro"
           style="float: right; margin-left: 16px"
         >
           <i class="fas fa-file"></i> 새 자료
@@ -58,7 +53,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   <div class="row">
     <div class="card col-xl-5">
       <div class="linelist" style="margin-top: 16px"></div>
-      <h3 style="padding-left: 15px">자재 목록</h3>
+      <h3 style="padding-left: 15px">제품 목록</h3>
       <div class="card-body">
         <div id="grid"></div>
       </div>
@@ -67,16 +62,16 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     <div class="card col-xl-6">
       <div class="linelist" style="margin-top: 16px">
         <h3 style="width: 100px; display: inline; padding-left: 15px">
-          자재 상세 정보
+          제품 정보
         </h3>
       </div>
       <div class="card-body">
         <form id="dataForm" name="dataForm" onsubmit="return false">
-          <table class="table" style="vertical-align: middle; margin-top: 20px">
+          <table class="table" style="vertical-align: middle">
             <colgroup>
-              <col style="width: 100px" />
+              <col style="width: 120px" />
               <col />
-              <col style="width: 100px" />
+              <col style="width: 120px" />
               <col />
             </colgroup>
             <tbody>
@@ -85,92 +80,75 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 <td>
                   <select
                     class="dataTable-selector"
-                    name="rscTyp"
-                    id="rscTyp"
+                    name="proTyp"
+                    id="proTyp"
                     style="width: 220px"
                   >
-                    <option selected value="">==등록시필수선택==</option>
-                    <c:forEach items="${matType}" var="mat">
-                      <option value="${mat.detailName}">
-                        ${mat.detailName}
-                      </option>
-                    </c:forEach>
+                    <option value="">==선택==</option>
+                    <option value="LIQ">액상 커피</option>
+                    <option value="SOL">분말 커피</option>
                   </select>
-                  <input type="hidden" id="hInput" name="hInput" />
                 </td>
-                <th>자재코드 <strong class="blue">*</strong></th>
+                <th>완제품코드 <strong class="blue">*</strong></th>
                 <td>
                   <input
                     class="form-control"
                     type="text"
-                    id="rscCd"
-                    name="rscCd"
-                    style="width: 220px"
+                    id="proCd"
+                    name="proCd"
+                    style="width: 250px"
+                    maxlength="20"
                     placeholder="등록시 자동부여됩니다."
                     readonly
                   />
                 </td>
               </tr>
               <tr>
-                <th>자재명 <strong class="blue">*</strong></th>
+                <th>제품명 <strong class="blue">*</strong></th>
                 <td>
                   <input
                     class="form-control"
                     type="text"
-                    id="rscNm"
-                    name="rscNm"
-                    style="width: 220px"
+                    id="proNm"
+                    name="proNm"
+                    style="width: 250px"
                     maxlength="50"
                   />
                 </td>
-                <th>관리단위</th>
+                <th>제품 규격</th>
                 <td>
                   <input
-                    type="text"
-                    id="rscUnit"
-                    name="rscUnit"
                     class="form-control"
-                    maxlength="30"
-                    style="width: 220px"
+                    type="text"
+                    id="proSpec"
+                    name="proSpec"
+                    style="width: 250px"
+                    maxlength="50"
                   />
                 </td>
               </tr>
               <tr>
-                <th>자재규격</th>
+                <th>단위</th>
                 <td>
                   <input
                     class="form-control"
                     type="text"
-                    id="rscSpec"
-                    name="rscSpec"
-                    style="width: 220px"
+                    id="proUnit"
+                    name="proUnit"
+                    style="width: 250px"
                     maxlength="50"
                   />
                 </td>
                 <th>안전재고</th>
                 <td>
                   <input
-                    class="form-control"
                     type="text"
                     id="safRtc"
                     name="safRtc"
-                    style="width: 220px"
+                    class="form-control"
+                    maxlength="50"
+                    style="width: 250px"
                   />
-                </td>
-              </tr>
-              <tr style="height: 55px">
-                <th>사용유무</th>
-                <td>
-                  <select
-                    class="dataTable-selector"
-                    name="rscAvail"
-                    id="rscAvail"
-                    style="width: 220px"
-                  >
-                    <option value="">==선택==</option>
-                    <option value="Y">Yes</option>
-                    <option value="N">No</option>
-                  </select>
                 </td>
                 <th></th>
                 <td></td>
@@ -181,14 +159,29 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="card col-xl-5">
+      <div class="linelist" style="margin-top: 16px"></div>
+      <h3 style="padding-left: 15px">자재 목록</h3>
+      <div class="card-body">
+        <div id="grid2"></div>
+      </div>
+    </div>
+    <div class="card col-xl-6">
+      <div class="linelist" style="margin-top: 16px"></div>
+      <h3 style="padding-left: 15px">공정 순서</h3>
+      <div class="card-body">
+        <div id="grid3"></div>
+      </div>
+    </div>
+  </div>
 </div>
-<script language="Javascript">
+<script>
   let gridData = [
-    <c:forEach items="${matList }" var="mat">
+    <c:forEach items="${proList }" var="pro">
       {
-        rscTyp : '${mat.detailName}',
-        rscCd : '${mat.basicCode}${mat.detailCode}',
-        rscNm : '${mat.detailExplain}',
+        proCd : '${pro.basicCode}${pro.detailCode}',
+        proNm : '${pro.detailExplain}',
       },
     </c:forEach>
   ];
@@ -199,21 +192,17 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     el: document.getElementById('grid'),
     data: gridData,
        scrollY: true,
+       bodyHeight: 300,
        rowHeaders: ['rowNum'],
        columns: [
-         {
-           header: '구분',
-           name: 'rscTyp',
-           align: 'center',
-          },
           {
-            header: '자재 코드',
-            name: 'rscCd',
+            header: '제품 코드',
+            name: 'proCd',
             align: 'center',
           },
           {
-            header: '자재명',
-            name: 'rscNm',
+            header: '제품명',
+            name: 'proNm',
             align: 'center',
           },
         ]
@@ -240,23 +229,36 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     selectedRowKey = ev.rowKey;
     grid.addRowClassName(selectedRowKey, 'highlight');
 
-    let str = grid.getValue(selectedRowKey, 'rscCd');
-    str = str.substring(3, str.length-3);
+    $.ajax({
+      url: "getPro",
+      method: "POST",
+      data: { proCd: grid.getValue(selectedRowKey, 'proCd')},
+      success: function(data) {
+        let str = '';
+        if( data.proCd.indexOf('LIQ') != -1 ) {
+            str = 'LIQ';
+        } else if ( data.proCd.indexOf('SOL') != -1 ) {
+            str = 'SOL';
+        }
+        $("#proTyp").val(str)
+        $("#proTyp").attr('disabled', 'disabled');
+        $("#proCd").val(data.proCd);
+        $("#proNm").val(data.proNm);
+        $("#proSpec").val(data.proSpec);
+        $("#proUnit").val(data.proUnit);
+        $("#safRtc").val(data.safRtc);
+      },
+      error: function (reject) {
+        console.log(reject);
+      },
+    });
 
     $.ajax({
-      url: "getRsc",
+      url: "getPrcs",
       method: "POST",
-      data: { rscCd: grid.getValue(selectedRowKey, 'rscCd')},
+      data: { proCd: grid.getValue(selectedRowKey, 'proCd')},
       success: function(data) {
-        $("#rscTyp").val(data.rscTyp);
-        $("#rscTyp").attr('disabled', true);
-        $("#hInput").val(str);
-        $("#rscCd").val(data.rscCd);
-        $("#rscNm").val(data.rscNm);
-        $("#rscUnit").val(data.rscUnit);
-        $("#rscSpec").val(data.rscSpec);
-        $("#safRtc").val(data.safRtc);
-        $("#rscAvail").val(data.rscAvail);
+        console.log(data)
       },
       error: function (reject) {
         console.log(reject);
@@ -265,51 +267,32 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   });
 
   //검색버튼
-  $('#searchBtn').click(ev => {
+  $('#searchProBtn').click(ev => {
     search();
   })
 
   function search() {
-    var searchKeyword = $('#searchParam').val()
-    var keyword = $('#searchMat').val()
-    searchData = gridData.filter( function (Mat) {
-      if(searchKeyword == 'matTyp'){
-        return Mat.matTyp.indexOf(keyword) != -1
-      } else if(searchKeyword == 'matCd') {
-        return Mat.matCd.indexOf(keyword) != -1
-      } else if(searchKeyword == 'matNm') {
-        return Mat.matNm.indexOf(keyword) != -1
-      } else {
-        return Mat.matTyp.indexOf(keyword) != -1 || Mat.matCd.indexOf(keyword) != -1 || Mat.matNm.indexOf(keyword) != -1
-      }
+    var keyword = $('#searchPro').val()
+    searchGrid = gridData.filter( function (Pro) {
+      return Pro.proNm.indexOf(keyword) != -1
     })
-    grid.resetData(searchData);
+    grid.resetData(searchGrid);
   }
 
   //새 자료 버튼
-  $('#newRsc').click(ev => {
+  $('#newPro').click(ev => {
     $('body').find('form')[1].reset();
-    $("#hInput").val('');
-    $("#rscTyp").attr('disabled', false);
+    $("#proTyp").attr('disabled', false);
   });
 
-  //구분 선택시 타입 입력
-  $("#rscTyp").on('click', () => {
-    <c:forEach items="${matType }" var="mat">
-      if( $("#rscTyp").val() == '${mat.detailName}') {
-        $("#hInput").val('${mat.detailCode}')
-      }
-    </c:forEach>
-  })
-
   //저장 버튼
-  $('#saveRsc').click(ev => {
-    if( $('#rscTyp').val() == '' || $("#rscNm").val() == null || $('#rscNm').val() == '' ) {
+  $('#savePro').click(ev => {
+    if( $("#proTyp").val() == '' || $("#proNm").val() == null || $('#proNm').val() == '' ) {
       alert('필수 입력 사항을 입력해 주세요')
     } else {
-      $("#rscTyp").attr('disabled', false);
+      $("#proTyp").attr('disabled', false);
       $.ajax({
-        url: "mergeRsc",
+        url: "mergePro",
         type: "POST",
         data: $("#dataForm").serialize(),
         dataType: 'json',
@@ -317,26 +300,25 @@ uri="http://java.sun.com/jsp/jstl/core"%>
           let fixedData = [];
           for(let i = 0; i < result.length; i++) {
             fixedData[i] = {
-              rscTyp : result[i].detailName,
-              rscCd : result[i].basicCode + result[i].detailCode,
-              rscNm : result[i].detailExplain,
+              proCd : result[i].fullCode,
+              proNm : result[i].detailExplain,
             }
           }
           grid.resetData(fixedData)
           alert('성공적으로 저장되었습니다.');
-          $("#rscTyp").attr('disabled', true);
         }
       })
+      $("#proTyp").attr('disabled', true);
     }
   })
 
   //삭제
   $("#delBtn").click((ev) => {
-    if( $("#rscCd").val() == '' || $("#rscCd").val() == null) {
-      alert('선택된 자재가 없습니다')
+    if( $("#proCd").val() == '' || $("#proCd").val() == null) {
+      alert('선택된 제품이 없습니다')
     } else {
       $.ajax({
-        url: "delRsc",
+        url: "delPro",
         method: "POST",
         data: $("#dataForm").serialize(),
         dataType: "json",
@@ -344,16 +326,14 @@ uri="http://java.sun.com/jsp/jstl/core"%>
           let fixedData = [];
           for(let i = 0; i < result.length; i++) {
             fixedData[i] = {
-              rscTyp : result[i].detailName,
-              rscCd : result[i].basicCode + result[i].detailCode,
-              rscNm : result[i].detailExplain,
+              proCd : result[i].fullCode,
+              proNm : result[i].detailExplain,
             }
           }
           alert("비활성화되었습니다.");
           grid.resetData(fixedData);
           $('body').find('form')[1].reset();
-          $("#hInput").val('');
-          $("#rscTyp").attr('disabled', false);
+          $("#proTyp").attr('disabled', false);
         },
       });
     }

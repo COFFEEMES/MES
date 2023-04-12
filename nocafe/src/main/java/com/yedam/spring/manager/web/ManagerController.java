@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.spring.manager.service.BasicCodeVO;
+import com.yedam.spring.manager.service.BomVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.ManagerService;
 import com.yedam.spring.manager.service.RscVO;
+import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.VendVO;
 
 @Controller
@@ -94,6 +96,38 @@ public class ManagerController {
 	public List<DetailCodeVO> delRsc(RscVO rscVO){
 		managerService.delRsc(rscVO);
 		return managerService.getAllMat();
+	}
+	
+	@GetMapping("/bomManage")
+	public String getAllPro(Model model) {
+		model.addAttribute("proList", managerService.getAllPro());
+		return "manager/BOM";
+	}
+	
+	@PostMapping("/getPro")
+	@ResponseBody
+	public EdctsVO getPro(EdctsVO edctsVO) {
+		return managerService.getPro(edctsVO);
+	}
+	
+	@PostMapping("/mergePro")
+	@ResponseBody
+	public List<DetailCodeVO> mergePro(EdctsVO edctsVO){
+		managerService.mergePro(edctsVO);
+		return managerService.getAllPro();
+	}
+	
+	@PostMapping("/delPro")
+	@ResponseBody
+	public List<DetailCodeVO> delPro(EdctsVO edctsVO){
+		managerService.delPro(edctsVO);
+		return managerService.getAllPro();
+	}
+	
+	@PostMapping("/getPrcs")
+	@ResponseBody
+	public List<BomVO> getPrcs(EdctsVO edctsVO){
+		return managerService.getPrcs(edctsVO);
 	}
 
 }
