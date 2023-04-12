@@ -12,5 +12,9 @@ public class BomVO {
 	private String prcsCd;
 	private String eqmCd;
 	
-	private String detailExplain;
+	private String prcsNm;
+	private String prcsExplain;
+	
+	private String rscNm;
+	private String rscUnit;
 }

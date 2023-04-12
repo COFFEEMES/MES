@@ -31,4 +31,9 @@ public class ReceiveServiceImpl  implements ReceiveService{
 		
 	}
 
+	@Override
+	public List<ReceiveVO> search() {
+		return receiveMapper.search();
+	}
+
 }

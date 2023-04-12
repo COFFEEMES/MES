@@ -30,5 +30,8 @@ public interface ManagerMapper {
 	public void mergePro(EdctsVO edctsVO);
 	public void delPro(EdctsVO edctsVO);
 	public List<BomVO> getPrcs(EdctsVO edctsVO);
+	public List<BomVO> getUseRsc(EdctsVO edctsVO);
+	public List<BomVO> getPrcsRcs(BomVO bomVO);
+	public void delPrcs(BomVO bomVO);
 
 }

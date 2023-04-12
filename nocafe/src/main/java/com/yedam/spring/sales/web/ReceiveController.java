@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,11 +37,19 @@ public class ReceiveController {
 		return receiveService.testComplete(start, end);
 	}
 	
-	//주문서 전체수정
+	//입고 등록
 	@PostMapping("/signUp")
 	@ResponseBody
 	public int signUp(@RequestBody List<ReceiveVO> receiveVO) {
 		return receiveService.signUp(receiveVO);
 	} 
+	
+	//입고 조회
+	//전체조회
+	@GetMapping("/receiveData")
+	public List<ReceiveVO> receiveData(Model model) {
+		return receiveService.search();
+	}
+	
 
 }

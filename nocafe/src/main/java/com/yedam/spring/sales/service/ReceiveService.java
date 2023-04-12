@@ -9,4 +9,7 @@ public interface ReceiveService {
 	
 	//입고등록
 	public int signUp(List<ReceiveVO> receiveVO);
+	
+	//입고조회
+	public List<ReceiveVO> search();
 }
