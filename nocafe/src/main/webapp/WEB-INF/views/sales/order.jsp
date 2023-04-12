@@ -723,12 +723,14 @@ $('#proModal').on('hidden.bs.modal', function (e) {
         data: JSON.stringify(grid.getData()),
         success: function (data) {
 			/* console.log(data);*/ 
-/*         	 setTimeout(function () {
+			toastr.success("주문서가 저장되었습니다.");
+    /*     	 setTimeout(function () {
 	    		   grid.refreshLayout()
-	    		   }, 100);  */ 
+	    		   }, 100);   */
         	// grid.resetData(data);
-        	toastr.success("주문서가 저장되었습니다.");
-        	 location.reload();
+	    		   search();
+        	
+        	 //location.reload();
 
         },
         error: function (reject) {
