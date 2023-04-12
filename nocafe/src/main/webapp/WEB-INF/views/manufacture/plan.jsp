@@ -152,8 +152,6 @@ label {
 	</div>
 
 	<script>
-	let dt = new Date();
-	console.log(dt);
 // //		계획일자 받을 변수	
 // //		생성된 계획 코드 변수
 // //		console.log(Date.now()+8032500)
@@ -163,19 +161,7 @@ label {
 
 // //		↓↓↓↓↓ 계획번호 생성
 // 	getPlanCd(planDt);		
-	
-//         let date = new Date();
 
-// 	    let day = date.getDate();
-// 	    let month = date.getMonth() + 1;
-// 	    let year = date.getFullYear();
-
-// 	    if (month < 10) month = "0" + month;
-// 	    if (day < 10) day = "0" + day;
-
-// 	    let today = year + "-" + month + "-" + day;   
-// 	    let endday = year + "-" + (month + 3)+ "-" + day;
-	    
 // 	    ↓↓↓↓↓bom 으로 가져온 공정
 	    let bom;
 	    let planDt = $("#tui-date-picker-target").val();
@@ -190,11 +176,14 @@ label {
 // 		↓↓↓↓↓input date에 오늘 날짜 담기
 		$(document).ready(function() {
 		    $("#tui-date-picker-target").attr("value", today);
-			$(".targetDate").attr({"max":after,
+			$("#ex-strat").attr({"max":after,
+								  "min":today})
+			$("#ex-end").attr({"max":after,
 								  "min":today})
 			
 			
 		});
+		let orderListAry = new Array;
 
         //초기화
     	$("#clearBtn").on("click", function(){
@@ -214,8 +203,8 @@ label {
 				scrollX : false,
 				scrollY : false,
 				columns : [{
-					header 	: '계획코드',
-					name	: 'planCd',
+					header 	: '업체명',
+					name	: 'vendNm',
 					align	: 'center'
 				},
 				{
@@ -234,35 +223,34 @@ label {
 			            return dateChange(data.value);
 			          },
 				},
-				{
-					header 	: '시작 일자',
-					name	: 'ex_start_dt',
-					 editor: {
-					      type: 'datePicker',
-					      options: {
-					        format: 'yyyy/MM/dd',
-					        selectableRanges: [[todayForgrid,threeMonthsLater ]]
-					      }
-					    }
-				},
-				{
-					header 	: '종료 일자',
-					name	: 'ex_end_dt',
-					 editor: {
-					      type: 'datePicker',
-					      options: {
-					        format: 'yyyy/MM/dd',
-					        selectableRanges: [[todayForgrid,threeMonthsLater ]]
-					      }
-					    }
-				},
+// 				{
+// 					header 	: '시작 일자',
+// 					name	: 'ex_start_dt',
+// 					 editor: {
+// 					      type: 'datePicker',
+// 					      options: {
+// 					        format: 'yyyy/MM/dd',
+// 					        selectableRanges: [[todayForgrid,threeMonthsLater ]]
+// 					      }
+// 					    }
+// 				},
+// 				{
+// 					header 	: '종료 일자',
+// 					name	: 'ex_end_dt',
+// 					 editor: {
+// 					      type: 'datePicker',
+// 					      options: {
+// 					        format: 'yyyy/MM/dd',
+// 					        selectableRanges: [[todayForgrid,threeMonthsLater ]]
+// 					      }
+// 					    }
+// 				},
 				],
 			};
 		
 		
-		
+// 		↓↓↓↓ 주문서 버튼 클릭
 		$(modalBtn).on("click",function(e){
-
 					
 // 					↓↓↓↓ 생산미계획 주문서정보 모달창으로 조회
 					$.ajax({
@@ -277,6 +265,13 @@ label {
 // 								↓↓↓↓모달창 리셋
 								modGrid.resetData(res);
 								setTimeout(()=> modGrid.refreshLayout() , 300);
+								console.log(res[0].orderNo);
+								for(let i = 0;i < res.length;i++){
+									orderListAry[i] = res[i].orderNo;
+								};
+								console.log(orderListAry);
+								
+								
 						},error: function(err){
 							console.log(err);
 						}
@@ -287,28 +282,23 @@ label {
 		//	↓↓↓↓↓↓모달 확인 버튼 클릭시 화면에 뿌려주는 동작
 		$("#confirmBtn").on("click", function(e){
 			let oderInfo = modGrid.getCheckedRows();
-			for(let i = 0 ; i<oderInfo.length;i++){
-			oderInfo[i].planCd = code;
-			};
-			console.log(oderInfo[0]);
-			let proNm = oderInfo[0].proNm;
+			grid.resetData(oderInfo);
 			
 			$.ajax({
-				url : 'getStock',
-				method : 'GET',
-				data : {proNm : proNm},
-				success: function(result){
-					for(let i = 0;i<oderInfo.length;i++){
-					  oderInfo[i].stockCnt = result.stockCnt;
-				  }
-					console.log(oderInfo);
-					grid.resetData(oderInfo);
-					grid2.resetData(oderInfo);
+				url : 'getOrderPro',
+				method : 'POST',
+				dataType: 'json',
+		        contentType: 'application/json; charset=utf-8',
+				data : JSON.stringify(orderListAry),
+				success : function(res){
+// 					console.log(res);
+					grid2.resetData(res);
+					
+				},error: function(err){
+					console.log(err);
 				}
-			});
+			})
 
-// 	        console.log(oderInfo);
-			
 		});
 		
 
@@ -350,15 +340,19 @@ label {
 			data : gridData,
 			scrollX : false,
 			scrollY : false,
-			columns : [{
-				header 	: '계획코드',
-				name	: 'planCd',
+			columns : [
+			{
+				header 	: '업체명',
+				name	: 'vendNm',
 				align	: 'center'
 			},
 			{
-				header 	: '주문번호',
-				name	: 'orderNo',
-				align	: 'center'
+				header 	: '주문 일자',
+				name	: 'orderDt',
+				align	: 'center',
+				formatter: function(data) {
+		            return dateChange(data.value);
+		          },
 			},
 			{
 				header 	: '납기 일자',
@@ -368,28 +362,28 @@ label {
 		            return dateChange(data.value);
 		          },
 			},
-			{
-				header 	: '시작 일자',
-				name	: 'ex_start_dt',
-				 editor: {
-				      type: 'datePicker',
-				      options: {
-				        format: 'yyyy/MM/dd',
-				        selectableRanges: [[todayForgrid,threeMonthsLater ]]
-				      }
-				    }
-			},
-			{
-				header 	: '종료 일자',
-				name	: 'ex_end_dt',
-				 editor: {
-				      type: 'datePicker',
-				      options: {
-				        format: 'yyyy/MM/dd',
-				        selectableRanges: [[todayForgrid,threeMonthsLater ]]
-				      }
-				    }
-			},
+// 			{
+// 				header 	: '시작 일자',
+// 				name	: 'ex_start_dt',
+// 				 editor: {
+// 				      type: 'datePicker',
+// 				      options: {
+// 				        format: 'yyyy/MM/dd',
+// 				        selectableRanges: [[todayForgrid,threeMonthsLater ]]
+// 				      }
+// 				    }
+// 			},
+// 			{
+// 				header 	: '종료 일자',
+// 				name	: 'ex_end_dt',
+// 				 editor: {
+// 				      type: 'datePicker',
+// 				      options: {
+// 				        format: 'yyyy/MM/dd',
+// 				        selectableRanges: [[todayForgrid,threeMonthsLater ]]
+// 				      }
+// 				    }
+// 			},
 			],
 		};
 		let grid = new tui.Grid(gridFormat);
@@ -413,7 +407,11 @@ label {
 			{
 				header 	: '생산 수량',
 				name	: 'orderCnt', 
-				align	: 'right'
+				align	: 'right',
+				editor 	: 
+					{
+						type: 'text'
+					}
 			},
 			{
 				header 	: '재고량',
@@ -422,7 +420,7 @@ label {
 			}
 			],
 			onGridUpdated(ev){
-				
+// 				기본값
 				let proNm = grid2.getData()[0].proNm
 				
 				getPrcs(proNm);
@@ -446,11 +444,7 @@ label {
 				name	: 'rscNm',
 				align	: 'center'
 			},
-			{
-				header 	: 'bom코드',
-				name	: 'bomCd',
-				align	: 'center',
-			},
+		
 			{
 				header 	: '불량률',
 				name	: 'inferPct',
@@ -459,8 +453,8 @@ label {
 			
 			],
 			onGridUpdated(ev){
-				console.log(grid3.getData()[0].bomCd);
-				let data=grid3.getData()[0].bomCd;
+				console.log(grid2.getData()[0].proNm);
+				let data=grid32.getData()[0].proNm;
 				getRscInfo(data);
 		
 			}
@@ -609,7 +603,7 @@ label {
 		    	$.ajax({
 					url : 'getRsc',
 					method : 'GET',
-					data : {bomCd: data},
+					data : {proCd: data},
 					success: function (result){
 						let proCnt=0;
 						for(let i=0;i<grid2.getData().length;i++){
@@ -626,6 +620,11 @@ label {
 					}
 				})
 		    };
+		    
+
+		    
+		    
+
 		
 //	 		새계획버튼
 	        $('#regiBtn').on('click', function(){

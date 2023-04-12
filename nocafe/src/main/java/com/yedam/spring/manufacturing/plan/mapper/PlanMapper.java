@@ -10,14 +10,19 @@ public interface PlanMapper {
 //	미계획 주문서 조회
 	public List<OrderVO> selectOrderList();
 	
+//	주문서 번호로 생산할 제품, 총량 ,완제품 조회
+	public List<PlanVO> getOrderPro(String[] orderListAry);
+	
 //	생산계획 코드 생성
 	public PlanVO getPlanCd(PlanVO planVO);
+	
+
+	//-----------------------------------------------------------------------------------	사용중
 	
 //	bom 통해서 필요 공정 호출 
 	public List<PlanVO> getBomCd(PlanVO planVO);
 	
-//	proCd를 보내서 완제품 재고 수량 반환
-	public PlanVO getLotRestore(PlanVO planVO);
+
 
 //	불량률 불러오기 
 	public List<PlanVO> getInferPct(PlanVO planVO);
