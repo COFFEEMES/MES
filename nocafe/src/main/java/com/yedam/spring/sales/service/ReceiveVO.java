@@ -29,6 +29,6 @@ public class ReceiveVO {
 	//검사완료제품 모달창에 담을 변수
 	//제품코드
 	private String proNm; //제품명
-	private int TestGood; //검사합격량
-	
+	private int output; //검사합격량
+	private String prcsTblCd;//공정진행코드
 }

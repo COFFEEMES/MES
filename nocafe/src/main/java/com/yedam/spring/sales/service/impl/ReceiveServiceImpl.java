@@ -20,4 +20,15 @@ public class ReceiveServiceImpl  implements ReceiveService{
 		return receiveMapper.testComplete(start, end);
 	}
 
+	@Override
+	public int signUp(List<ReceiveVO> receiveVO) {
+		int result = 0;
+		for(int i=0; i<receiveVO.size(); i++) {
+			receiveMapper.signUp(receiveVO.get(i));
+			result++;
+		}
+		return result;
+		
+	}
+
 }

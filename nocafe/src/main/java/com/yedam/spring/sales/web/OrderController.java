@@ -82,13 +82,4 @@ public class OrderController {
 			return orderService.saveOrderTotal(orderVO);
 		} 
 		
-	
-	//제품 입고 
-		
-	//제품입고 페이지
-	@GetMapping("/receiveList")
-	public String receiveList() {
-		return "sales/receive";
-	}
-		
 }
