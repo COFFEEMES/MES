@@ -4,6 +4,35 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.yedam.spring.material.mapper.MaterialMapper">
   
+  	<!-- 발주관리페이지 자재목록 -->  	
+  	
+  	  	<select id="selectMaterialLOTList" resultType="MaterialLOTVO">
+	  SELECT   a.rsc_lot_cd,
+			   a.rsc_insp_cd,
+			   a.ordr_cd,
+			   a.ist_cd,
+			   a.lot_cnt,
+			   a.exp_dt,
+			   a.rsc_cd,
+               b.saf_rtc
+	    FROM rsc_lot a, rsc b
+	    WHERE a.rsc_cd = b.rsc_cd
+	    
+	    </select>
+	    
+	<!-- 발주관리페이지 자재발주 -->   
+	    <select id="selectMaterialOrderList" resultType="MaterialOrderVO">
+	    SELECT a.rsc_cd,
+               a.rsc_nm,
+               b.vend_cd,
+               b.ordr_cd,
+               c.ordr_cnt,
+               c.paprd_cmnd_dt
+        FROM rsc a, rsc_ordr b, rsc_ordr_dtl c
+        WHERE a.rsc_cd = c.rsc_cd
+        AND c.ordr_cd = b.ordr_cd
+	    </select>
+  
     <!-- 자재조회 -->
 	<select id="selectMaterialList" resultType="MaterialVO">
 		SELECT rsc_cd,
@@ -12,19 +41,12 @@
 			   rsc_spec,
 			   rsc_unit,
 			   saf_rtc,
-			   vend_cd
+			   rsc_avail
 	    FROM rsc
 	    ORDER BY rsc_cd
 	</select>
-  
-  <!-- 발주조회 -->
-	<select id="selectMaterialOrderList" resultType="MaterialOrderVO">
-		SELECT ordr_cd,
-			   ordr_req_dt,
-			   vend_cd
-	    FROM rsc_ordr
-	    ORDER BY ordr_cd
-	</select>
+	
+	
   
   <!-- 발주디테일 -->
   <select id="getMaterialOrderDetail" resultType="MaterialOrderDetailVO">
@@ -57,18 +79,7 @@
 	    ORDER BY rsc_oust_cd
   </select>
   
-    <!-- 자재LOT조회 -->
-  	<select id="selectMaterialLOTList" resultType="MaterialLOTVO">
-  		SELECT rsc_lot_cd,
-			   rsc_cd,
-			   rsc_insp_cd,
-			   ordr_cd,
-			   ist_cd,
-			   lot_cnt,
-			   exp_dt
-	    FROM rsc_lot
-	    ORDER BY rsc_lot_cd
-  </select>
+
   
   <!-- 자재입고검사조회 -->
   	<select id="selectMaterialTestList" resultType="MaterialTestDetailVO">

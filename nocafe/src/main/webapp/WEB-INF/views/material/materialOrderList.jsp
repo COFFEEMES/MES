@@ -73,7 +73,6 @@
 
 			<div class="card mb-4">
 				<div class="card-body">
-
 					<tr>
 						<th>발주신청일</th>
 						<td><input class="form-control" type="date" id="frDt" name="frDt" style="width: 150px"> ~</td>

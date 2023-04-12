@@ -9,6 +9,7 @@ public class MaterialVO {
 	private String rscTyp;		//자재유형
 	private String rscSpec;		//자재규격
 	private String rscUnit;		//관리단위
-	private int safRtc;			//안전재고
-	private String vendCd;		//사용여부
+	private String safRtc;		//안전재고
+	private String rscAvail;	//사용여부
+
 }
