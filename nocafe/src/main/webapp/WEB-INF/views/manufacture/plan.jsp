@@ -454,7 +454,7 @@ label {
 			],
 			onGridUpdated(ev){
 				console.log(grid2.getData()[0].proNm);
-				let data=grid32.getData()[0].proNm;
+				let data=grid2.getData()[0].proNm;
 				getRscInfo(data);
 		
 			}
