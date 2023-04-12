@@ -166,11 +166,45 @@
 	
 	<!-- 공정 순서 조회 -->
 	<select id="getPrcs" resultType="BomVO">
-		SELECT *
-		  FROM bom b, detail_code d
-		 WHERE b.prcs_cd = d.full_code
+		SELECT b.bom_sq
+			 , b.prcs_cd
+			 , p.prcs_nm
+			 , p.prcs_explain
+		  FROM bom b, prcs p
+		 WHERE b.prcs_cd = p.prcs_cd
 		   AND b.pro_cd = #{proCd}
-		 ORDER BY b.pro_cd, b.bom_sq
+		 GROUP BY b.bom_sq, b.prcs_cd, p.prcs_nm, p.prcs_explain
+		 ORDER BY b.bom_sq
 	</select>
+	
+	<!-- BOM 필요 자재 조회 -->
+	<select id="getUseRsc" resultType="BomVO">
+		SELECT b.rsc_cd
+			 , r.rsc_nm
+			 , SUM(b.use_cnt) use_cnt
+			 , r.rsc_unit
+		  FROM bom b, rsc r
+		 WHERE b.rsc_cd = r.rsc_cd
+		   AND b.pro_cd = #{proCd}
+		 GROUP BY b.rsc_cd, r.rsc_nm, r.rsc_unit
+		 ORDER BY 1
+	</select>
+	
+	<!-- 공정별 필요 자재 조회 -->
+	<select id="getPrcsRcs" resultType="BomVO">
+		SELECT b.rsc_cd
+			 , r.rsc_nm
+			 , b.use_cnt
+			 , r.rsc_unit
+		  FROM bom b, rsc r
+		 WHERE b.rsc_cd = r.rsc_cd
+		   AND b.pro_cd = #{proCd}
+		   AND b.prcs_cd = #{prcsCd}
+	</select>
+	
+	<!-- 공정 삭제 -->
+	<update id="delPrcs" statementType="CALLABLE" parameterType="BomVO">
+	
+	</update>
 
 </mapper>

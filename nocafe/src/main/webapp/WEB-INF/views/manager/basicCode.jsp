@@ -113,22 +113,22 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   const grid = new tui.Grid({
     el: document.getElementById('grid'),
     data: gridData,
-       scrollY: true,
-       bodyHeight: 480,
-       rowHeaders: ['rowNum'],
-       columns: [
-         {
-           header: '공통 코드',
-           name: 'basicCode',
-           align: 'center',
-          },
-          {
-            header: '코드명',
-            name: 'basicName',
-            align: 'center',
-          },
-        ]
-      });
+    scrollY: true,
+    bodyHeight: 480,
+    rowHeaders: ['rowNum'],
+    columns: [
+      {
+        header: '공통 코드',
+        name: 'basicCode',
+        align: 'center',
+      },
+      {
+        header: '코드명',
+        name: 'basicName',
+        align: 'center',
+      },
+    ]
+  });
 
   //테마 호버
   let hoverOption = {
@@ -210,11 +210,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   var rowCount = 0;
   var selectedRowKey = null;
   var basicCode = '';
+  var basicName = '';
 
   grid.on('click', ev => {
-    var basicName = grid.getValue(ev.rowKey, 'basicName');
+    basicName = grid.getValue(ev.rowKey, 'basicName');
     basicCode = grid.getValue(ev.rowKey, 'basicCode');
-    $('#searchBcode').val(basicName);
 
     //셀 클릭시 로우 하이라이팅
     if (selectedRowKey != ev.rowKey) {
@@ -265,7 +265,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 
   //상세 코드 추가 버튼
   $('#newDcode').click(ev => {
-    if ($('#searchBcode').val() == '') {
+    if (basicName == '' || basicName == null) {
       alert('공통코드를 먼저 선택해주세요!')
     } else if (grid2.getRow(grid2.getRowCount() - 1).detailCode == null || grid2.getRow(grid2.getRowCount() - 1).detailCode == ''){
       alert('입력이 미완료된 추가건이 있습니다.')

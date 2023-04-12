@@ -114,4 +114,21 @@ public class ManagerImpl implements ManagerService {
 		return managerMapper.getPrcs(edctsVO);
 	}
 
+	@Override
+	public List<BomVO> getUseRcs(EdctsVO edctsVO) {
+		return managerMapper.getUseRsc(edctsVO);
+	}
+
+	@Override
+	public List<BomVO> getPrcsRcs(BomVO bomVO) {
+		return managerMapper.getPrcsRcs(bomVO);
+	}
+
+	@Override
+	public void delPrcs(List<BomVO> list) {
+		for(BomVO temp : list) {
+			managerMapper.delPrcs(temp);
+		}
+	}
+
 }

@@ -198,26 +198,26 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   const grid = new tui.Grid({
     el: document.getElementById('grid'),
     data: gridData,
-       scrollY: true,
-       rowHeaders: ['rowNum'],
-       columns: [
-         {
-           header: '구분',
-           name: 'rscTyp',
-           align: 'center',
-          },
-          {
-            header: '자재 코드',
-            name: 'rscCd',
-            align: 'center',
-          },
-          {
-            header: '자재명',
-            name: 'rscNm',
-            align: 'center',
-          },
-        ]
-      });
+    scrollY: true,
+    rowHeaders: ['rowNum'],
+    columns: [
+      {
+        header: '구분',
+        name: 'rscTyp',
+        align: 'center',
+      },
+      {
+        header: '자재 코드',
+        name: 'rscCd',
+        align: 'center',
+      },
+      {
+        header: '자재명',
+        name: 'rscNm',
+        align: 'center',
+      },
+    ]
+  });
 
   //테마 호버
   let hoverOption = {

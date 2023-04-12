@@ -25,5 +25,8 @@ public interface ManagerService {
 	public void mergePro(EdctsVO edctsVO);
 	public void delPro(EdctsVO edctsVO);
 	public List<BomVO> getPrcs(EdctsVO edctsVO);
+	public List<BomVO> getUseRcs(EdctsVO edctsVO);
+	public List<BomVO> getPrcsRcs(BomVO bomVO);
+	public void delPrcs(List<BomVO> list);
 
 }
