@@ -29,5 +29,8 @@ public class OrderVO {
 	private int orderCnt;
 	private String planStatus;
 	
+	//추가
+	private int detailCnt; //주문상품개수
+	
 	
 }
