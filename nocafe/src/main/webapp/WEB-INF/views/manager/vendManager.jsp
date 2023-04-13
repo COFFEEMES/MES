@@ -318,6 +318,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       $('#vendModal').modal('show');
     }
   })
+  let selectedRowKey = null;
 
   //모달창 닫기
   $("#closeBtn").on("click", closeModal)
@@ -326,6 +327,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     $('#vendModal').modal('hide')
     $('.modal').on('hidden.bs.modal', function (e) {
       $(this).find('form')[0].reset();
+      grid.removeRowClassName(selectedRowKey, "highlight");
     })
     $("#vendCd").val('');
   }
@@ -340,7 +342,6 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   };
   tui.Grid.applyTheme("default", hoverOption);
 
-  let selectedRowKey = null;
   grid.on("click", (ev) => {
     //하이라이팅
     if (selectedRowKey != ev.rowKey) {

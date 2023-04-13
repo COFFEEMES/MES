@@ -173,10 +173,13 @@ public class ManagerController {
 		return managerService.getAllRsc();
 	}
 	
-//	@PostMapping("/saveNewPrcs")
-//	@ResponseBody
-//	public List<BomVO> saveNewPrcs(){
-//		return
-//	}
+	@PostMapping("/saveNewPrcs")
+	@ResponseBody
+	public List<BomVO> saveNewPrcs(@RequestBody List<RscVO> list){
+		managerService.saveNewPrcs(list);
+		EdctsVO edctsVO = new EdctsVO();
+		edctsVO.setProCd(list.get(0).getProCd());
+		return managerService.getPrcs(edctsVO);
+	}
 
 }

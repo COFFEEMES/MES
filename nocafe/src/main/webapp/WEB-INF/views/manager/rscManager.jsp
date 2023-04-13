@@ -291,6 +291,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     $('body').find('form')[1].reset();
     $("#hInput").val('');
     $("#rscTyp").attr('disabled', false);
+    grid.removeRowClassName(selectedRowKey, 'highlight');
   });
 
   //구분 선택시 타입 입력

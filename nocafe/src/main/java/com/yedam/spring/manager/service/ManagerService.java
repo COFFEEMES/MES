@@ -31,5 +31,6 @@ public interface ManagerService {
 	public void savePrcs(List<BomVO> list);
 	public List<PrcsVO> getAllPrcs();
 	public List<RscVO> getAllRsc();
+	public void saveNewPrcs(List<RscVO> list);
 
 }

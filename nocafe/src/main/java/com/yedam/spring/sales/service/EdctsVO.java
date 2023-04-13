@@ -12,4 +12,5 @@ public class EdctsVO {
 	private String safRtc;
 	
 	private String proTyp;
+	private String unit;
 }

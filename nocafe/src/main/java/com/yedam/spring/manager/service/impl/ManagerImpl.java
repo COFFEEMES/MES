@@ -149,4 +149,11 @@ public class ManagerImpl implements ManagerService {
 		return managerMapper.getAllRsc();
 	}
 
+	@Override
+	public void saveNewPrcs(List<RscVO> list) {
+		for(RscVO temp : list) {
+			managerMapper.saveNewPrcs(temp);
+		}
+	}
+
 }

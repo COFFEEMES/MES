@@ -13,4 +13,8 @@ public class RscVO {
 	private String rscAvail;
 	
 	private String hInput;
+	private String prcsCd;
+	private String proCd;
+	private String unit;
+	private String useCnt;
 }
