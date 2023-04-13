@@ -16,7 +16,7 @@ public class MaterialController {
 	//발주관리페이지
 	@GetMapping("/materialOrder")
 	public String getMaterialOrder(Model model) {
-		model.addAttribute("materialList", materialService.getMaterialLOTList());
+		model.addAttribute("materialLOTList", materialService.getMaterialLOTList());
 		model.addAttribute("materialOrderList", materialService.getMaterialOrderList());
 		return "material/materialOrder";
 	}

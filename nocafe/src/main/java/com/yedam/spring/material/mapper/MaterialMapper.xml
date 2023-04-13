@@ -7,17 +7,14 @@
   	<!-- 발주관리페이지 자재목록 -->  	
   	
   	  	<select id="selectMaterialLOTList" resultType="MaterialLOTVO">
-	  SELECT   a.rsc_lot_cd,
-			   a.rsc_insp_cd,
-			   a.ordr_cd,
-			   a.ist_cd,
-			   a.lot_cnt,
-			   a.exp_dt,
-			   a.rsc_cd,
-               b.saf_rtc
-	    FROM rsc_lot a, rsc b
-	    WHERE a.rsc_cd = b.rsc_cd
-	    
+	  SELECT   a.rsc_cd,
+			   a.rsc_nm,
+			   b.vend_cd,
+			   c.lot_cnt,
+               a.saf_rtc
+	    FROM rsc_lot c, rsc a, rsc_ordr b
+	    WHERE a.rsc_cd = c.rsc_cd
+	    AND c.ordr_cd = b.ordr_cd
 	    </select>
 	    
 	<!-- 발주관리페이지 자재발주 -->   
@@ -35,15 +32,18 @@
   
     <!-- 자재조회 -->
 	<select id="selectMaterialList" resultType="MaterialVO">
-		SELECT rsc_cd,
-			   rsc_nm,
-			   rsc_typ,
-			   rsc_spec,
-			   rsc_unit,
-			   saf_rtc,
-			   rsc_avail
-	    FROM rsc
-	    ORDER BY rsc_cd
+		SELECT 
+			   r.rsc_nm,
+			   r.rsc_typ,
+			   r.rsc_spec,
+			   r.rsc_unit,
+			   r.saf_rtc,
+			   r.rsc_avail,
+			   l.rsc_cd,
+			   SUM(l.lot_cnt) AS "lot_cnt"
+	    FROM rsc r, rsc_lot l
+	    WHERE r.rsc_cd = l.rsc_cd
+	    GROUP BY r.rsc_nm, r.rsc_typ, r.rsc_spec, r.rsc_unit, r.saf_rtc, r.rsc_avail, l.rsc_cd
 	</select>
 	
 	

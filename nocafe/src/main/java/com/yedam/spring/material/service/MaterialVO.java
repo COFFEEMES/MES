@@ -11,5 +11,9 @@ public class MaterialVO {
 	private String rscUnit;		//관리단위
 	private String safRtc;		//안전재고
 	private String rscAvail;	//사용여부
+	
+	
+	private int lotCnt;	
+	
 
 }

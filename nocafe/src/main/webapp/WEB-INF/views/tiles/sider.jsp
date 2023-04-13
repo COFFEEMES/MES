@@ -118,9 +118,10 @@ pageEncoding="UTF-8"%>
           data-bs-parent="#sidenavAccordion"
         >
           <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link" href="layout-static.html">Static Navigation</a>
-            <a class="nav-link" href="layout-sidenav-light.html"
-              >Light Sidenav</a
+          <a class="nav-link" href="materialOrder">자재발주관리</a>
+            <a class="nav-link" href="materialOrderList">자재발주조회</a>
+            <a class="nav-link" href="materialList"
+              >자재재고조회</a
             >
           </nav>
         </div>

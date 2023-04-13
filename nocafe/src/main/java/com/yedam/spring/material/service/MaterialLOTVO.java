@@ -18,7 +18,8 @@ public class MaterialLOTVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private String rscCd;		//자재코드
 
-	
+	private String rscNm;
+	private String vendCd;
 	
 	private String safRtc;		//안전재고
 }
