@@ -10,24 +10,29 @@
 	<select id="searchOrder" resultType="OrderVO">
 		SELECT order_no,
 			   vend_cd,
-			   vend_nm,
-			   order_sit,
-			   parrd_dt,
-			   order_dt
-		FROM order_sheet
-		<where>
-			<if test="vendNm!=null and !vendNm.equals('')">
-				vend_nm=#{vendNm}
-			</if>
-			<if test="start != null and !start.equals('')"> 
-				 AND order_dt >= #{start} 
-			</if>
-			<if test="end != null and !end.equals('')"> 
-				AND <![CDATA[order_dt <= #{end}]]>
-			</if>
-		</where>
-		ORDER BY order_dt DESC
+	           vend_nm,
+	           order_sit,
+	           parrd_dt,
+	           order_dt,
+	           nvl((SELECT COUNT(order_detail_no) 
+	           		FROM order_detail d 
+	           		WHERE d.order_no = s.order_no 
+	           		GROUP BY d.order_no),0) AS "detail_cnt"
+	  	FROM order_sheet s
+	<where>
+	<if test="vendNm!=null and !vendNm.equals('')">
+		vend_nm=#{vendNm}
+	</if>
+	<if test="start != null and !start.equals('')">
+		AND order_dt >= #{start}
+	</if>
+	<if test="end != null and !end.equals('')">
+		AND <![CDATA[order_dt <= #{end}]]>
+	</if>
+	</where>
+	ORDER BY order_dt DESC
 	</select>
+	
 	
 	<!--거래처 모달창 조회 -->
 	<select id="searchVend" resultType="vendVO">

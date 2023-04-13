@@ -273,7 +273,16 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       columns: [
         {
           header: "주문번호",
-          name: "orderNo"
+          name: "orderNo",
+          formatter: function(data) {
+        	  let orderNo = data.row.orderNo;
+        	  let detailCnt = data.row.detailCnt;
+        	  let color ="";
+        	  if(detailCnt==0) color = '<span style="color:red";>'+orderNo+'</span>';
+        	  else if (orderNo==null) color = "";
+        	  else color = '<span style="black";>'+orderNo+'</span>';
+        	  return color;
+          }
         },
         {
           header: "거래처",
@@ -328,6 +337,12 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
             }
      
         },
+        {
+            header: "주문제품개수",
+            name: "detailCnt",
+            hidden: true
+          },
+        
       ],
       bodyHeight: 400,
       pageOptions: {
