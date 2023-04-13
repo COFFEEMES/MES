@@ -1,6 +1,7 @@
 package com.yedam.spring.manufacturing.plan.web;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,6 @@ public class PlanController {
 		System.out.println(planVO);
 		return planService.getPlanCd(planVO);
 	};
-//-----------------------------------------------------------------------------------	사용중
 
 	
 //	bom코드 
@@ -69,10 +69,14 @@ public class PlanController {
 		return planService.getInferPct(planVO);
 	};
 	
-	@GetMapping("getRsc")
+//-----------------------------------------------------------------------------------	사용중
+	@PostMapping("getRscStock")
 	@ResponseBody
-	public List<PlanVO>getRsc(PlanVO planVO){
-		return planService.getRsc(planVO);
+	public List<PlanVO>getRsc(@RequestBody List<Object>containorAry){
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("conAry", containorAry);
+		
+		return planService.getRsc(map);
 	}
 	
 	@PostMapping("getRscLot")

@@ -41,6 +41,7 @@ public class PlanVO {
 	private String rscLotCd;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date expDt;
+	private	int exCnt;
 	
 	
 //	받아올 공정정보

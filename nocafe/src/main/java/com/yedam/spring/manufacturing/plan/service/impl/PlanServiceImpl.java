@@ -1,5 +1,6 @@
 package com.yedam.spring.manufacturing.plan.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,6 @@ public class PlanServiceImpl implements PlanService {
 		System.out.println(planVO);
 		return planMapper.getPlanCd(planVO);
 	}
-//-----------------------------------------------------------------------------------	사용중
 	
 
 
@@ -45,10 +45,11 @@ public class PlanServiceImpl implements PlanService {
 	public List<PlanVO> getInferPct(PlanVO planVO) {
 		return planMapper.getInferPct(planVO);
 	}
+//-----------------------------------------------------------------------------------	사용중
 
 	@Override
-	public List<PlanVO> getRsc(PlanVO planVO) {
-		return planMapper.getRscNeed(planVO);
+	public List<PlanVO> getRsc(HashMap<String,Object> map) {
+		return planMapper.getRscNeed(map);
 	}
 
 	@Override

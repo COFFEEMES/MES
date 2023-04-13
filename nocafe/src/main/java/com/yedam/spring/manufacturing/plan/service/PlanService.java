@@ -1,5 +1,6 @@
 package com.yedam.spring.manufacturing.plan.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.yedam.spring.sales.service.OrderVO;
@@ -14,7 +15,6 @@ public interface PlanService {
 
 //	생산계획 코드 생성
 	public PlanVO getPlanCd(PlanVO planVO);
-//-----------------------------------------------------------------------------------	사용중	
 	
 
 	
@@ -24,9 +24,10 @@ public interface PlanService {
 	
 //	불량률 조회
 	public List<PlanVO> getInferPct(PlanVO planVO);
+//-----------------------------------------------------------------------------------	사용중	
 	
 //	자재 조회
-	public List<PlanVO> getRsc(PlanVO planVO);
+	public List<PlanVO> getRsc(HashMap<String,Object> map);
 	
 //	각 자재별 LOT 단위로 불러 오기
 	public List<PlanVO> getRscDetail(PlanVO planVO);
