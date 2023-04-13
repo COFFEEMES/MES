@@ -25,7 +25,7 @@
   
   	<!-- 입고 처리  -->
 	<update id="signUp" statementType="CALLABLE" parameterType="ReceiveVO">
-  	{ CALL receive_sign_up(#{proCd},#{proIstCnt},#{prcsTblCd}) }
+  	{ CALL receive_sign_up(#{proCd},#{proIstCnt},#{prcsTblCd},#{proIstNo}) }
 	</update>
   
   
@@ -34,12 +34,27 @@
 	SELECT pro_ist_no, pro_ist_dt, 
 	      (SELECT pro_nm 
 	       FROM edcts 
-	       WHERE pro_cd = e.pro_cd) AS "pro_nm", pro_ist_cnt, 
+	       WHERE pro_cd = e.pro_cd) AS "pro_nm", pro_ist_cnt,
 	      (SELECT pro_lot_no 
-	      FROM pro_stc 
-	      WHERE pro_ist_no = e.pro_ist_no) AS "pro_ist_no"
+	       FROM pro_stc 
+	       WHERE pro_ist_no = e.pro_ist_no
+           AND pro_cd = e.pro_cd) AS "pro_lot_no"
 	FROM edcts_ist e
-	WHERE TO_CHAR(pro_ist_dt,'yyyyMMdd') = TO_CHAR( sysdate, 'yyyymmdd');
+	WHERE TO_CHAR(pro_ist_dt,'yyyyMMdd') = TO_CHAR( sysdate, 'yyyymmdd')
+	ORDER BY pro_ist_no DESC
 	</select>
+  
+  
+  <!--입고번호 생성  -->
+  <select id= "number" resultType="String">
+     	SELECT SUBSTR(TO_CHAR(sysdate, 'yyyyMMdd'),3) || 
+        (SELECT LPAD(NVL(MAX(SUBSTR(PRO_IST_NO,-1,2)+1),1),4,'0')
+         FROM edcts_ist 
+        WHERE TO_CHAR(pro_ist_dt,'yyyyMMdd')=TO_CHAR(sysdate,'yyyyMMdd')
+        )
+    	FROM dual
+  </select>
+  
+  
   
   </mapper>

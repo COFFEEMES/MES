@@ -30,4 +30,5 @@ public interface OrderMapper {
 	
 	//주문서 수정입력
 	public int saveOrderTotal(OrderVO orderVO);
+
 }

@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
  
@@ -60,7 +62,7 @@
                      	</tr>
                      	<tr> 
                      		<th>포장완료제품</th>
-                     		<td><input type="text" class="form-control" id="edctsLotNo" name="edctsLotNo" style="width:150px" readonly>
+                     		<td><input type="text" class="form-control" id="com" name="com" style="width:180px" readonly>
                      			<!-- 모달버튼 -->
     							<button type="button" class="btn btn-primary" id="comSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
     						</td>
@@ -194,6 +196,9 @@ var gridRe = new tui.Grid({
     {
         header: "입고일자",
         name: "proIstDt",
+        formatter : function(data){          
+            return dateChange(data.value);
+       }
     },
     {
         header: "제품명",
@@ -232,6 +237,7 @@ let comData = []; //체크된 제품 정보 넣는 배열
 let rowData = {}; //추가할 행
 //등록하기전 그리드에 추가
 function append() {
+	gridRe.clear();
 	comData = gridCom.getCheckedRows();
 	for(let i =0; i<comData.length; i++) {	
 		rowData.proNm = comData[i].proNm;
@@ -241,6 +247,13 @@ function append() {
 		rowData.prcsTblCd = comData[i].prcsTblCd
 		gridRe.appendRow(rowData);
 	}
+	
+	if(gridCom.getCheckedRows().length==1){
+		document.getElementById("com").value = gridCom.getCheckedRows()[0].proNm;
+	}else 
+		{
+			document.getElementById("com").value = gridCom.getCheckedRows()[0].proNm + " 외 "+ (gridCom.getCheckedRows().length-1) + "건";
+		}
 	
 }
 
@@ -259,16 +272,17 @@ function getToday(){
  } 
  
 //날짜 변환
-function dateChange() {
-  let date1 = new Date();
-  let date2 =
-    (date1.getFullYear()+"").substr(2,4)+
-    (date1.getMonth() < 10 ? "0" + (date1.getMonth() + 1): date1.getMonth() + 1)+ 
-    (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
-  return date2;
+function dateChange(date) {
+      let date1 = new Date(date);
+   let date2 = date1.getFullYear() + '-' 
+         + ((date1.getMonth()<10)?'0'+(date1.getMonth()+1):(date1.getMonth()+1)) + '-'
+          + ((date1.getDate()<10)?'0'+date1.getDate():date1.getDate())   ;       
+   return date2;
 }
 
 
+
+//저장누르면 입고처리
 document.getElementById("saveBtn").addEventListener("click", register);
 function register(){
     $.ajax({
@@ -279,8 +293,9 @@ function register(){
         contentType : 'application/json',
         data: JSON.stringify(gridRe.getData()),
         success: function(data) {  	
-     	  gridRe.clear();
-     	  console.log("등록: "+ data);
+     	 load();
+     	 toastr.success(data + "건 입고 등록되었습니다");
+     	  //console.log("등록: "+ data);
         },
         error: function (reject) {
           console.log(reject);
@@ -289,7 +304,24 @@ function register(){
       }); 
 }
 
+//페이지뜨자마자 입고 조회(오늘날짜)
+window.onload = load;
+	
+	
+function load() {
+	 $.ajax({
+	        url: "receiveData",
+	        method: "get",
+	        success: function(data) {  	
+	     	  gridRe.resetData(data)
+	     	  console.log(data);
+	        },
+	        error: function (reject) {
+	          console.log(reject);
+	        },
 
+	      }); 
+}
 
 </script>
 </html>

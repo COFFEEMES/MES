@@ -17,4 +17,7 @@ public interface ReceiveMapper {
 	
 	//입고조회
 	public List<ReceiveVO> search();
+
+	//주문번호 만들기
+	public String number();
 }
