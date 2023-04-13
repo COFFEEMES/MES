@@ -12,5 +12,6 @@ public class VendVO {
 	private String empCode;
 	
 	private String vendTyp;
+	private String empName;
 	
 }

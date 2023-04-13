@@ -6,6 +6,7 @@ import com.yedam.spring.manager.service.BasicCodeVO;
 import com.yedam.spring.manager.service.BomVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.EmpVO;
+import com.yedam.spring.manager.service.PrcsVO;
 import com.yedam.spring.manager.service.RscVO;
 import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.VendVO;
@@ -33,5 +34,8 @@ public interface ManagerMapper {
 	public List<BomVO> getUseRsc(EdctsVO edctsVO);
 	public List<BomVO> getPrcsRcs(BomVO bomVO);
 	public void delPrcs(BomVO bomVO);
+	public void savePrcs(BomVO temp);
+	public List<PrcsVO> getAllPrcs();
+	public List<RscVO> getAllRsc();
 
 }

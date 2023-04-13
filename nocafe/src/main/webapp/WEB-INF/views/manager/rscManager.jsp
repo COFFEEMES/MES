@@ -274,13 +274,13 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     var keyword = $('#searchMat').val()
     searchData = gridData.filter( function (Mat) {
       if(searchKeyword == 'matTyp'){
-        return Mat.matTyp.indexOf(keyword) != -1
+        return Mat.rscTyp.indexOf(keyword) != -1
       } else if(searchKeyword == 'matCd') {
-        return Mat.matCd.indexOf(keyword) != -1
+        return Mat.rscCd.indexOf(keyword) != -1
       } else if(searchKeyword == 'matNm') {
-        return Mat.matNm.indexOf(keyword) != -1
+        return Mat.rscNm.indexOf(keyword) != -1
       } else {
-        return Mat.matTyp.indexOf(keyword) != -1 || Mat.matCd.indexOf(keyword) != -1 || Mat.matNm.indexOf(keyword) != -1
+        return Mat.rscTyp.indexOf(keyword) != -1 || Mat.rscCd.indexOf(keyword) != -1 || Mat.rscNm.indexOf(keyword) != -1
       }
     })
     grid.resetData(searchData);

@@ -28,5 +28,8 @@ public interface ManagerService {
 	public List<BomVO> getUseRcs(EdctsVO edctsVO);
 	public List<BomVO> getPrcsRcs(BomVO bomVO);
 	public void delPrcs(List<BomVO> list);
+	public void savePrcs(List<BomVO> list);
+	public List<PrcsVO> getAllPrcs();
+	public List<RscVO> getAllRsc();
 
 }

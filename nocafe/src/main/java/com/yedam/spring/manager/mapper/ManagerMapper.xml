@@ -44,8 +44,9 @@
 	<!-- 거래처 전체 조회 -->
 	<select id="getAllVend" resultType="VendVO">
 		SELECT *
-		  FROM detail_code d, vend v
+		  FROM detail_code d, vend v, emp e
 		 WHERE v.vend_cd = d.basic_code||d.detail_code
+		   AND v.emp_code = e.emp_code
 		   AND detail_avail = 'Y'
 		 ORDER BY detail_code
 	</select>
@@ -181,13 +182,14 @@
 	<select id="getUseRsc" resultType="BomVO">
 		SELECT b.rsc_cd
 			 , r.rsc_nm
-			 , SUM(b.use_cnt) use_cnt
+			 , b.use_cnt
 			 , r.rsc_unit
-		  FROM bom b, rsc r
+			 , p.prcs_nm
+		  FROM bom b, rsc r, prcs p
 		 WHERE b.rsc_cd = r.rsc_cd
+		   AND b.prcs_cd = p.prcs_cd
 		   AND b.pro_cd = #{proCd}
-		 GROUP BY b.rsc_cd, r.rsc_nm, r.rsc_unit
-		 ORDER BY 1
+		 ORDER BY b.bom_sq
 	</select>
 	
 	<!-- 공정별 필요 자재 조회 -->
@@ -204,7 +206,32 @@
 	
 	<!-- 공정 삭제 -->
 	<update id="delPrcs" statementType="CALLABLE" parameterType="BomVO">
-	
+		{ CALL del_prcs(
+			  #{proCd}
+			, #{prcsCd}
+		  )
+		}
 	</update>
+	
+	<!-- 공정 설명 수정/저장 -->
+	<update id="savePrcs" parameterType="BomVO">
+		UPDATE prcs
+		   SET prcs_explain = #{prcsExplain}
+		 WHERE prcs_cd = #{prcsCd}
+	</update>
+	
+	<!-- 공정 전체 조회 -->
+	<select id="getAllPrcs" resultType="PrcsVO">
+		SELECT *
+		  FROM prcs
+		 ORDER BY prcs_cd
+	</select>
+	
+	<!-- 자재 전체 조회 -->
+	<select id="getAllRsc" resultType="RscVO">
+		SELECT *
+		  FROM rsc
+		 ORDER BY rsc_cd
+	</select>
 
 </mapper>
