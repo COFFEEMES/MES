@@ -156,8 +156,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                     <label>담당자</label>
                     <input
                       type="text"
-                      id="empCode"
-                      name="empCode"
+                      id="empName"
+                      name="empName"
                       class="form-control"
                       maxlength="50"
                       readonly
@@ -240,7 +240,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         bizno : '${vend.bizno}',
         telno : '${vend.telno}',
         vendAddr : '${vend.vendAddr}',
-        empCode : '${vend.empCode}',
+        empName : '${vend.empName}',
       },
     </c:forEach>
   ];
@@ -282,7 +282,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       },
       {
         header: "담당자",
-        name: "empCode",
+        name: "empName",
         align: "center",
       },
     ],
@@ -366,7 +366,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     $("#bizno").val(grid.getValue(ev.rowKey, "bizno"));
     $("#telno").val(grid.getValue(ev.rowKey, "telno"));
     $("#vendAddr").val(grid.getValue(ev.rowKey, "vendAddr"));
-    $("#empCode").val(grid.getValue(ev.rowKey, "empCode"));
+    $("#empName").val(grid.getValue(ev.rowKey, "empName"));
   });
 
   //저장
@@ -408,7 +408,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   });
 
   //담당사원 전체조회
-  $("#empCode").on('click', searchEmp)
+  $("#empName").on('click', searchEmp)
 
   function searchEmp () {
     setTimeout(()=> grid2.refreshLayout() , 300);
@@ -453,7 +453,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 
   //담당사원 선택시 값 입력, 모달창 종료
   grid2.on('click', (ev) => {
-    $("#empCode").val(grid2.getValue(ev.rowKey, "empCode"));
+    $("#empName").val(grid2.getValue(ev.rowKey, "empName"));
     $('#empModal').modal('hide');
   })
 

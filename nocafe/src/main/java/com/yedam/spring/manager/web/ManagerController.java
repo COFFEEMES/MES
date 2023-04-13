@@ -14,6 +14,7 @@ import com.yedam.spring.manager.service.BasicCodeVO;
 import com.yedam.spring.manager.service.BomVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.ManagerService;
+import com.yedam.spring.manager.service.PrcsVO;
 import com.yedam.spring.manager.service.RscVO;
 import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.VendVO;
@@ -150,5 +151,32 @@ public class ManagerController {
 		edctsVO.setProCd(list.get(0).getProCd());
 		return managerService.getPrcs(edctsVO);
 	}
+	
+	@PostMapping("/savePrcs")
+	@ResponseBody
+	public List<BomVO> savePrcs(@RequestBody List<BomVO> list) {
+		managerService.savePrcs(list);
+		EdctsVO edctsVO = new EdctsVO();
+		edctsVO.setProCd(list.get(0).getProCd());
+		return managerService.getPrcs(edctsVO);
+	}
+	
+	@PostMapping("/getAllPrcs")
+	@ResponseBody
+	public List<PrcsVO> getAllPrcs(){
+		return managerService.getAllPrcs();
+	}
+	
+	@PostMapping("/getAllRsc")
+	@ResponseBody
+	public List<RscVO> getAllRsc(){
+		return managerService.getAllRsc();
+	}
+	
+//	@PostMapping("/saveNewPrcs")
+//	@ResponseBody
+//	public List<BomVO> saveNewPrcs(){
+//		return
+//	}
 
 }

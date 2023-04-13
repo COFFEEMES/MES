@@ -241,6 +241,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 
   //체크된 열 하이라이팅
   grid2.on('check', gridCheck)
+
   function gridCheck (ev) {
     grid2.addRowClassName(ev.rowKey, 'highlight2');
   };

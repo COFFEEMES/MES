@@ -11,6 +11,7 @@ import com.yedam.spring.manager.service.BomVO;
 import com.yedam.spring.manager.service.DetailCodeVO;
 import com.yedam.spring.manager.service.EmpVO;
 import com.yedam.spring.manager.service.ManagerService;
+import com.yedam.spring.manager.service.PrcsVO;
 import com.yedam.spring.manager.service.RscVO;
 import com.yedam.spring.sales.service.EdctsVO;
 import com.yedam.spring.sales.service.VendVO;
@@ -129,6 +130,23 @@ public class ManagerImpl implements ManagerService {
 		for(BomVO temp : list) {
 			managerMapper.delPrcs(temp);
 		}
+	}
+
+	@Override
+	public void savePrcs(List<BomVO> list) {
+		for(BomVO temp : list) {
+			managerMapper.savePrcs(temp);
+		}
+	}
+	
+	@Override
+	public List<PrcsVO> getAllPrcs() {
+		return managerMapper.getAllPrcs();
+	}
+
+	@Override
+	public List<RscVO> getAllRsc() {
+		return managerMapper.getAllRsc();
 	}
 
 }
