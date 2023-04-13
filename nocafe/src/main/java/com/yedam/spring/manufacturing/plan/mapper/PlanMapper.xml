@@ -87,12 +87,22 @@
 	
 <!-- 	↓↓↓↓↓필요재료 조회 -->
 	<select id="getRscNeed" resultType="PlanVO">
-		SELECT r.rsc_cd, SUM(r.lot_cnt) lot_cnt, d.detail_explain rsc_nm, s.ex_cnt
-  		FROM rsc_lot r, detail_code d, (SELECT rsc_cd, SUM(CASE pro_cd
+		SELECT  r.rsc_cd, 
+				SUM(r.lot_cnt) lot_cnt, 
+				d.detail_explain rsc_nm, 
+				s.ex_cnt
+  		FROM 	rsc_lot r, detail_code d, (SELECT 	rsc_cd, 
+  													SUM(
+  													CASE pro_cd
   													<foreach collection="conAry" item="arr" >
-                                                   WHEN (SELECT full_code FROM detail_code WHERE detail_explain = #{arr.proNm}) THEN use_cnt * #{arr.proCnt}
+                                                   WHEN (SELECT full_code 
+                                                   				FROM detail_code 
+                                                   				WHERE detail_explain = #{arr.proNm}) 
+                                                   
+                                                   THEN use_cnt * #{arr.proCnt}
 										        	</foreach>
-                                                 	END) ex_cnt
+                                                 	END
+                                                 	) ex_cnt
                                     	FROM bom
                                    		WHERE pro_cd IN (SELECT full_code
                                                       	 FROM detail_code 
@@ -102,15 +112,15 @@
                                                     )
                                    		GROUP BY rsc_cd
                                   ) s
-		 WHERE r.rsc_cd = d.full_code
-   		 AND r.rsc_cd = s.rsc_cd
-  		 AND r.rsc_cd IN(SELECT DISTINCT rsc_cd
-                     	 FROM bom
-                    	 WHERE pro_cd IN (SELECT DISTINCT full_code
-                                       FROM detail_code 
-                                      WHERE detail_explain IN  <foreach collection="conAry" item="arr" open="(" close=")" separator=",">
-															   #{arr.proNm}
-																</foreach>
+		 WHERE 	r.rsc_cd = d.full_code
+   		 AND 	r.rsc_cd = s.rsc_cd
+  		 AND 	r.rsc_cd IN(SELECT DISTINCT rsc_cd
+                     	 	FROM bom
+                    	 	WHERE pro_cd IN (SELECT DISTINCT full_code
+                                       		 FROM detail_code 
+                                      		 WHERE detail_explain IN    <foreach collection="conAry" item="arr" open="(" close=")" separator=",">
+															   			#{arr.proNm}
+																		</foreach>
                                      )
                    )
  		 GROUP BY r.rsc_cd, d.detail_explain, s.ex_cnt
@@ -118,18 +128,28 @@
 	
 <!-- ↓↓↓↓↓↓↓필요재고 LOT조회 -->
 	<select id="getRscDetil" resultType="PlanVO">
-		select      rsc_lot_cd, 
-		            lot_cnt, 
-		            exp_dt,
-					#{rscNm} as rscNm
-	    from 		rsc_lot
-	    where 		rsc_cd =(select rsc_cd
-		                     from   (select b.rsc_cd, d.detail_name
-		                                from bom b join detail_code d
-		                                on  b.rsc_cd = d.detail_code
-		                                where b.bom_cd = #{bomCd}) 
-		                     where detail_name LIKE '%${rscNm}%')
-		order by 3
+ SELECT r.rsc_cd, 
+ 		r.lot_cnt, 
+ 		d.detail_explain rsc_nm, 
+ 		r.rsc_lot_cd, 
+ 		r.exp_dt
+ FROM 	rsc_lot r JOIN detail_code d
+ ON 	r.rsc_cd = d.full_code
+ WHERE 	r.rsc_cd = (SELECT full_code 
+ 					FROM detail_code 
+ 					WHERE detail_explain = #{rscNm})
+ ORDER BY 5
+	</select>
+	
+	<select id="getProNm" resultType="PlanVO">
+	SELECT DISTINCT d.detail_explain pro_nm
+	FROM bom b JOIN detail_code d
+	ON b.pro_cd = d.full_code
+	WHERE b.pro_cd IN  (SELECT pro_cd
+						FROM bom  
+						WHERE rsc_cd = (SELECT full_code 
+										FROM detail_code 
+										WHERE detail_explain = #{rscNm}))
 	</select>
 
 </mapper>

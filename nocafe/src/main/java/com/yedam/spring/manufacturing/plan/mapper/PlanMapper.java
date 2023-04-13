@@ -26,12 +26,15 @@ public interface PlanMapper {
 
 //	불량률 불러오기 
 	public List<PlanVO> getInferPct(PlanVO planVO);
-	//-----------------------------------------------------------------------------------	사용중
 	
 //	자재 수량 불러오기
 	public List<PlanVO> getRscNeed(HashMap<String,Object> map);
 	
 //	각 자재별 LOT 단위로 불러 오기
 	public List<PlanVO> getRscDetil(PlanVO planVO);
+	
+//	자재 이름으로 완제품이름 받아오기
+	public List<PlanVO> getProNm(PlanVO planVO);
+	//-----------------------------------------------------------------------------------	사용중
 	
 }

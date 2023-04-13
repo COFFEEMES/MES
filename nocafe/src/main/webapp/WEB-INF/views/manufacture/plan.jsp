@@ -412,11 +412,15 @@ label {
 				header 	: '제품명',
 				name	: 'proNm',
 				align	: 'center'
+			},{
+				header 	: '주문 수량',
+				name	: 'orderCnt', 
+				align	: 'right',
 			},
 		
 			{
 				header 	: '생산 수량',
-				name	: 'orderCnt', 
+				name	: 'proCnt', 
 				align	: 'right',
 				editor 	: 
 					{
@@ -430,6 +434,10 @@ label {
 			}
 			],
 			onGridUpdated(ev){
+				grid2.setColumnValues('proCnt',grid2.getColumn('orderCnt'))
+				
+				
+				
 // 				기본값
 				let gridData = grid2.getData()
 				
@@ -531,12 +539,27 @@ label {
 			},
 			{
 				header 	: '예상사용량',
-				name	: 'orderNo',
+				name	: 'ex_rsc',
 				align	: 'center'
 			},
 			
 			],
 		});
+
+		grid2.on('dblclick',(ev)=>{
+			console.log(ev);
+			if(ev.rowKey == null){
+				Swal.fire({
+				      icon: 'error',
+				      title: '값이 없습니다.',
+				      text: '값을 조회 후 사용가능합니다.',
+				    });
+			};
+			console.log(ev.rowKey);
+			let proNm = grid2.getData()[ev.rowKey].proNm;
+			getPrcs(proNm);
+				
+		})
 		
 		grid4.on('dblclick',(ev)=>{
 			console.log(ev);
@@ -554,10 +577,22 @@ label {
 		 	$.ajax({
 		 		url : 'getRscLot',
 		 		method : 'POST',
-		 		data : {rscNm : rscNm, bomCd : bomCd},
+		 		data : {rscNm : rscNm},
 		 		success : function(result){
-		 			console.log(result);
 		 			grid5.resetData(result);
+		 		let grid2 = grid2.getData();
+		 			
+		 			$.ajax({
+		 			url : 'getProNm',
+			 		method : 'POST',
+			 		data : {rscNm : rscNm},
+			 		success : function(result){
+			 			console.log(result)
+			 		}
+		 			
+		 			})
+		 			
+		 			
 		 		},error : function(err){
 		 			console.log(err);
 		 		}
@@ -566,20 +601,6 @@ label {
 		 	
 		});
 		
-		grid2.on('dblclick',(ev)=>{
-			console.log(ev);
-			if(ev.rowKey == null){
-				Swal.fire({
-				      icon: 'error',
-				      title: '값이 없습니다.',
-				      text: '값을 조회 후 사용가능합니다.',
-				    });
-			};
-			console.log(ev.rowKey);
-			let proNm = grid2.getData()[ev.rowKey].proNm;
-			getPrcs(proNm);
-				
-		})
 		
 		
 // 		↓↓↓↓↓↓↓날짜 포맷 적용함수
@@ -661,10 +682,6 @@ label {
 					}
 				})
 		    };
-		    
-
-
-		
 
         </script>
 </body>

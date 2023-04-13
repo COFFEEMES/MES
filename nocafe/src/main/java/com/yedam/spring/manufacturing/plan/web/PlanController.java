@@ -69,7 +69,6 @@ public class PlanController {
 		return planService.getInferPct(planVO);
 	};
 	
-//-----------------------------------------------------------------------------------	사용중
 	@PostMapping("getRscStock")
 	@ResponseBody
 	public List<PlanVO>getRsc(@RequestBody List<Object>containorAry){
@@ -78,13 +77,21 @@ public class PlanController {
 		
 		return planService.getRsc(map);
 	}
+//-----------------------------------------------------------------------------------	사용중
 	
 	@PostMapping("getRscLot")
 	@ResponseBody
-	public List<PlanVO>getLot(@RequestParam String rscNm, @RequestParam String bomCd ,PlanVO planVO){
+	public List<PlanVO>getLot(@RequestParam String rscNm,PlanVO planVO){
 		planVO.setRscNm(rscNm);
-		planVO.setBomCd(bomCd);
 		return planService.getRscDetail(planVO);
+	}
+	
+
+	@PostMapping("getProNm")
+	@ResponseBody
+	public List<PlanVO>getProNm(@RequestParam String rscNm,PlanVO planVO){
+		planVO.setRscNm(rscNm);
+		return planService.getProNm(planVO);
 	}
 	
 //	/*

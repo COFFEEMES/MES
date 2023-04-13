@@ -32,5 +32,6 @@ public interface PlanService {
 //	각 자재별 LOT 단위로 불러 오기
 	public List<PlanVO> getRscDetail(PlanVO planVO);
 
-	
+//	자재이름으로 완제품 이름 받아오기
+	public List<PlanVO> getProNm(PlanVO planVO);
 }

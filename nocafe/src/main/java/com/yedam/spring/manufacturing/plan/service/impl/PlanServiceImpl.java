@@ -56,6 +56,10 @@ public class PlanServiceImpl implements PlanService {
 	public List<PlanVO> getRscDetail(PlanVO planVO) {
 		return planMapper.getRscDetil(planVO);
 	}
+	@Override
+	public List<PlanVO> getProNm(PlanVO planVO) {
+		return planMapper.getProNm(planVO);
+	}
 
 
 
