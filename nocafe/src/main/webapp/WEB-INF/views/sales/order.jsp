@@ -134,13 +134,14 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                     <div class="modal-footer">
                      <button type="button" class="btn btn-primary" id="addBtnDetail">
         					<i class="fas fa-plus"></i> 추가 </button>   
-                     <button class="btn btn-primary" id="okBtn">
+                     <button class="btn btn-primary" id="okBtn" type="button">
         					<i class="fas fa-save"></i> 저장 </button>
                         <button type="button" id="clearBtn3" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
         </div>   
+        </div>
         <!-- 상세조회 Modal 끝-->
         
         <!-- 제품명 Modal -->

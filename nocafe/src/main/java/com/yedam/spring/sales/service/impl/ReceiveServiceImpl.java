@@ -22,8 +22,12 @@ public class ReceiveServiceImpl  implements ReceiveService{
 
 	@Override
 	public int signUp(List<ReceiveVO> receiveVO) {
+		// 제품입고번호 생성하는select문 만들고 
+		String num = receiveMapper.number();
 		int result = 0;
 		for(int i=0; i<receiveVO.size(); i++) {
+			//반환된 값을 receiveVO.get(i).set제품입고번호
+			receiveVO.get(i).setProIstNo(num);
 			receiveMapper.signUp(receiveVO.get(i));
 			result++;
 		}
@@ -34,6 +38,12 @@ public class ReceiveServiceImpl  implements ReceiveService{
 	@Override
 	public List<ReceiveVO> search() {
 		return receiveMapper.search();
+	}
+
+	//제품입고번호 생성
+	@Override
+	public String number() {
+		return receiveMapper.number();
 	}
 
 }

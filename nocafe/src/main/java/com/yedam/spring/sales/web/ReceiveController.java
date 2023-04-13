@@ -45,8 +45,8 @@ public class ReceiveController {
 	} 
 	
 	//입고 조회
-	//전체조회
 	@GetMapping("/receiveData")
+	@ResponseBody
 	public List<ReceiveVO> receiveData(Model model) {
 		return receiveService.search();
 	}
