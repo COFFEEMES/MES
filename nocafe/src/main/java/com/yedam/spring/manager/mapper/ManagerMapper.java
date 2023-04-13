@@ -37,5 +37,6 @@ public interface ManagerMapper {
 	public void savePrcs(BomVO temp);
 	public List<PrcsVO> getAllPrcs();
 	public List<RscVO> getAllRsc();
+	public void saveNewPrcs(RscVO temp);
 
 }

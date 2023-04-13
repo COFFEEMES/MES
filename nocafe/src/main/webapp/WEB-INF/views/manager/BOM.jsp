@@ -31,7 +31,6 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 
   .form-control {
     width: 60%;
-    margin-top: 20px;
   }
 </style>
 <div class="container-fluid px-4">
@@ -178,6 +177,19 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                     style="width: 250px"
                   />
                 </td>
+              </tr>
+              <tr>
+                <th>생산 단위</th>
+                <td>
+                  <input
+                    type="text"
+                    id="unit"
+                    name="unit"
+                    class="form-control"
+                    maxlength="50"
+                    style="width: 250px"
+                  />
+                </td>
                 <th></th>
                 <td></td>
               </tr>
@@ -292,6 +304,14 @@ uri="http://java.sun.com/jsp/jstl/core"%>
           <div id="grid5"></div>
         </div>
         <div class="modal-footer">
+          <button
+            id="delSelRow"
+            type="button"
+            class="btn btn-primary"
+            data-dismiss="modal"
+          >
+            <i class="fas fa-file"></i> 선택 삭제
+          </button>
           <button
             id="closeNewPrcsBtn"
             type="button"
@@ -650,13 +670,14 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         } else if ( data.proCd.indexOf('SOL') != -1 ) {
             str = 'SOL';
         }
-        $("#proTyp").val(str)
+        $("#proTyp").val(str);
         $("#proTyp").attr('disabled', 'disabled');
         $("#proCd").val(data.proCd);
         $("#proNm").val(data.proNm);
         $("#proSpec").val(data.proSpec);
         $("#proUnit").val(data.proUnit);
         $("#safRtc").val(data.safRtc);
+        $("#unit").val(data.unit);
       },
       error: function (reject) {
         console.log(reject);
@@ -706,6 +727,10 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   $('#newPro').click(ev => {
     $('body').find('form')[1].reset();
     $("#proTyp").attr('disabled', false);
+    grid2.clear();
+    grid3.clear();
+    selProCd = '';
+    grid.removeRowClassName(selectedRowKey, 'highlight');
   });
 
   //제품 저장 버튼
@@ -728,6 +753,12 @@ uri="http://java.sun.com/jsp/jstl/core"%>
             }
           }
           grid.resetData(fixedData)
+          $('body').find('form')[1].reset();
+          $("#proTyp").attr('disabled', false);
+          grid2.clear();
+          grid3.clear();
+          selProCd = '';
+          grid.removeRowClassName(selectedRowKey, 'highlight');
           alert('성공적으로 저장되었습니다.');
         }
       })
@@ -935,6 +966,17 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     grid5.finishEditing();
   })
 
+  //선택 삭제 버튼
+  $('#delSelRow').on('click', () => {
+    grid5.removeCheckedRows();
+    gridData5 = grid5.getData();
+    for(let i = 0; i < gridData5.length; i++) {
+      gridData5[i].rowKey = i;
+      gridData5[i]._attributes.rowNum = i + 1;
+    }
+    grid5.resetData(gridData5);
+  })
+
   //새 공정 저장 버튼
   $('#saveNewPrcs').on('click', () => {
     let saveAble = true;
@@ -944,16 +986,33 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         saveAble = false;
       } else {
         temp.prcsCd = $('#prcsSearch').val();
+        temp.proCd = selProCd;
+        temp.unit = $("#unit").val();
       }
     }
     if( saveAble ) {
       $.ajax({
         url: "saveNewPrcs",
         method: "POST",
-        success: function(data) {
-
-          //여기 작성해야함!!!!!!!!!!!!!
-
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(result) {
+          $.ajax({
+            url: "getUseRcs",
+            method: "POST",
+            data: { proCd: selProCd},
+              success: function(data) {
+              gridData2 = data
+              grid2.resetData(gridData2);
+            },
+            error: function (reject) {
+              console.log(reject);
+            },
+          });
+          gridData3 = result;
+          grid3.resetData(gridData3);
+          $('#newPrcsModal').modal('hide');
+          alert('성공적으로 저장되었습니다')
         },
         error: function (reject) {
           console.log(reject);
@@ -967,6 +1026,14 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //새 공정 모달 닫기 버튼
   $('#closeNewPrcsBtn').on('click', () => {
     $('#newPrcsModal').modal('hide');
+  })
+
+  //새 공정 모달 닫기면 내용 리셋
+  $('#newPrcsModal').on('hidden.bs.modal', function (e) {
+    $('#prcsSearch').val('')
+    $('#prcsNameSearch').val('')
+    grid5.clear();
+    gridData5 = [{ rscCd:'', rscNm:'', rscUnit:'', useCnt:''}];
   })
 
   //새 공정 선택 모달 검색 버튼

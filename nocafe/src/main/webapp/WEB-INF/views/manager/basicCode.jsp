@@ -107,6 +107,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       },
     </c:forEach>
   ];
+
   let gridData2 = [];
   let searchData = [];
 
@@ -229,8 +230,14 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       method: "POST",
       data: { basicCode: basicCode},
       success: function(data) {
-        gridData2 = data
-        grid2.resetData(gridData2);  //그리드 적용
+        if(data.length != 0){
+          gridData2 = data
+          grid2.resetData(gridData2);  //그리드 적용
+        } else {
+          gridData2 = [];
+          grid2.resetData(gridData2);  //그리드 적용
+          grid2.appendRow();
+        }
         rowCount = grid2.getRowCount();
       },
       error: function (reject) {

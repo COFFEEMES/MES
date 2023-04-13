@@ -139,10 +139,22 @@
 	
 	<!-- 제품 상세 조회 -->
 	<select id="getPro" resultType="EdctsVO">
-		SELECT *
-		  FROM edcts
-		 WHERE pro_cd = #{proCd}
-		 ORDER BY pro_cd
+		SELECT e.pro_cd
+			 , e.pro_nm
+			 , e.pro_spec
+			 , e.pro_unit
+			 , e.saf_rtc
+			 , b.unit
+		  FROM edcts e, bom b
+		 WHERE e.pro_cd = b.pro_cd(+)
+		   AND e.pro_cd = #{proCd}
+		 GROUP BY e.pro_cd
+				, e.pro_nm
+				, e.pro_spec
+				, e.pro_unit
+				, e.saf_rtc
+				, b.unit
+		 ORDER BY e.pro_cd
 	</select>
 	
 	<!-- 제품 상세 정보 추가/수정 -->
@@ -154,6 +166,7 @@
 			, #{proUnit}
 			, #{safRtc}
 			, #{proTyp}
+			, #{unit}
 		  )
 		}
 	</update>
@@ -233,5 +246,17 @@
 		  FROM rsc
 		 ORDER BY rsc_cd
 	</select>
+	
+	<!-- 새 공정 추가 -->
+	<update id="saveNewPrcs" statementType="CALLABLE" parameterType="RscVO">
+		{ CALL insert_bom(
+			  #{proCd}
+			, #{rscCd}
+			, #{unit}
+			, #{useCnt}
+			, #{prcsCd}
+		  )
+		}
+	</update>
 
 </mapper>
