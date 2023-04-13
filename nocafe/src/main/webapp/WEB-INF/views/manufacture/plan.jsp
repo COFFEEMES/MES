@@ -183,7 +183,17 @@ label {
 			
 			
 		});
+		
+		class proInfo{
+			constructor(name, cnt){
+				this.proNm = name;
+				this.proCnt = cnt;
+			};
+		};
+		
+		
 		let orderListAry = new Array;
+		let containorAry = new Array;
 
         //초기화
     	$("#clearBtn").on("click", function(){
@@ -265,11 +275,11 @@ label {
 // 								↓↓↓↓모달창 리셋
 								modGrid.resetData(res);
 								setTimeout(()=> modGrid.refreshLayout() , 300);
-								console.log(res[0].orderNo);
+// 								console.log(res[0].orderNo);
 								for(let i = 0;i < res.length;i++){
 									orderListAry[i] = res[i].orderNo;
 								};
-								console.log(orderListAry);
+// 								console.log(orderListAry);
 								
 								
 						},error: function(err){
@@ -421,9 +431,19 @@ label {
 			],
 			onGridUpdated(ev){
 // 				기본값
-				let proNm = grid2.getData()[0].proNm
+				let gridData = grid2.getData()
 				
-				getPrcs(proNm);
+				getPrcs(gridData[1].proNm);
+				
+				let con ;
+				
+// 				필요자재 출력
+				for(let i = 0;i<gridData.length;i++){					
+					con = new proInfo(gridData[i].proNm,gridData[i].orderCnt);
+					containorAry[i] = con					
+ 				};
+ 				getRscInfo(containorAry);
+				
 			}
 		});
 
@@ -434,6 +454,7 @@ label {
 			data : gridData3,
 			scrollX : false,
 			scrollY : true,
+			rowHeaders : ['rowNum'],
 			columns : [{
 				header 	: '공정이름',
 				name	: 'prcsNm',
@@ -452,12 +473,17 @@ label {
 			},
 			
 			],
-			onGridUpdated(ev){
-				console.log(grid2.getData()[0].proNm);
-				let data=grid2.getData()[0].proNm;
-				getRscInfo(data);
-		
-			}
+// 			onGridUpdated(ev){
+// 				console.log(grid2.getData());
+				
+// 				let grid2Data = grid2.getData();
+				
+// 				for(let i=0;i<grid2Data.length;i++){
+// 					proNmAry[i] = grid2Data[i].proNm
+// 				}
+// 				console.log(proNmAry);
+// 				getRscInfo(proNmAry);
+// 			}
 			 
 		});
 		
@@ -523,7 +549,6 @@ label {
 			};
 			console.log(ev.rowKey);
 		 	let rscNm = grid4.getData()[ev.rowKey].rscNm;
-		 	let bomCd = grid3.getData()[0].bomCd;
 		 	
 		 
 		 	$.ajax({
@@ -541,6 +566,20 @@ label {
 		 	
 		});
 		
+		grid2.on('dblclick',(ev)=>{
+			console.log(ev);
+			if(ev.rowKey == null){
+				Swal.fire({
+				      icon: 'error',
+				      title: '값이 없습니다.',
+				      text: '값을 조회 후 사용가능합니다.',
+				    });
+			};
+			console.log(ev.rowKey);
+			let proNm = grid2.getData()[ev.rowKey].proNm;
+			getPrcs(proNm);
+				
+		})
 		
 		
 // 		↓↓↓↓↓↓↓날짜 포맷 적용함수
@@ -564,7 +603,7 @@ label {
 				method : 'GET',
 				data : {proNm : data},
 				success : function(result){
-					
+					console.log(result);
 					bom=result;
 					
 					$.ajax({
@@ -572,10 +611,13 @@ label {
 						method : 'GET',
 						data : {proNm : data},
 						success : function(res){
+							console.log(res);
+							
 							
 							for(let i=0;i<bom.length;i++){
 								bom[i].inferPct = res[i].inferPct;
 							}
+							console.log(bom);
 							grid3.resetData(bom);
 						}
 					})
@@ -599,20 +641,19 @@ label {
 				})
 		    };
 		    
+// 		    필요자재와 사용가능 자재 불러오기
 		    function getRscInfo(data){
+					console.log(data);
 		    	$.ajax({
-					url : 'getRsc',
-					method : 'GET',
-					data : {proCd: data},
+					url : 'getRscStock',
+					method : 'POST',
+					dataType: 'json',
+			        contentType: 'application/json; charset=utf-8',
+					data : JSON.stringify(data),
 					success: function (result){
-						let proCnt=0;
-						for(let i=0;i<grid2.getData().length;i++){
-							proCnt += grid2.getData()[i].orderCnt;
-						};
-						let bom = grid3.getData();
-						for(let i = 0; i<result.length;i++){
-							result[i].exCnt = (bom[i].useCnt)*proCnt;
-						};
+
+						console.log(result);
+						
 						grid4.resetData(result);
 					},
 					error: function(err){
@@ -622,26 +663,8 @@ label {
 		    };
 		    
 
-		    
-		    
 
 		
-//	 		새계획버튼
-	        $('#regiBtn').on('click', function(){
-	        	$("#clearBtn").click();
-	        	let newRow = new Object;
-	    		let planDt = $("#tui-date-picker-target").val();
-				console.log(planDt);
-//	 			↓↓↓↓↓ 새로운 행 삽입
-				grid = tui.Grid(options);
-				getPlanCd(planDt);
-				setTimeout(()=>newRow.planCd = code,80)
-	        	newRow.parrdDt = threeMonthsLater;
-	        	setTimeout(()=> grid.appendRow(newRow,{
-	        		at : grid.getRowCount(),
-	        		focus : true
-	        		}) , 100);
-	        	grid2.appendRow();
-	        })
+
         </script>
 </body>
