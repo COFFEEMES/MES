@@ -202,6 +202,7 @@
 		 WHERE b.rsc_cd = r.rsc_cd
 		   AND b.prcs_cd = p.prcs_cd
 		   AND b.pro_cd = #{proCd}
+		   AND r.rsc_cd != 'RSCNOT001'
 		 ORDER BY b.bom_sq
 	</select>
 	

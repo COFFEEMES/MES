@@ -16,7 +16,7 @@ pageEncoding="UTF-8"%>
           <div class="sb-nav-link-icon">
             <i class="fas fa-columns"></i>
           </div>
-          기초 코드 관리
+          기준 코드 관리
           <div class="sb-sidenav-collapse-arrow">
             <i class="fas fa-angle-down"></i>
           </div>
@@ -90,8 +90,8 @@ pageEncoding="UTF-8"%>
               href="${pageContext.request.contextPath }/mkrPlan"
               >생산계획서 작성</a
             >
-            <a class="nav-link" href="layout-sidenav-light.html"
-              >Light Sidenav</a
+            <a class="nav-link" href="performance"
+              >생산실적 작성</a
             >
           </nav>
         </div>
