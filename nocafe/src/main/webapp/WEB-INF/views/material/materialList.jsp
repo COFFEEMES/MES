@@ -63,7 +63,7 @@ tr {
 
     <script>
     const gridData = [
-        <c:forEach items="${selectMaterialLOTList }" var="material">
+        <c:forEach items="${materialList }" var="material">
           {	  rscCd : '${material.rscCd}',
         	  rscNm : '${material.rscNm}',
         	  rscTyp : '${material.rscTyp}',

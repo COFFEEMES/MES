@@ -2,16 +2,21 @@ package com.yedam.spring.material.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface MaterialService {
 	
 	//자재조회
 	public List<MaterialVO> getMaterialList();
 	
+	//자재검색
+	public List<MaterialLOTVO> materalSearch(@Param("rscNm") String rscNm);
+	
 	// 발주조회
 	public List<MaterialOrderVO> getMaterialOrderList();
 	
 	// 발주디테일
-	public MaterialOrderDetailVO getMaterialOrderDetail(MaterialOrderDetailVO materialOrderDetailVO);
+	public List<MaterialOrderDetailVO> getMaterialOrderDetail(MaterialOrderDetailVO materialOrderDetailVO);
 
 	//자재입고조회
 	public List<MaterialReceivingVO> getMaterialReceivingList();

@@ -2,6 +2,7 @@ package com.yedam.spring.material.service.impl;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class MaterialServiceImpl implements MaterialService {
 	
 	//발주디테일
 	@Override
-	public MaterialOrderDetailVO getMaterialOrderDetail(MaterialOrderDetailVO materialOrderDetailVO) {
+	public List<MaterialOrderDetailVO> getMaterialOrderDetail(MaterialOrderDetailVO materialOrderDetailVO) {
 		return materialMapper.getMaterialOrderDetail(materialOrderDetailVO);
 	}
 
@@ -61,6 +62,15 @@ public class MaterialServiceImpl implements MaterialService {
 		return materialMapper.selectMaterialTestList();
 	}
 
+	
+
+	//자재검색
+	@Override
+	public List<MaterialLOTVO> materalSearch(@Param("rscNm") String rscNm) {
+		return materialMapper.materalSearch(rscNm);
+	}
+
+	
 
 
 
