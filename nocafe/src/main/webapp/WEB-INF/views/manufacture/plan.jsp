@@ -48,6 +48,7 @@ label {
 	width : 150px;
 	
 }
+.tui-grid-cell.not-allow-row {background-color : red}
 </style>
 </head>
 
@@ -173,6 +174,7 @@ label {
 	
 	    let today = dateChange(todayForgrid);
 	    let after = dateChange(threeMonthsLater);
+	    let proNmList = null;
 // 		↓↓↓↓↓input date에 오늘 날짜 담기
 		$(document).ready(function() {
 		    $("#tui-date-picker-target").attr("value", today);
@@ -302,6 +304,9 @@ label {
 				data : JSON.stringify(orderListAry),
 				success : function(res){
 // 					console.log(res);
+					for(let i = 0; i<res.length; i++){
+						res[i].proCnt = res[i].orderCnt 
+					}
 					grid2.resetData(res);
 					
 				},error: function(err){
@@ -318,6 +323,9 @@ label {
  		const modGrid = new tui.Grid({
 			el : document.getElementById('modGrid'),
  			rowHeaders : [ 'checkbox' ],
+ 			scrollX : false,
+			scrollY : true,
+			bodyHeight :400,
  			columns : [ {
  				header : '주문번호',
  				name : 'orderNo'
@@ -407,7 +415,8 @@ label {
 			el : document.getElementById('grid2'),
 			data : gridData2,
 			scrollX : false,
-			scrollY : false,
+			scrollY : true,
+			bodyHeight : 243,
 			columns : [{
 				header 	: '제품명',
 				name	: 'proNm',
@@ -425,7 +434,24 @@ label {
 				editor 	: 
 					{
 						type: 'text'
-					}
+					},
+// 				formatter:function(data){
+// 					 let orderCnt = data.row.orderCnt;
+// 		             let proCnt = data.row.proCnt;
+// 		             let color ="";
+// 		             if(proCnt < orderCnt) {
+// 		            	 color = '<span style="color:red";>'+proCnt+'</span>';
+// 		            	 setTimeout(()=>  Swal.fire({
+// 						      icon: 'error',
+// 						      title: '수량 경고!',
+// 						      text: '주문수량보다 생산수량이 적을 수는 없습니다.',
+// 						    }) , 10)
+		            	
+// 		             }		             
+// 		             else if (proCnt==null) color = "";
+// 		             else color = '<span style="black";>'+proCnt+'</span>';
+// 		             return color;
+// 				}
 			},
 			{
 				header 	: '재고량',
@@ -434,23 +460,14 @@ label {
 			}
 			],
 			onGridUpdated(ev){
-				grid2.setColumnValues('proCnt',grid2.getColumn('orderCnt'))
-				
-				
 				
 // 				기본값
 				let gridData = grid2.getData()
 				
 				getPrcs(gridData[1].proNm);
 				
-				let con ;
-				
-// 				필요자재 출력
-				for(let i = 0;i<gridData.length;i++){					
-					con = new proInfo(gridData[i].proNm,gridData[i].orderCnt);
-					containorAry[i] = con					
- 				};
- 				getRscInfo(containorAry);
+				mkgrid3()
+
 				
 			}
 		});
@@ -462,6 +479,7 @@ label {
 			data : gridData3,
 			scrollX : false,
 			scrollY : true,
+			bodyHeight : 243,
 			rowHeaders : ['rowNum'],
 			columns : [{
 				header 	: '공정이름',
@@ -499,6 +517,9 @@ label {
 		const grid4 = new tui.Grid({
 			el : document.getElementById('grid4'),
 			data : gridData4,
+			scrollX : false,
+			scrollY : true,
+			bodyHeight : 243,
 			columns : [{
 				header 	: '자재명',
 				name	: 'rscNm',
@@ -516,12 +537,46 @@ label {
 			},
 			
 			],
+			onGridUpdated(ev){
+				let gridData = grid4.getData()
+					
+				
+				gridData.forEach(row=>{
+					let lotCnt = Number(row.lotCnt)
+					let exCnt = Number(row.exCnt)
+					
+					if(lotCnt < exCnt){
+						grid4.addRowClassName(row.rowKey,'not-allow-row');
+							if(cnt == 0){
+								lessLot = row.rscNm
+							}else{
+								lessLot += ","
+								lessLot +=row.rscNm
+								console.log(lessLot)
+							}
+						cnt++
+						console.log(cnt)
+// 						console.log(lessLot)
+					}else{
+						grid4.removeRowClassName(row.rowKey,'not-allow-row')
+					}
+						
+				});
+// 				grid5가 존재하면 불량률도 수정되야 한다
+				if(grid5.getData().length>0){
+					mkCal()
+				};
+				
+			}
 		});
 		
 		const gridData5 = [];
 		const grid5 = new tui.Grid({
 			el : document.getElementById('grid5'),
 			data : gridData5,
+			scrollX : false,
+			scrollY : true,
+			bodyHeight : 243,
 			columns : [{
 				header 	: '자재명',
 				name	: 'rscNm',
@@ -539,7 +594,7 @@ label {
 			},
 			{
 				header 	: '예상사용량',
-				name	: 'ex_rsc',
+				name	: 'exCnt',
 				align	: 'center'
 			},
 			
@@ -556,6 +611,9 @@ label {
 				    });
 			};
 			console.log(ev.rowKey);
+			if(ev.rowKey=== undefined){
+				return
+			}
 			let proNm = grid2.getData()[ev.rowKey].proNm;
 			getPrcs(proNm);
 				
@@ -579,19 +637,24 @@ label {
 		 		method : 'POST',
 		 		data : {rscNm : rscNm},
 		 		success : function(result){
-		 			grid5.resetData(result);
-		 		let grid2 = grid2.getData();
+			 			console.log(result)
+		 			
+		 		let gridData = grid2.getData();
 		 			
 		 			$.ajax({
 		 			url : 'getProNm',
 			 		method : 'POST',
 			 		data : {rscNm : rscNm},
-			 		success : function(result){
-			 			console.log(result)
+			 		success : function(res){
+						let exCnt = 0;
+						
+
+					
+					proNmList = res;
+		 			grid5.resetData(result);
+		 			mkCal()
 			 		}
-		 			
 		 			})
-		 			
 		 			
 		 		},error : function(err){
 		 			console.log(err);
@@ -682,6 +745,120 @@ label {
 					}
 				})
 		    };
-
+// 		    grid3그리기
+		    function mkgrid3(){
+		    	let gridData = grid2.getData();
+// 				필요자재 출력
+				let con ;
+				for(let i = 0;i<gridData.length;i++){					
+					con = new proInfo(gridData[i].proNm,gridData[i].proCnt);
+					containorAry[i] = con					
+ 				};
+ 				getRscInfo(containorAry);
+		    };
+		    
+// 		    grid5 예상사용량 그리기
+			function mkCal(){						
+				let exCnt = 0;
+				let gridData = grid4.getData();
+				let grData = grid5.getData();
+				for(let i=0;i<gridData.length;i++){
+				for(let j=0;j<grData.length;j++){
+					if(gridData[i].rscNm == grData[j].rscNm){
+						exCnt = parseInt(gridData[i].exCnt)
+						console.log(exCnt)
+					}
+					}
+				};
+				let rowCnt = 0
+				console.log(grData)
+				while(rowCnt < grData.length){
+					if(rowCnt != 0){
+					exCnt -= grData[rowCnt].lotCnt
+					}
+					if(exCnt<0){exCnt = 0};
+					grData[rowCnt].exCnt = exCnt;
+					rowCnt++
+					console.log(grData)
+				}
+					grid5.resetData(grData)				
+			}
+			
+			
+			
+// 			grid2의 내용을 수정했을때 예외처리
+			let modData = 0;
+			grid2.on("editingStart",(e)=>{
+				console.log(e)
+				modData = grid2.getRow(e.rowKey).proCnt
+				console.log(modData)
+			})
+			$("#grid2").on("keyup",function(key){
+				let gridData = grid2.getData()
+				let lessLot = null;
+				if(key.keyCode == 13){
+					gridData.forEach(row=>{
+						console.log(row)
+						let orderCnt = Number(row.orderCnt)
+						let proCnt = Number(row.proCnt)
+						if(isNaN(proCnt)){
+							 setTimeout(()=>  {Swal.fire({
+	 						      icon: 'error',
+	 						      title: '입력경고!',
+	 						      text: 
+	 						    	  '숫자만 입력 가능합니다!',
+	 						    })	
+	 						    console.log(row.rowKey)
+	 						 	grid2.setValue(row.rowKey,'proCnt',modData)   
+							 }					    
+							 )
+	 						    
+						}
+						
+						if(orderCnt > proCnt){
+							lessLot = row.proNm
+							grid2.addRowClassName(row.rowKey,'not-allow-row');
+							 setTimeout(()=>  Swal.fire({
+	 						      icon: 'error',
+	 						      title: '수량 경고!',
+	 						      text: 
+	 						    	lessLot + '주문수량보다 생산수량이 적을 수는 없습니다. 생산수량을 수정해주세요',
+	 						    }) , 10)
+	 						    grid2.setValue(row.rowKey,'proCnt',modData)   
+						}else{
+							grid2.removeRowClassName(row.rowKey,'not-allow-row')
+						}
+						mkgrid3()
+					})
+				}
+				
+			})
+// 			-------------------------------------------------------------
+// 		제품별로 예상 사용량 계산하기
+// 		function mkCal(){						
+// 				let exCnt = 0;
+// 				let gridData = grid2.getData();
+// 				let grData = grid5.getData();
+// 				for(let i=0;i<gridData.length;i++){
+// 				for(let j=0;j<proNmList.length;j++){
+// 					if(gridData[i].proNm == proNmList[j].proNm){
+// 						exCnt += parseInt(gridData[i].proCnt)
+// 					}
+// 					}
+// 				};
+// 				let rowCnt = 0
+// 				console.log(grData)
+// 				while(rowCnt < grData.length){
+// 					if(rowCnt != 0){
+// 					exCnt -= grData[rowCnt].lotCnt
+// 					}
+// 					if(exCnt<0){exCnt = 0};
+// 					grData[rowCnt].exCnt = exCnt;
+// 					rowCnt++
+// 					console.log(grData)
+// 				}
+// 					grid5.resetData(grData)				
+// 			}
+			
         </script>
 </body>
