@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.spring.manufacturing.performance.mapper.PerformanceMapper">
+	<!-- 모든 지시 조회 -->
+	<select id="getAllInst" resultType="InstVO">
+		SELECT DISTINCT h.pr_order_cd
+			 , h.pr_order_dt
+		  FROM pr_order_header h, pr_order o
+		 WHERE h.pr_order_cd = o.pr_order_cd
+		   AND o.pr_end_dt IS NULL
+		 ORDER BY 1
+	</select>
+</mapper>
