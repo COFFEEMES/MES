@@ -31,17 +31,15 @@
 				<div class="card-body">
 
 					<tr>
-						<th>원자재명</th>
+						<th>자재명</th>
 						<td><input class="form-control" type="text" id="rscNm" name="rscNm" style="width: 150px"></td>
-						<th>업체명</th>
-						<td><input class="form-control" type="text" id="vendNm" name="vendNm" style="width: 150px"></td>
-						<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i
+						<button style="margin-bottom:3px" class="btn btn-primary" id="SearchBtn"><i
 								class="fas fa-search"></i></button>
 						&nbsp&nbsp
 
 
 					<br><br>
-					<div id="grid">자재목록</div>
+					<div id="grid"><h6>자재목록</h6></div>
 				</div>
 			</div>
 
@@ -56,19 +54,23 @@
 
 					<br><br>
 					
-					<div id="grid2">자재발주<br></div>
+					<div id="grid2"><h6>자재발주</h6></div>
 				</div>
 			</div>
 
 
 
 			<script>
-
-				// 상단 그리드 출력 
-const gridData = [
+			let today = new Date();
+			let year = today.getFullYear();
+			let month = today.getMonth() + 1;
+			let date = today.getDate();
+			let format = year + (("00" + month.toString()).slice(-2)) + (("00" + date.toString()).slice(-2));
+				
+			const gridData = [
         <c:forEach items="${materialLOTList }" var="material">
-          {	  rscCd : '${material.rscCd}',
-        	  rscNm : '${material.rscNm}',
+          {	  rscCd :  '${material.rscCd}',
+        	  rscNm :  '${material.rscNm}',
         	  vendCd : '${material.vendCd}',
         	  lotCnt : '${material.lotCnt}',
         	  safRtc : '${material.safRtc}'
@@ -95,7 +97,7 @@ const gridData = [
                 sortable: true
             },
             {
-                header: '거래처코드',
+                header: '업체코드',
                 name: 'vendCd',
                 sortingType: 'asc',
                 sortable: true
@@ -107,14 +109,68 @@ const gridData = [
             {
             	header: '안전재고',
             	name: 'safRtc'
-            }
+            	}
+  
         ]
     });
+    var isValid = true;
+    
+    $('#grid').mouseleave(ev => {
+        grid.finishEditing();
+    })
+    
+    $('#grid2').mouseleave(ev => {
+        grid2.finishEditing();
+    })
+    
+    
+    grid.on('dblclick', ev => {
+					var rscCd = grid.getValue(ev.rowKey, 'rscCd')
+					var rscNm = grid.getValue(ev.rowKey, 'rscNm')
+					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
+					var lotCnt = grid.getValue(ev.rowKey, 'lotCnt')
+					if (lotCnt==0 || lotCnt==null || lotCnt == ''){
+						lotCnt =0;} 
+					var safRtc = grid.getValue(ev.rowKey, 'safRtc')
 
+					var rscCd2 = grid2.getColumnValues('rscCd');
+					var vendCd2 = grid2.getColumnValues('vendCd');
+    
+					
+					var isValid = true;
+					for (i = 0; i < rscCd2.length; i++) {
+						if (rscCd2[i] == rscCd) {
+							alert('동일 항목의 발주가 진행중입니다.');
+							isValid = false;
+							return false;
+						} else if (vendCd2[i] != vendCd) {
+							alert('동일 업체의 발주만 가능합니다.');
+							isValid = false;
+							return false;
+						}
 
+					}
 
+					grid2.appendRow({
+						"rscCd": rscCd,
+						"rscNm": rscNm,
+						"vendCd": vendCd,
+						"lotCnt": lotCnt,
+						"safRtc": safRtc,
+					})
+    
+					$.ajax({
+						url: "MaterialDetail",
+						method: 'POST',
+						data: {
+							rscCd: rscCd
+						},
+						success: function (result) {}
+					})
 
-
+	
+				})
+    
 
 				const grid2 = new tui.Grid({
 					el: document.getElementById('grid2'),
@@ -137,10 +193,6 @@ const gridData = [
 						align: 'center',
 						name: 'vendCd'
 					}, {
-						header: '업체명',
-						align: 'left',
-						name: 'vendNm'
-					}, {
 						header: '발주코드',
 						align: 'center',
 						name: 'ordrCd'
@@ -152,15 +204,11 @@ const gridData = [
 					}, {
 						header: '현재재고',
 						align: 'right',
-						name: 'rscStc'
+						name: 'lotCnt'
 					}, {
 						header: '안전재고',
 						align: 'right',
-						name: 'safStc'
-					}, {
-						header: '예상재고량',
-						align: 'right',
-						name: 'allStc'
+						name: 'safRtc'
 					}, {
 						header: '납기요청일',
 						align: 'center',
@@ -168,12 +216,40 @@ const gridData = [
 						editor: {
 							type: 'datePicker',
 							options: {
-								datetimeFormat: "yyyy-MM-dd"
+								datetimeFormat: "yyyy/MM/dd"
 							}
 						}
 					}],
 				});
-
+				
+				  
+				  
+				  $('#SearchBtn').on('click', function () {
+						let rscNm = $('#rscNm').val()
+						$.ajax({
+							url: "materalSearch",
+							method: 'POST',
+							data: {
+								rscNm: rscNm,
+							},
+							success: function (result) {
+								grid.resetData(result);
+							}
+						})
+					})
+					
+				$('#minusBtn').on('click', function (ev) {
+					var data = grid2.getCheckedRows();
+					var isValid = true;
+					
+					if(data.length == null || data.length == 0){
+						alert('체크된 발주 목록이 없습니다.');
+						isValid = false;
+						return false;
+					}
+					grid2.removeCheckedRows()
+					alert('정상적으로 삭제되었습니다.');
+				})
 			</script>
 
 </body>
