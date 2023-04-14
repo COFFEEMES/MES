@@ -5,6 +5,11 @@ pageEncoding="UTF-8"%>
   <head>
     <meta charset="UTF-8" />
     <title>Insert title here</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
   </head>
   <body>
     <div class="container-fluid px-4">
@@ -17,20 +22,23 @@ pageEncoding="UTF-8"%>
         <li class="breadcrumb-item active">> 제품출고등록</li>
       </ol>
     </div>
-    <div id="cont">
-      <div class="container-fluid px-4">
-        <div class="card mb-4"></div>
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="card mb-4" style="margin-right: 10px">
+    <div style="display: flex">
+      <div style="flex: 2">
+        <div class="container-fluid px-4">
+          <div class="col-md-8">
+            <div class="card mb-4" style="width:900px; height:700px;">
               <div class="card-header">진행중 주문서</div>
               <div class="card-body">
                 <div id="order"></div>
               </div>
             </div>
           </div>
-          <div class="col-lg-6">
-            <div class="card mb-4">
+        </div>
+      </div>
+
+        <div style="flex: 1">
+          <div class="col-md-4">
+            <div class="card mb-4" style="width:900px; height:700px;">
               <div class="card-header">출고 등록 현황</div>
               <div class="card-body">
                 <div id="release"></div>
@@ -40,7 +48,6 @@ pageEncoding="UTF-8"%>
         </div>
       </div>
     </div>
-
     <!--모달-->
     <div
       class="modal fade"
@@ -65,6 +72,22 @@ pageEncoding="UTF-8"%>
             <div id="invenGrid"></div>
           </div>
           <div class="modal-footer">
+            주문일자<input
+              type="text"
+              id="orderDt"
+              name="orderDt"
+              class="form-control"
+              style="width: 150px"
+              disabled
+            />
+            거래처<input
+              type="text"
+              id="vend"
+              name="vend"
+              class="form-control"
+              style="width: 150px"
+              disabled
+            />
             주문수량<input
               type="text"
               id="orderCntOut"
@@ -75,7 +98,7 @@ pageEncoding="UTF-8"%>
             />
             <input
               type="text"
-              id="edctsOustCntOut"
+              id="cnt"
               class="form-control"
               placeholder="출고수량 입력"
               style="width: 150px"
@@ -87,6 +110,7 @@ pageEncoding="UTF-8"%>
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
+              id="closeBtn"
             >
               닫기
             </button>
@@ -94,12 +118,17 @@ pageEncoding="UTF-8"%>
         </div>
       </div>
     </div>
-    <!--모달 끝-->
   </body>
   <script>
+    let orderDetailNo = ""; //주문상세코드
+    let orderNo = ""; //주문번호
+
     //진행중 주문서
     var gridPro = new tui.Grid({
       el: document.getElementById("order"),
+      scrollX: false,
+      scrollY: true,
+      bodyHeight: 600,
       rowHeaders: ["rowNum"],
       columns: [
         {
@@ -131,16 +160,19 @@ pageEncoding="UTF-8"%>
           },
         },
         {
+          header: "주문일자",
+          name: "orderDt",
+          formatter: function (data) {
+            return dateChange(data.value);
+          },
+        },
+        {
           header: "가능여부",
           name: "",
           hidden: true,
         },
       ],
-      pageOptions: {
-        useClient: true,
-        type: "scroll",
-        perPage: 30,
-      },
+    
     });
     gridPro.on("click", (ev) => {
       $("#comModal").modal("show");
@@ -152,10 +184,19 @@ pageEncoding="UTF-8"%>
         success: function (data) {
           setTimeout(function () {
             gridInven.refreshLayout();
-          }, 100);
+          }, 0);
           gridInven.resetData(data); //그리드 적용
+
+          document.getElementById("orderDt").value = dateChange(
+            gridPro.getData()[ev.rowKey].orderDt
+          );
+          document.getElementById("vend").value =
+            gridPro.getData()[ev.rowKey].vendNm;
           document.getElementById("orderCntOut").value =
-            gridPro.getData()[ev.rowKey].orderCnt;
+            gridPro.getData()[ev.rowKey].orderCnt; //정보출력
+
+          orderDetailNo = gridPro.getData()[ev.rowKey].orderDetailNo; //주문상세코드
+          orderNo = gridPro.getData()[ev.rowKey].orderNo; //주문코드
         },
         error: function (reject) {
           console.log(reject);
@@ -166,6 +207,9 @@ pageEncoding="UTF-8"%>
     //출고현황
     var gridRe = new tui.Grid({
       el: document.getElementById("release"),
+      scrollX: false,
+      scrollY: true,
+      bodyHeight: 600,
       rowHeaders: ["rowNum"],
       columns: [
         {
@@ -186,11 +230,6 @@ pageEncoding="UTF-8"%>
           name: "proOustCnt",
         },
       ],
-      pageOptions: {
-        useClient: true,
-        type: "scroll",
-        perPage: 30,
-      },
     });
 
     //페이지뜨자마자 진행 중 주문서 조회
@@ -202,7 +241,17 @@ pageEncoding="UTF-8"%>
         method: "get",
         success: function (data) {
           gridPro.resetData(data);
-          // console.log(data);
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });
+
+      $.ajax({
+        url: "getOust",
+        method: "get",
+        success: function (data) {
+          gridRe.resetData(data);
         },
         error: function (reject) {
           console.log(reject);
@@ -213,6 +262,9 @@ pageEncoding="UTF-8"%>
     //모달창
     var gridInven = new tui.Grid({
       el: document.getElementById("invenGrid"),
+      scrollX: false,
+      scrollY: true,
+      bodyHeight: 243,
       rowHeaders: ["checkbox"],
       columns: [
         {
@@ -263,5 +315,60 @@ pageEncoding="UTF-8"%>
         (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
       return date2;
     }
+
+    //등록버튼 누르면
+    document.getElementById("addBtn").addEventListener("click", reAdd);
+    function reAdd() {
+      let orderCnt = document.getElementById("cnt").value; //주문수량
+
+      if (gridInven.getCheckedRows().length == 0) {
+        Swal.fire({
+          icon: "error",
+          title: "출고할 제품을 선택해주세요",
+        });
+        return;
+      } else if (orderCnt == "") {
+        Swal.fire({
+          icon: "error",
+          title: "출고수량을 입력해주세요",
+        });
+        return;
+      }
+
+      let proLotNo = gridInven.getCheckedRows()[0].proLotNo; //LOT번호
+      let proNm = gridInven.getCheckedRows()[0].proNm; //제품명
+
+      $.ajax({
+        url: "reAdd",
+        method: "post",
+        data: {
+          orderCnt: orderCnt,
+          proLotNo: proLotNo,
+          proNm: proNm,
+          orderDetailNo: orderDetailNo,
+          orderNo: orderNo,
+        },
+        success: function (data) {
+          //console.log(data);
+          $("#comModal").modal("hide");
+          load();
+          document.getElementById("cnt").value="";
+          Swal.fire({
+            icon: "success",
+            title: "출고 등록 되었습니다",
+            //text: '값을 조회 후 사용가능합니다.',
+          });
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });
+    }
+    
+    //닫기버튼 누르면 초기화
+    document.getElementById("closeBtn").addEventListener("click", function() {
+    	document.getElementById("cnt").value="";	
+    	
+    	});
   </script>
 </html>

@@ -16,8 +16,9 @@ public class ReceiveServiceImpl  implements ReceiveService{
 	ReceiveMapper receiveMapper;
 	
 	@Override
-	public List<ReceiveVO> testComplete(String start, String end) {
-		return receiveMapper.testComplete(start, end);
+	//String start, String end
+	public List<ReceiveVO> testComplete() {
+		return receiveMapper.testComplete();
 	}
 
 	@Override

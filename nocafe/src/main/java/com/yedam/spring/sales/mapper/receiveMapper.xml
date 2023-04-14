@@ -8,24 +8,16 @@
   
   <!-- 입고 모달창 조회 -->
 	<select id="testComplete" resultType="ReceiveVO">
-		SELECT prcs_tbl_cd, output, o.pro_cd , e.pro_nm
-        FROM process_tbl T, pr_order o, edcts e
-        WHERE o.pr_order_cd = t.pr_order_cd
-        AND o.pro_cd = e.pro_cd
-        AND t.prcs_cd ='PRCWRP001'
+   		SELECT t.pr_order_cd, t.prcs_cd, t.pro_cd, t.output, e.pro_nm
+        FROM process_tbl t, edcts e 
+        WHERE t.prcs_cd ='PRCWRP001' 
         AND t.completed = 1
-			<if test="start != null and !start.equals('')"> 
-				 AND pr_start_dt >= #{start} 
-			</if>
-			<if test="end != null and !end.equals('')"> 
-				AND <![CDATA[pr_end_dt<= #{end}]]>
-			</if>
-		ORDER BY pr_end_dt
+        AND t.pro_cd = e.pro_cd
 	</select>
   
   	<!-- 입고 처리  -->
 	<update id="signUp" statementType="CALLABLE" parameterType="ReceiveVO">
-  	{ CALL receive_sign_up(#{proCd},#{proIstCnt},#{prcsTblCd},#{proIstNo}) }
+  	{ CALL receive_sign_up(#{proCd},#{proIstCnt},#{prOrderCd},#{prcsCd},#{proIstNo}) }
 	</update>
   
   
@@ -55,6 +47,6 @@
     	FROM dual
   </select>
   
-  
+  <!--입고 조회 페이지 -->
   
   </mapper>
