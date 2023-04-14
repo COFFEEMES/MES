@@ -5,8 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 </head>
 <body>
  
@@ -46,7 +46,7 @@
                      	<col>
                      </colgroup>
                      <tbody>
-                      <tr>
+<!--                       <tr>
                       <th for="edctsIstDt" class="form-label">제품생산일자</th> 
                           <td><input type="date" id="start" name="start" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="end" name="end" class="form-control" style="width:150px;"></td>
                      	<th></th>
@@ -59,13 +59,13 @@
                      	<td></td>
                      	<th></th>
                      	<td></td>
-                     	</tr>
+                     	</tr> -->
                      	<tr> 
-                     		<th>포장완료제품</th>
-                     		<td><input type="text" class="form-control" id="com" name="com" style="width:180px" readonly>
+                     		<th style="border-bottom-width: 0px">포장완료제품</th>
+                     		<td style="border-bottom-width: 0px" ><input type="text" class="form-control" id="com" name="com" style="width:180px" readonly>
                      			<!-- 모달버튼 -->
     							<button type="button" class="btn btn-primary" id="comSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
-    						</td>
+<!--     						</td>
     						<th></th>
     						<td></td>
     						<th></th>
@@ -76,7 +76,7 @@
     						<td></td>
     						<th></th>
     						<td></td>
-                     	</tr>
+                     	</tr> -->
 <!--                      	<tr>
                      		<th>검사수량</th>
                      		<td><input type="text" class="form-control" id="inspCnt" name="inspCnt" style="width:150px;margin-left: 3px;" readonly></td>
@@ -129,6 +129,9 @@
 //검사완료 제품 모달 그리드
 var gridCom = new tui.Grid({
   el: document.getElementById("comGrid"),
+  scrollX: false,
+  scrollY: true,
+  bodyHeight: 243,
   rowHeaders: ['checkbox'],
   columns: [
     {
@@ -145,8 +148,13 @@ var gridCom = new tui.Grid({
         name: "output",
      },
      {
-    	 header:"공정진행코드",
-    	 name:"prcsTblCd",
+    	 header:"생산지시코드",
+    	 name:"prOrderCd",
+    	 hidden: true
+     },
+     {
+    	 header:"공정코드",
+    	 name:"prcsCd",
     	 hidden: true
      }
   ],
@@ -160,12 +168,12 @@ var gridCom = new tui.Grid({
 
 //조회버튼 눌렀을 때
     function search() {
-       start = document.getElementById("start").value;
-      end = document.getElementById("end").value; 
+       //start = document.getElementById("start").value;
+      //end = document.getElementById("end").value; 
       $.ajax({
         url: "testCom",
         method: "post",
-         data: { start: start, end: end}, 
+         //data: { start: start, end: end}, 
         success: function (data) {
         setTimeout(function () {
         	gridCom.refreshLayout()
@@ -187,6 +195,9 @@ document.getElementById("confirmBtn").addEventListener("click", append);
 //입고 조회 그리드
 var gridRe = new tui.Grid({
   el: document.getElementById("complete"),
+  scrollX: false,
+  scrollY: true,
+  bodyHeight: 243,
 
   columns: [
     {
@@ -220,8 +231,13 @@ var gridRe = new tui.Grid({
       name: "proLotNo",
     },
     {
-   	 header:"공정진행코드",
-   	 name:"prcsTblCd",
+   	 header:"생산지시코드",
+   	 name:"prOrderCd",
+   	 hidden: true
+    },
+    {
+   	 header:"공정코드",
+   	 name:"prcsCd",
    	 hidden: true
     }
   ],
@@ -244,7 +260,8 @@ function append() {
 		rowData.proIstCnt = comData[i].output;
 		rowData.proIstDt = getToday();
 		rowData.proCd = comData[i].proCd;
-		rowData.prcsTblCd = comData[i].prcsTblCd
+		rowData.prOrderCd = comData[i].prOrderCd;
+		rowData.prcsCd = comData[i].prcsCd;
 		gridRe.appendRow(rowData);
 	}
 	
@@ -294,8 +311,12 @@ function register(){
         data: JSON.stringify(gridRe.getData()),
         success: function(data) {  	
      	 load();
-     	 toastr.success(data + "건 입고 등록되었습니다");
-     	  //console.log("등록: "+ data);
+     	document.getElementById("com").value = "";
+     	Swal.fire({
+            icon: 'success',
+            title: data + "건 입고 등록되었습니다",
+            //text: '값을 조회 후 사용가능합니다.',
+          });
         },
         error: function (reject) {
           console.log(reject);
@@ -314,7 +335,7 @@ function load() {
 	        method: "get",
 	        success: function(data) {  	
 	     	  gridRe.resetData(data)
-	     	  console.log(data);
+	     	  //console.log(data);
 	        },
 	        error: function (reject) {
 	          console.log(reject);
@@ -322,6 +343,22 @@ function load() {
 
 	      }); 
 }
+
+
+//초기화 버튼 누르면
+document.getElementById("ReBtn").addEventListener("click", returnFun);
+function returnFun() {
+	document.getElementById("com").value = "";
+	//document.getElementById("start").value = "";
+	//document.getElementById("end").value = "";
+/* 	for(let i=0; i<gridRe.getData().length; i++){
+			gridRe.removeRow(i,gridRe.getData()[i].proIstNo==null);
+	} */
+	gridRe.clear();
+	load();
+	
+}
+
 
 </script>
 </html>

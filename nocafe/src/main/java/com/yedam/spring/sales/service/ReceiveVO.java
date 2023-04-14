@@ -30,5 +30,7 @@ public class ReceiveVO {
 	//제품코드
 	private String proNm; //제품명
 	private int output; //검사합격량
-	private String prcsTblCd;//공정진행코드
+	//private String prcsTblCd;//공정진행코드
+	private String prOrderCd; //생산지시코드
+	private String prcsCd; //공정코드
 }

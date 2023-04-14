@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.spring.sales.service.OrderVO;
 import com.yedam.spring.sales.service.ReceiveVO;
 import com.yedam.spring.sales.service.ReleaseService;
 import com.yedam.spring.sales.service.ReleaseVO;
@@ -42,5 +43,21 @@ public class ReleaseController {
 	public List<ReleaseVO> getInven(@RequestParam(required = false) String proNm) {
 		return releaseService.getInven(proNm);
 	}
+	
+	//출고조회
+	@GetMapping("/getOust")
+	@ResponseBody
+	public List<ReleaseVO> getOust(Model model) {
+		return releaseService.getOust();
+	}
+	
+	//주문서 조회 프로세스
+	@PostMapping("/reAdd")
+	@ResponseBody
+	public int reAdd(@RequestParam(required = false) String orderNo, @RequestParam(required = false)  String orderDetailNo, @RequestParam(required = false) int orderCnt,
+			@RequestParam(required = false)  String proLotNo, @RequestParam(required = false)  String proNm) {
+		return releaseService.reAdd(orderNo, orderDetailNo, orderCnt, proLotNo, proNm);
+	}
+	
 	
 }

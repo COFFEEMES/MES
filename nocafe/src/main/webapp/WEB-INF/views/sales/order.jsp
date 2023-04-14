@@ -18,8 +18,8 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
     <style>
       .c_btn {
         color: #fff;
@@ -28,6 +28,10 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
         border: none;
         padding: 6px;
         border-radius: 4px;
+      }
+      #proModal{
+      	left: 30%;
+  		margin-left: 10px;
       }
     </style>
   </head>
@@ -268,6 +272,9 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     //조회 그리드
     var grid = new tui.Grid({
       el: document.getElementById("order"),
+      scrollX: false,
+      scrollY: true,
+      bodyHeight: 243,
       rowHeaders: ['checkbox'],
     	  
       columns: [
@@ -374,6 +381,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     //상세주문 조회
      grid.on('click', (ev) => {
  	 	if(ev.targetType=='cell' && ev.columnName =='orderNo') {
+ 	 		console.log(ev);
  	 	orderNo = grid.getData()[ev.rowKey].orderNo;
  	 	//console.log(orderNo);
  	 	orderDetailFct();
@@ -546,9 +554,17 @@ searchBtn.addEventListener("click", searchVend);
         	search();
         	//console.log(data);
         	if(data>0) 
-        		toastr.success(data+'건이 삭제되었습니다');
+        		Swal.fire({
+                    icon: 'success',
+                    title: data+'건이 삭제되었습니다',
+                    //text: '값을 조회 후 사용가능합니다.',
+                  });
         	else
-            	toastr.warning('삭제할 주문서를 선택하세요');
+        		Swal.fire({
+                    icon: 'error',
+                    title: '삭제할 주문서를 선택하세요',
+                    //text: '값을 조회 후 사용가능합니다.',
+                  });
         		
         },
         error: function (reject) {
@@ -730,7 +746,16 @@ $('#proModal').on('hidden.bs.modal', function (e) {
    
  //주문서 저장
  function saveOrderTotal() {
-
+	for(let i=0; i<grid.getData().length; i++) {
+		if(grid.getData()[i].vendNm==null) {
+			Swal.fire({
+                icon: 'error',
+                title: '주문서를 작성해주세요.',
+              });
+			return ;
+		}
+	}
+	 
     $.ajax({
         url: "saveOrderTotal",
         method: "post",
@@ -738,16 +763,12 @@ $('#proModal').on('hidden.bs.modal', function (e) {
         contentType : 'application/json',
         data: JSON.stringify(grid.getData()),
         success: function (data) {
-			/* console.log(data);*/ 
-			toastr.success("주문서가 저장되었습니다.");
-    /*     	 setTimeout(function () {
-	    		   grid.refreshLayout()
-	    		   }, 100);   */
-        	// grid.resetData(data);
+				Swal.fire({
+                    icon: 'success',
+                    title: '주문서가 저장되었습니다.',
+                    //text: '값을 조회 후 사용가능합니다.',
+                  });
 	    		   search();
-        	
-        	 //location.reload();
-
         },
         error: function (reject) {
           console.log(reject);
@@ -782,13 +803,11 @@ $('#proModal').on('hidden.bs.modal', function (e) {
         contentType : 'application/json',
         data: JSON.stringify(dataa),
         success: function (data) {
-        	//console.log(data);
-        	//gridDetail.resetData(data);
-        	toastr.success("주문서가 저장되었습니다.");
-/*            	 setTimeout(function () {
-	    		   gridDetail.refreshLayout()
-	    		   }, 100); 
-          	  */
+        	Swal.fire({
+                icon: 'success',
+                title: '주문서가 저장되었습니다.',
+                //text: '값을 조회 후 사용가능합니다.',
+              });
 
         },
         error: function (reject) {

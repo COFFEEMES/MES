@@ -33,8 +33,9 @@ public class ReceiveController {
 	//검사완료 조회 모달창
 	@PostMapping("/testCom")
 	@ResponseBody
-	public List<ReceiveVO> testCom(@RequestParam(required = false) String start, @RequestParam(required = false)  String end) {
-		return receiveService.testComplete(start, end);
+	//@RequestParam(required = false) String start, @RequestParam(required = false)  String end
+	public List<ReceiveVO> testCom() {
+		return receiveService.testComplete();
 	}
 	
 	//입고 등록
@@ -51,5 +52,10 @@ public class ReceiveController {
 		return receiveService.search();
 	}
 	
+	//제품입고조회 페이지
+	@GetMapping("/receiveCheck")
+	public String receiveCheck() {
+		return "sales/receiveCheck";
+	}
 
 }

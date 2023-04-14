@@ -8,23 +8,36 @@
   	
      <!-- 진행중 주문서 조회 -->
 	<select id="getOrder" resultType="ReleaseVO">
-	SELECT s.order_no, order_detail_no, vend_nm, pro_nm, order_cnt, parrd_dt
+	SELECT s.order_no, order_detail_no, vend_nm, pro_nm, order_cnt, parrd_dt, order_dt
 	FROM order_sheet s, order_detail d
 	WHERE s.order_no = d.order_no
 	AND order_sit_detail = '준비중'
 	ORDER BY parrd_dt
 	</select>
   	
+  	<!-- 완제품재고량 모달창 -->
   	<select id="getInven" resultType="ReleaseVO">
   	SELECT pro_cd, pro_lot_no, lot_cnt, (SELECT pro_nm FROM edcts WHERE pro_cd = p.pro_cd ) AS "pro_nm" 
         , pro_exp, pro_wdt
 	FROM pro_stc p 
 	WHERE (SELECT pro_nm FROM edcts WHERE pro_cd = p.pro_cd )=#{proNm}
 	AND TO_CHAR(pro_exp,'yyyyMMdd') >= TO_CHAR((sysdate+5),'yyyyMMdd')
+	AND lot_cnt > 0
 	GROUP BY pro_ist_no,pro_cd,pro_lot_no,lot_cnt,pro_exp, pro_wdt
-  	
-  	
+  	ORDER BY pro_wdt
   	</select>
+  	
+  	<!-- 출고조회 -->
+  	<select id="getOust" resultType="ReleaseVO">
+  	SELECT pro_cd, pro_lot_no, pro_oust_dt, pro_oust_cnt
+	FROM pro_oust
+	WHERE TO_CHAR(pro_oust_dt, 'yyyyMMdd') = TO_CHAR(sysdate, 'yyyyMMdd')
+ 	</select>
+ 	
+ 	<!-- 등록버튼 누르면  -->
+ 	<update id="reAdd" statementType="CALLABLE" parameterType="ReleaseVO">
+ 	{ CALL re_add(#{orderNo},#{orderDetailNo}, #{orderCnt}, #{proLotNo}, #{proNm}) }
+ 	</update>
 
   </mapper>
   

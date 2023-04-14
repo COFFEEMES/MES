@@ -5,7 +5,8 @@ import java.util.List;
 public interface ReceiveService {
 
 	//검사완료 제품 모달창 조회
-	public List<ReceiveVO> testComplete(String start, String end);
+	//String start, String end
+	public List<ReceiveVO> testComplete();
 	
 	//입고등록
 	public int signUp(List<ReceiveVO> receiveVO);

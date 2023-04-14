@@ -17,6 +17,8 @@ public class ReleaseVO {
 	private int orderCnt;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date parrdDt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date orderDt;
 
 	//완제품재고 모달창
 	private String proCd;
