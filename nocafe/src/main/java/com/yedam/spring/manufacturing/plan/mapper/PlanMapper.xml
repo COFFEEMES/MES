@@ -80,7 +80,7 @@
 		FROM 	prcs_result p join bom b
 		ON 		p.prcs_cd = b.prcs_cd
 		WHERE 	b.pro_cd = (select full_code from detail_code where detail_explain = #{proNm})
-		GROUP BY b.bom_sq, p.prcs_cd
+		GROUP BY b.bom_sq, p.prcs_cd, b.rsc_cd
 		ORDER BY 1 
 	</select>
 <!-- ========================================================================사용중  -->
