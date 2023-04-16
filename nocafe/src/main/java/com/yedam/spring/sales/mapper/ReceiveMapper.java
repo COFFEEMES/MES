@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.yedam.spring.sales.service.OrderVO;
 import com.yedam.spring.sales.service.ReceiveVO;
+import com.yedam.spring.sales.service.ReleaseVO;
 
 public interface ReceiveMapper {
 
@@ -22,6 +22,9 @@ public interface ReceiveMapper {
 	//주문번호 만들기
 	public String number();
 	
-	//입고조회 페이지
+	//입출조회 페이지 -> 입고
 	public List<ReceiveVO> reCheck(@Param("start")String start, @Param("end")String end, @Param("proNm")String proNm);
+	
+	//입출조회 페이지 -> 출고
+	public List<ReleaseVO> releaseCheck(@Param("start")String start, @Param("end")String end, @Param("proNm")String proNm);
 }

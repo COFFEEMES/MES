@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.yedam.spring.sales.mapper.LotMapper">
+  		
+  	<!--조회-->
+  	<select id="lotList" resultType="ReleaseVO">
+	SELECT pro_lot_no, pro_cd, SUM(lot_cnt) AS "lot_cnt", pro_exp, pro_wdt ,
+		(SELECT pro_nm 
+         FROM edcts  
+         WHERE pro_cd = P.pro_cd) AS "pro_nm"
+	FROM pro_stc p
+	WHERE lot_cnt > 0
+	<if test="proNm!=null and !proNm.equals('')">
+		AND (SELECT pro_nm 
+         FROM edcts 
+         WHERE pro_cd = p.pro_cd) = #{proNm}
+    </if>
+    <if test="start != null and !start.equals('')">
+    	AND pro_wdt >= #{start}   
+	</if>
+	<if test="end != null and !end.equals('')">
+		AND <![CDATA[pro_wdt <=  TO_DATE(#{end},'yyyy-MM-dd')+1 ]]>
+	</if>	
+	GROUP BY pro_lot_no, pro_cd, pro_exp, pro_wdt
+	ORDER BY pro_exp
+  </select>
+  	
+  	<!--주문서 삭제  -->
+	<delete id = "deleteLot" parameterType="String">
+		DELETE FROM pro_stc
+		WHERE pro_lot_no = #{str}
+	</delete>	
+  		
+ </mapper>
