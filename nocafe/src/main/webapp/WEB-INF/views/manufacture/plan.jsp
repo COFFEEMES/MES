@@ -77,7 +77,7 @@ label {
 				<br>
 				<div id="planDate">
 					<label>생산계획일자</label> 
-					<input type="date"	id="ex-strat" name="tui-date-picker-target"	class="form-control tragetDate" style="width: 150px">
+					<input type="date"	id="ex-start" name="tui-date-picker-target"	class="form-control tragetDate" style="width: 150px">
 					- <input type="date" id="ex-end" name="tui-date-picker-target"	class="form-control tragetDate" style="width: 150px">
 				</div>
 				</div>
@@ -174,11 +174,10 @@ label {
 	
 	    let today = dateChange(todayForgrid);
 	    let after = dateChange(threeMonthsLater);
-	    let proNmList = null;
 // 		↓↓↓↓↓input date에 오늘 날짜 담기
 		$(document).ready(function() {
 		    $("#tui-date-picker-target").attr("value", today);
-			$("#ex-strat").attr({"max":after,
+			$("#ex-start").attr({"max":after,
 								  "min":today})
 			$("#ex-end").attr({"max":after,
 								  "min":today})
@@ -192,10 +191,18 @@ label {
 				this.proCnt = cnt;
 			};
 		};
+		class planInfo{
+			constructor(name, cnt){
+				this.proNm = name;
+				this.planCnt = cnt;
+			};
+		};
 		
 		
-		let orderListAry = new Array;
-		let containorAry = new Array;
+	    let proNmListAry = new Array; //계획 정보 담아 줄 배열
+		let orderListAry = new Array; //주문정보 담아 줄 배열
+		let dateListAry	 = new Array; //계획 일자 담아 줄 배열
+		let containorAry = new Array; //grid3에 뿌려줄 제품이름, 주문수량 포함 객체 넣어줄 배열
 
         //초기화
     	$("#clearBtn").on("click", function(){
@@ -539,7 +546,7 @@ label {
 			],
 			onGridUpdated(ev){
 				let gridData = grid4.getData()
-					
+				let cnt = 0;
 				
 				gridData.forEach(row=>{
 					let lotCnt = Number(row.lotCnt)
@@ -650,7 +657,6 @@ label {
 						
 
 					
-					proNmList = res;
 		 			grid5.resetData(result);
 		 			mkCal()
 			 		}
@@ -833,6 +839,40 @@ label {
 				}
 				
 			})
+			
+			
+			$("#osBtn").on("click",function(){
+				let startDt = $("#ex-start").val()
+				let endDt = $("#ex-end").val()
+				planDt =  $("#tui-date-picker-target").val();
+				if(startDt == '' || endDt == ''){
+					Swal.fire({
+					      icon: 'error',
+					      title: '데이터 없음!',
+					      text: 
+					    	'생산계획일자를 지정해 주세요!',
+					    })
+					    return
+				}
+				
+				let data = grid2.getData();
+				console.log(data)
+				for(let i= 0; i<data.length;i++){
+					proNmListAry[i] = new planInfo(data[i].proNm,data[i].proCnt);
+				};
+				
+				dateListAry[0] = planDt;
+				dateListAry[1] = startDt
+				dateListAry[2] = endDt
+				
+				console.log(proNmListAry,dateListAry,orderListAry);
+				
+
+				
+				
+				
+			})
+				
 // 			-------------------------------------------------------------
 // 		제품별로 예상 사용량 계산하기
 // 		function mkCal(){						
