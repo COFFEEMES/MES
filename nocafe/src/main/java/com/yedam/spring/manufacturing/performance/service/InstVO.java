@@ -24,6 +24,6 @@ public class InstVO {
 	private Date   prEndtDt;
 	
 	private String rscNm;
-	
+	private String proNm;
 
 }
