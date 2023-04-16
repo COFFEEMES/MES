@@ -47,6 +47,55 @@
     	FROM dual
   </select>
   
-  <!--입고 조회 페이지 -->
+    <!--입출고 조회 페이지  입고-->
+  <select id="reCheck" resultType="ReceiveVO">
+  SELECT pro_ist_no, pro_ist_dt, 
+	      (SELECT pro_nm 
+	       FROM edcts 
+	       WHERE pro_cd = e.pro_cd) AS "pro_nm", pro_ist_cnt,
+	      (SELECT pro_lot_no 
+	       FROM pro_stc 
+	       WHERE pro_ist_no = e.pro_ist_no
+           AND pro_cd = e.pro_cd) AS "pro_lot_no"
+	FROM edcts_ist e
+	<where>
+	<if test="proNm!=null and !proNm.equals('')">
+		(SELECT pro_nm 
+         FROM edcts 
+         WHERE pro_cd = e.pro_cd) = #{proNm}
+    </if>
+    <if test="start != null and !start.equals('')">
+    	AND pro_ist_dt >= #{start}   
+	</if>
+	<if test="end != null and !end.equals('')">
+		AND <![CDATA[pro_ist_dt <=  TO_DATE(#{end},'yyyy-MM-dd')+1 ]]>
+	</if>
+	</where>	
+	ORDER BY pro_ist_no DESC
+  </select>
+
+
+    <!--입출고 조회 페이지  출고-->
+  <select id="releaseCheck" resultType="ReleaseVO">
+	 SELECT pro_oust_no,(SELECT pro_nm 
+                        FROM edcts  
+                        WHERE pro_cd = P.pro_cd) AS "pro_nm", pro_lot_no, pro_oust_dt, pro_oust_cnt, order_no, order_detail_no
+     FROM pro_oust p
+	<where>
+	<if test="proNm!=null and !proNm.equals('')">
+		(SELECT pro_nm 
+         FROM edcts 
+         WHERE pro_cd = e.pro_cd) = #{proNm}
+    </if>
+    <if test="start != null and !start.equals('')">
+    	AND pro_oust_dt >= #{start}   
+	</if>
+	<if test="end != null and !end.equals('')">
+		AND <![CDATA[pro_oust_dt <=  TO_DATE(#{end},'yyyy-MM-dd')+1 ]]>
+	</if>
+	</where>	
+	ORDER BY pro_oust_dt DESC
+  </select>
+
   
   </mapper>

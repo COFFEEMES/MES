@@ -8,11 +8,11 @@
 </head>
 <body>
 <div class="container-fluid px-4">
-		<h1 class="mt-4">제품입고조회</h1>
+		<h1 class="mt-4">제품 입/출고 조회</h1>
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
 			<li class="breadcrumb-item">> 영업관리</li>
-			<li class="breadcrumb-item active">> 제품입고조회</li>
+			<li class="breadcrumb-item active">> 입/출고 조회</li>
 		</ol>
 		
 		<div class="card mb-4">
@@ -35,7 +35,11 @@
                      	<col style="width: 150px;">
                      	<col>
                      	</colgroup>
-                     	<tbody>
+                     	<tbody>  
+	                     	<tr>  	
+								<th style="border-bottom-width: 0px" ><label><input type="radio" id ="receive"  name="radio" value="receive" checked="checked">입고</label><!-- </th> -->
+								<!-- <th style="border-bottom-width: 0px" > --><label><input type="radio" id="release" name="radio" value="release">출고</label></th>
+							<tr>
                      		<tr>
                      			<th style="border-bottom-width: 0px">제품명</th>
                      			<td style="border-bottom-width: 0px"><input type="text" class="form-control" id="proName" name="proName" style="width:200px;">
@@ -54,6 +58,7 @@
 			</div>
         </div>
             <div id="grid" class="card mb-4"></div>
+            <div id="grid2" class="card mb-4"></div>
       		 <!-- 제품명 Modal -->
  			<div class="modal fade" id="proModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -91,6 +96,9 @@
  
  <script>
  let proNmSearch = document.getElementById("proNmSearch"); //제품명 인풋박스 
+ let start="";
+ let end="";
+ let proNm="";
  
 //제품명 모달이 뜨면
  $('#proModal').on('shown.bs.modal', function (e) {
@@ -212,17 +220,29 @@ var gridRe = new tui.Grid({
 });
 
 //페이지뜨자마자 입고 조회
-window.onload = load;
+window.onload = reSearch;
 	
 	
-function load() {
+function search() {
 	 start = document.getElementById("start").value;
      end = document.getElementById("end").value;
-     proNm = document.getElementById("proName").value
+     proNm = document.getElementById("proName").value;
+     
+     //입고버튼이 눌려있으면
+     if(document.getElementById('receive').checked==true) {
+    	 reSearch();
+     } 
+     else {
+    	 relsearch();
+     }
+}
+
+//입고조회 아작스
+function reSearch() {
 	 $.ajax({
-	        url: "",
+	        url: "reCheck",
 	        method: "post",
-	        data: { start: start, end: end, proNm: proNm }
+	        data: { start: start, end: end, proNm: proNm },
 	        success: function(data) {  	
 	     	  gridRe.resetData(data)
 	     	  //console.log(data);
@@ -232,9 +252,108 @@ function load() {
 	        },
 
 	      }); 
+		gridRe.el.hidden = false;
+		gridRel.el.hidden=true;
 }
 
+//출고조회 아작스
+function relsearch() {
+	 $.ajax({
+	        url: "releaseCheck",
+	        method: "post",
+	        data: { start: start, end: end, proNm: proNm },
+	        success: function(data) {  	
+	     	  gridRel.resetData(data)
+	     	  //console.log(data);
+	        },
+	        error: function (reject) {
+	          console.log(reject);
+	        },
+
+	      }); 
+		gridRe.el.hidden = true;
+		gridRel.el.hidden=false;
+}
+
+//조회버튼 누르면 조회
+document.getElementById('optionSearchBtn')
+		.addEventListener('click', search); 
  
+//날짜 변환
+function dateChange(date) {
+  let date1 = new Date(date);
+  let date2 =
+    date1.getFullYear() + "-" + 
+    (date1.getMonth() < 10 ? "0" + (date1.getMonth() + 1): date1.getMonth() + 1) +"-" +
+    (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+  return date2;
+}
+ 
+ 
+//라디오버튼 출고클릭하면
+document.getElementById('release').addEventListener('click', function(){
+	//console.log("출고");
+	gridRe.el.hidden = true;
+	gridRel.el.hidden=false;
+	relsearch();
+});   
+//라디오버튼 입고클릭하면
+document.getElementById('receive').addEventListener('click', function(){
+	//console.log("입고");
+	gridRe.el.hidden = false;
+	gridRel.el.hidden=true;
+	
+}); 
+ 
+//출고 조회 그리드
+var gridRel = new tui.Grid({
+  el: document.getElementById("grid2"),
+  scrollX: false,
+  scrollY: true,
+  bodyHeight: 243,
+
+  columns: [
+    {
+      header: "출고번호",
+      name: "proOustNo"
+    },
+    {
+        header: "출고일자",
+        name: "proOustDt",
+        formatter : function(data){          
+            return dateChange(data.value);
+       }
+    },
+    {
+        header: "제품명",
+        name: "proNm",
+      },
+      {
+          header: "제품코드",
+          name: "proCd",
+          hidden: true,    
+     },
+   
+    {
+        header: "출고수량",
+        name: "proOustCnt",
+     },
+      
+    {
+      header: "LOT번호",
+      name: "proLotNo",
+    },
+    
+  ],
+  bodyHeight: 300,
+  pageOptions: {
+      useClient: true,
+      type: 'scroll',
+      perPage: 30
+   }
+});
+ 
+
  </script>
  
    
