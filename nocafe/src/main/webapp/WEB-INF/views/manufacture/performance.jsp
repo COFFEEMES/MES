@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core"%> <%@ taglib prefix="fmt"
-uri="http://java.sun.com/jsp/jstl/fmt" %>
+uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <script
   src="https://code.jquery.com/jquery-3.6.4.js"
@@ -19,16 +19,14 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
   }
 
   .linelist {
-    display: inline-block;
     float: right;
-    margin: 0 20px 20px 0;
   }
 
   #lineb {
     display: inline-block;
   }
 
-  #pDate #planDate {
+  #planDate {
     float: left;
   }
 
@@ -53,17 +51,6 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
     <div class="card col-xl-11">
       <div class="card-body">
         <div id="lineb">
-          <div id="pDate">
-            <label>작성일자</label>
-            <input
-              type="date"
-              id="tui-date-picker-target"
-              name="tui-date-picker-target"
-              class="form-control"
-              style="width: 150px"
-            />
-          </div>
-          <br />
           <div id="planDate">
             <label>생산지시일자</label>
             <input
@@ -101,7 +88,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
   </div>
 
   <div class="row">
-    <div class="card col-xl-5">
+    <div class="card col-xl-4">
       <div class="linelist" style="margin-top: 16px">
         <h3 style="padding-left: 15px">생산지시 목록</h3>
       </div>
@@ -110,7 +97,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
       </div>
     </div>
 
-    <div class="card col-xl-6">
+    <div class="card col-xl-7">
       <div class="linelist" style="margin-top: 16px">
         <h3 style="width: 100px; display: inline; padding-left: 15px">
           생산지시 상세
@@ -146,47 +133,48 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
       </div>
     </div>
   </div>
-  <script language="Javascript">
-      let gridData = [
-        <c:forEach items="${instList }" var="inst">
-          {
-            prOrderCd : '${inst.prOrderCd}',
-            prOrderDt : '${inst.formedDate}',
-          },
-        </c:forEach>
-      ];
+</div>
+<script language="Javascript">
+    let gridData = [
+    <c:forEach items="${instList }" var="inst">
+      {
+        prOrderCd : '${inst.prOrderCd}',
+        prOrderDt : '${inst.formedDate}',
+      },
+    </c:forEach>
+    ];
 
-      let gridData2 = [];
-      let searchData = [];
+    let gridData2 = [];
+    let searchData = [];
 
-      const grid = new tui.Grid({
-        el: document.getElementById('grid'),
-        data: gridData,
-        scrollY: true,
-        bodyHeight: 480,
-        rowHeaders: ['rowNum'],
-        columns: [
-          {
-            header: '생산 지시 코드',
-            name: 'prOrderCd',
-            align: 'center',
+    const grid = new tui.Grid({
+      el: document.getElementById('grid'),
+      data: gridData,
+      scrollY: true,
+      bodyHeight: 480,
+      rowHeaders: ['rowNum'],
+      columns: [
+        {
+          header: '생산 지시 코드',
+          name: 'prOrderCd',
+          align: 'center',
+        },
+        {
+          header: '지시 일자',
+          name: 'prOrderDt',
+          align: 'center',
+          formatter: function (data) {
+        	  let dateVal = '';
+        	  if(data.value != null ){
+        		  dateVal = dateChange(data.value);
+        	  }else{
+        		  dateVal = getToday();
+        	  }
+            return dateVal;
           },
-          {
-            header: '지시 일자',
-            name: 'prOrderDt',
-            align: 'center',
-            formatter: function (data) {
-          	  let dateVal = '';
-          	  if(data.value != null ){
-          		  dateVal = dateChange(data.value);
-          	  }else{
-          		  dateVal = getToday();
-          	  }
-              return dateVal;
-            },
-          },
-        ]
-      });
+        },
+      ]
+    });
 
     function dateChange(date) {
       let date1 = new Date(date);
@@ -196,187 +184,154 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
      return date2;
     }
 
-      //테마 호버
-      let hoverOption = {
-          row: {
-              hover: {
-                  background: 'rgba(19,78,94,0.2)'
-              }
-          }
-      }
-      tui.Grid.applyTheme('default', hoverOption);
-
-      const grid2 = new tui.Grid({
-        el: document.getElementById('grid2'),
-        scrollY: false,
-        bodyHeight: 480,
-        rowHeaders: ['rowNum'],
-        columns: [
-          {
-            header: '생산 지시 코드',
-            name: 'prOrderCd',
-            align: 'center',
-            editor: 'text',
-            validation: {
-              required: true
-            },
-          },
-          {
-            header: '제품명',
-            name: 'rscNm',
-            align: 'center',
-            editor: 'text',
-            validation: {
-              required: true
-            },
-          },
-          {
-            header: '생산 지시량',
-            name: 'orderOutput',
-            editor: 'text',
-            align: 'center',
-          },
-        ]
-      });
-
-      //공통코드 추가 버튼
-      $("#saveBcode").click((ev) => {
-        $.ajax({
-          url: "",
-          type: "POST",
-          data: $('#BcodeInfo').serialize(),
-          success: function(result) {
-              setTimeout(function () {
-                grid.refreshLayout()
-              }, 300);
-              grid.resetData(result);
-              alert('성공적으로 추가되었습니다.');
-          }
-        })
-      })
-
-      var rowCount = 0;
-      var selectedRowKey = null;
-      var basicCode = '';
-      var basicName = '';
-
-      grid.on('click', ev => {
-        basicName = grid.getValue(ev.rowKey, 'basicName');
-        basicCode = grid.getValue(ev.rowKey, 'basicCode');
-
-        //셀 클릭시 로우 하이라이팅
-        if (selectedRowKey != ev.rowKey) {
-          grid.removeRowClassName(selectedRowKey, 'highlight');
+    //테마 호버
+    let hoverOption = {
+        row: {
+            hover: {
+                background: 'rgba(19,78,94,0.2)'
+            }
         }
-        selectedRowKey = ev.rowKey;
-        grid.addRowClassName(selectedRowKey, 'highlight');
+    }
+    tui.Grid.applyTheme('default', hoverOption);
 
-        //세부코드 list 호출
-        $.ajax({
-          url: "",
-          method: "POST",
-          data: { basicCode: basicCode},
-          success: function(data) {
-            if(data.length != 0){
-              gridData2 = data
-              grid2.resetData(gridData2);  //그리드 적용
+    const grid2 = new tui.Grid({
+      el: document.getElementById('grid2'),
+      scrollY: false,
+      bodyHeight: 480,
+      rowHeaders: ['rowNum'],
+      columns: [
+        {
+          header: '제품 코드',
+          name: 'proCd',
+          align: 'center',
+        },
+        {
+          header: '제품명',
+          name: 'proNm',
+          align: 'center',
+        },
+        {
+          header: '지시 수량',
+          name: 'orderOutput',
+          align: 'center',
+        },
+        {
+          header: '진행상태',
+          name: 'prEndtDt',
+          align: 'center',
+          formatter: function (data) {
+            if (data.prEndtDt == null){
+              return '미완료';
             } else {
-              gridData2 = [];
-              grid2.resetData(gridData2);  //그리드 적용
-              grid2.appendRow();
+              return '생산 완료';
             }
-            rowCount = grid2.getRowCount();
           },
-          error: function (reject) {
-            console.log(reject);
-          },
-        });
-      });
+        },
+      ]
+    });
 
-      //체크된 열 하이라이팅
-      grid2.on('check', gridCheck)
+    var selectedRowKey = null;
+    var prOrderCd = '';
 
-      function gridCheck (ev) {
-        grid2.addRowClassName(ev.rowKey, 'highlight2');
-      };
+    grid.on('click', ev => {
+      prOrderCd = grid.getValue(ev.rowKey, 'prOrderCd');
 
-      grid2.on('uncheck', gridUncheck)
-      function gridUncheck(ev) {
-        grid2.removeRowClassName(ev.rowKey, 'highlight2');
-      };
-
-      //검색버튼
-      $('#searchBtn').click(ev => {
-        search();
-      })
-
-      function search() {
-        var keyword = $('#searchBcode').val()
-        searchData = gridData.filter( function (Bcode) {
-          return Bcode.basicName.indexOf(keyword) != -1
-        })
-        grid.resetData(searchData);
+      //셀 클릭시 로우 하이라이팅
+      if (selectedRowKey != ev.rowKey) {
+        grid.removeRowClassName(selectedRowKey, 'highlight');
       }
+      selectedRowKey = ev.rowKey;
+      grid.addRowClassName(selectedRowKey, 'highlight');
 
-      //상세 코드 추가 버튼
-      $('#newDcode').click(ev => {
-        if (basicName == '' || basicName == null) {
-          alert('공통코드를 먼저 선택해주세요!')
-        } else if (grid2.getRow(grid2.getRowCount() - 1).detailCode == null || grid2.getRow(grid2.getRowCount() - 1).detailCode == ''){
-          alert('입력이 미완료된 추가건이 있습니다.')
-        } else {
-          //그리드 추가
-          grid2.appendRow();
-          rowCount = grid2.getRowCount();
-        }
+      //생산지시 상세 list 호출
+      $.ajax({
+        url: "getPrOrderDetail",
+        method: "POST",
+        data: { prOrderCd: prOrderCd},
+        success: function(data) {
+          gridData2 = data;
+          grid2.resetData(gridData2);
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
       });
+    });
 
-      //기존정보 셀 편집 막기 & 하이라이팅
-      var selectedRowKey2 = null;
-      grid2.on('click', (ev) => {
-        const { columnName, rowKey } = ev;
-        if (columnName == 'detailCode') {
-          if (grid2.getModifiedRows().createdRows.length == 0 || rowKey < rowCount - 1 ) {
-            alert('이미 저장된 코드ID는 변경할 수 없습니다.');
-            return;
-          }
-        }
+    //검색버튼
+    $('#searchBtn').click(ev => {
+      search();
+    })
 
-        if (selectedRowKey2 != ev.rowKey) {
-          grid2.removeRowClassName(selectedRowKey2, 'highlight2');
-        }
-        selectedRowKey2 = ev.rowKey;
-        grid2.addRowClassName(selectedRowKey2, 'highlight2');
-      });
-
-      $('#grid2').mouseleave(ev => {
-        grid2.finishEditing();
+    function search() {
+      var keyword = $('#searchBcode').val()
+      searchData = gridData.filter( function (Bcode) {
+        return Bcode.basicName.indexOf(keyword) != -1
       })
+      grid.resetData(searchData);
+    }
 
-      //상세 코드 저장 버튼
-      $('#saveDcode').click(ev => {
-        var data = grid2.getCheckedRows();
-        if (data.length == 0){
-          alert("선택된 행이 없습니다")
-        } else {
-          for(let temp of data) {
-            temp.basicCode = basicCode
-          }
-          $.ajax({
-            url: "",
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: 'application/json',
-            success: function (result) {
-              setTimeout(function () {
-                grid2.refreshLayout()
-                grid2.uncheckAll()
-              }, 300);
-              grid2.resetData(result);
-              alert('성공적으로 저장되었습니다.');
-            }
-          })
-        }
-      })
-  </script>
-</div>
+    let gridData3 = [];
+
+    const grid3 = new tui.Grid({
+      el: document.getElementById('grid3'),
+      scrollY: true,
+      bodyHeight: 480,
+      rowHeaders: ['rowNum'],
+      columns: [
+        {
+          header: '공정 코드',
+          name: 'prcsCd',
+          align: 'center',
+        },
+        {
+          header: '공정명',
+          name: 'prcsNm',
+          align: 'center',
+        },
+        {
+          header: '투입량',
+          name: 'stock',
+          align: 'center',
+        },
+        {
+          header: '생산량',
+          name: 'output',
+          align: 'center',
+        },
+        {
+          header: '공정 진행 상태',
+          name: 'completed',
+          align: 'center',
+        },
+      ]
+    });
+
+  var proCd = '';
+
+  //제품 선택시 공정 출력
+  var selectedRowKey2 = null;
+
+  grid2.on('click', (ev) => {
+    proCd = grid2.getValue(ev.rowKey, 'proCd');
+
+    if (selectedRowKey2 != ev.rowKey) {
+      grid2.removeRowClassName(selectedRowKey2, 'highlight');
+    }
+    selectedRowKey2 = ev.rowKey;
+    grid2.addRowClassName(selectedRowKey2, 'highlight');
+
+    $.ajax({
+      url: "getPrcsBom",
+      method: "POST",
+      data: { prOrderCd: prOrderCd, proCd: proCd},
+      success: function(data) {
+        gridData3 = data;
+        grid3.resetData(gridData3);
+      },
+      error: function (reject) {
+        console.log(reject);
+      },
+    });
+  });
+</script>

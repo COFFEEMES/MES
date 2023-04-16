@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.spring.sales.service.OrderService;
-import com.yedam.spring.sales.service.OrderVO;
 import com.yedam.spring.sales.service.ReceiveService;
 import com.yedam.spring.sales.service.ReceiveVO;
+import com.yedam.spring.sales.service.ReleaseVO;
 
 @Controller
 public class ReceiveController {
@@ -45,7 +44,7 @@ public class ReceiveController {
 		return receiveService.signUp(receiveVO);
 	} 
 	
-	//입고 조회
+	//입고 조회(오늘날짜)
 	@GetMapping("/receiveData")
 	@ResponseBody
 	public List<ReceiveVO> receiveData(Model model) {
@@ -56,6 +55,20 @@ public class ReceiveController {
 	@GetMapping("/receiveCheck")
 	public String receiveCheck() {
 		return "sales/receiveCheck";
+	}
+	
+	//입출고 조회 -> 입고
+	@PostMapping("/reCheck")
+	@ResponseBody
+	public List<ReceiveVO> reCheck(@RequestParam(required = false) String start, @RequestParam(required = false)  String end, @RequestParam(required = false)  String proNm) {
+		return receiveService.reCheck(start, end, proNm);
+	}
+	
+	//입출고 조회 -> 출고
+	@PostMapping("/releaseCheck")
+	@ResponseBody
+	public List<ReleaseVO> releaseCheck(@RequestParam(required = false) String start, @RequestParam(required = false)  String end, @RequestParam(required = false)  String proNm) {
+		return receiveService.releaseCheck(start, end, proNm);
 	}
 
 }

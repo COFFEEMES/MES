@@ -60,6 +60,8 @@ pageEncoding="UTF-8"%>
             <a class="nav-link" href="orderList">주문서 관리</a>
             <a class="nav-link" href="receiveList">입고 관리</a>
             <a class="nav-link" href="releaseList">출고 관리</a>
+            <a class="nav-link" href="receiveCheck">입/출고 조회</a>
+            <a class="nav-link" href="lotList">완제품 LOT 관리</a>
           </nav>
         </div>
         <a

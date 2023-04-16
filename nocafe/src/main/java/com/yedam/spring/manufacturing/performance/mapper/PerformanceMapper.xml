@@ -12,4 +12,26 @@
 		   AND o.pr_end_dt IS NULL
 		 ORDER BY 1
 	</select>
+	
+	<!-- 지시 상세 조회 -->
+	<select id="getPrOrderDetail" resultType="InstVO">
+		SELECT *
+		  FROM pr_order p, edcts e
+		 WHERE p.pro_cd = e.pro_cd
+		   AND pr_order_cd = #{prOrderCd}
+		 ORDER BY p.pro_cd
+	</select>
+	
+	<!-- 제품별 공정 조회 -->
+	<select id="getPrcsBom" resultType="ProcessVO">
+		SELECT *
+		  FROM process_tbl t, prcs_result r, prcs p
+		 WHERE t.pr_order_cd = r.pr_order_cd
+		   AND t.pro_cd = r.pro_cd
+		   AND t.prcs_cd = r.prcs_cd
+		   AND t.prcs_cd = p.prcs_cd
+		   AND t.pr_order_cd = #{prOrderCd}
+		   AND t.pro_cd = #{proCd}
+		 ORDER BY t.bom_sq
+	</select>
 </mapper>
