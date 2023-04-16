@@ -21,7 +21,7 @@
         , pro_exp, pro_wdt
 	FROM pro_stc p 
 	WHERE (SELECT pro_nm FROM edcts WHERE pro_cd = p.pro_cd )=#{proNm}
-	AND TO_CHAR(pro_exp,'yyyyMMdd') >= TO_CHAR((sysdate+5),'yyyyMMdd')
+	<!-- AND TO_CHAR(pro_exp,'yyyyMMdd') >= TO_CHAR((sysdate+5),'yyyyMMdd') -->
 	AND lot_cnt > 0
 	GROUP BY pro_ist_no,pro_cd,pro_lot_no,lot_cnt,pro_exp, pro_wdt
   	ORDER BY pro_wdt

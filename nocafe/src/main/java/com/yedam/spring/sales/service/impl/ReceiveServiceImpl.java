@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.spring.sales.mapper.ReceiveMapper;
 import com.yedam.spring.sales.service.ReceiveService;
 import com.yedam.spring.sales.service.ReceiveVO;
+import com.yedam.spring.sales.service.ReleaseVO;
 
 @Service
 public class ReceiveServiceImpl  implements ReceiveService{
@@ -47,4 +48,16 @@ public class ReceiveServiceImpl  implements ReceiveService{
 		return receiveMapper.number();
 	}
 
+	//입출고 조회 페이지 -> 입고
+	@Override
+	public List<ReceiveVO> reCheck(String start, String end, String proNm) {
+		return receiveMapper.reCheck(start, end, proNm);
+	}
+
+
+	//입출고 조회 페이지 -> 출고
+	@Override
+	public List<ReleaseVO> releaseCheck(String start, String end, String proNm) {
+		return receiveMapper.releaseCheck(start, end, proNm);
+	}
 }

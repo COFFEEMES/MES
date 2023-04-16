@@ -34,6 +34,8 @@ public class ReleaseVO {
 	private Date proOustDt;
 	private int proOustCnt;
 	
+	private String proOustNo;
+	
 	
 	
 	
