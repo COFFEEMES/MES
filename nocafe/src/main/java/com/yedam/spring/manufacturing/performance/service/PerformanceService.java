@@ -6,4 +6,8 @@ public interface PerformanceService {
 
 	public List<InstVO> getAllInst();
 
+	public List<InstVO> getPrOrderDetail(InstVO instVO);
+
+	public List<ProcessVO> getPrcsBom(InstVO instVO);
+
 }

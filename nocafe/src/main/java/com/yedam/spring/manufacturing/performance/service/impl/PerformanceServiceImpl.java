@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.spring.manufacturing.performance.mapper.PerformanceMapper;
 import com.yedam.spring.manufacturing.performance.service.InstVO;
 import com.yedam.spring.manufacturing.performance.service.PerformanceService;
+import com.yedam.spring.manufacturing.performance.service.ProcessVO;
 
 @Service
 public class PerformanceServiceImpl implements PerformanceService {
@@ -33,6 +34,16 @@ public class PerformanceServiceImpl implements PerformanceService {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	@Override
+	public List<InstVO> getPrOrderDetail(InstVO instVO) {
+		return mapper.getPrOrderDetail(instVO);
+	}
+
+	@Override
+	public List<ProcessVO> getPrcsBom(InstVO instVO) {
+		return mapper.getPrcsBom(instVO);
 	}
 
 }
