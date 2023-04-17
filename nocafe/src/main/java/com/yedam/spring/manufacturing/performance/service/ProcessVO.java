@@ -27,6 +27,12 @@ public class ProcessVO {
 	private int prodCnt;
 	private String note;
 	
+	private String rscCd;
+	private String rscLotCd;
+	private String rscTotal;
+	
 	private String prcsNm;
+	private String empCode;
+	private String eqmCd;
 
 }

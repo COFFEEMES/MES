@@ -131,16 +131,16 @@ public class ManagerController {
 		return managerService.getPrcs(edctsVO);
 	}
 	
-	@PostMapping("/getUseRcs")
+	@PostMapping("/getUseRsc")
 	@ResponseBody
 	public List<BomVO> getUseRcs(EdctsVO edctsVO){
-		return managerService.getUseRcs(edctsVO);
+		return managerService.getUseRsc(edctsVO);
 	}
 	
-	@PostMapping("/getPrcsRcs")
+	@PostMapping("/getPrcsRsc")
 	@ResponseBody
-	public List<BomVO> getPrcsRcs(BomVO bomVO){
-		return managerService.getPrcsRcs(bomVO);
+	public List<BomVO> getPrcsRsc(BomVO bomVO){
+		return managerService.getPrcsRsc(bomVO);
 	}
 	
 	@PostMapping("/delPrcs")

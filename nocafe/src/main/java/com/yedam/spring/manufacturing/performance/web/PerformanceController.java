@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.spring.manufacturing.performance.service.EqmVO;
 import com.yedam.spring.manufacturing.performance.service.InstVO;
 import com.yedam.spring.manufacturing.performance.service.PerformanceService;
 import com.yedam.spring.manufacturing.performance.service.ProcessVO;
@@ -22,6 +23,7 @@ public class PerformanceController {
 	@GetMapping("/performance")
 	public String getAllInst(Model model) {
 		model.addAttribute("instList", service.getAllInst());
+		model.addAttribute("empList", service.getEmpList());
 		return "manufacture/performance";
 	}
 	
@@ -34,6 +36,22 @@ public class PerformanceController {
 	@PostMapping("/getPrcsBom")
 	@ResponseBody
 	public List<ProcessVO> getPrcsBom(InstVO instVO){
+		return service.getPrcsBom(instVO);
+	}
+	
+	@PostMapping("/getPrcsEqm")
+	@ResponseBody
+	public List<EqmVO> getPrcsEqm(EqmVO eqmVO){
+		return service.getPrcsEqm(eqmVO);
+	}
+	
+	@PostMapping("/prcsStart")
+	@ResponseBody
+	public List<ProcessVO> prcsStart(ProcessVO processVO){
+		service.prcsStart(processVO);
+		InstVO instVO = new InstVO();
+		instVO.setPrOrderCd(processVO.getPrOrderCd());
+		instVO.setProCd(processVO.getProCd());
 		return service.getPrcsBom(instVO);
 	}
 

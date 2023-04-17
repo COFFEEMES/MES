@@ -25,13 +25,38 @@
 	<!-- 제품별 공정 조회 -->
 	<select id="getPrcsBom" resultType="ProcessVO">
 		SELECT *
-		  FROM process_tbl t, prcs_result r, prcs p
+		  FROM process_tbl t, prcs_result r, prcs p, process_material m
 		 WHERE t.pr_order_cd = r.pr_order_cd
 		   AND t.pro_cd = r.pro_cd
 		   AND t.prcs_cd = r.prcs_cd
 		   AND t.prcs_cd = p.prcs_cd
+		   AND t.pr_order_cd = m.pr_order_cd
+		   AND t.pro_cd = m.pro_cd
+		   AND t.prcs_cd = m.prcs_cd
 		   AND t.pr_order_cd = #{prOrderCd}
 		   AND t.pro_cd = #{proCd}
 		 ORDER BY t.bom_sq
+	</select>
+	
+	<!-- 공정에 따른 설비 조회 -->
+	<select id="getPrcsEqm" resultType="EqmVO">
+		SELECT *
+		  FROM eqm e, prcs p
+		 WHERE e.eqm_type = p.eqm_type
+		   AND p.prcs_cd = #{prcsCd}
+		   AND e.eqm_avail = 'Y'
+	</select>
+	
+	<!-- 담당사원 검색 -->
+	<select id="getEmpList" resultType="EmpVO">
+		SELECT *
+		  FROM emp e, detail_code d
+		 WHERE e.emp_code = d.basic_code||d.detail_code
+		   AND d.detail_avail = 'Y'
+	</select>
+	
+	<!-- 작업 시작 -->
+	<select id="prcsStart" statementType="CALLABLE" parameterType="ProcessVO">
+	
 	</select>
 </mapper>
