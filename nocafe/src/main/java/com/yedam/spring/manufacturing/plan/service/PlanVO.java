@@ -13,10 +13,10 @@ public class PlanVO {
 	private Date   planDt;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date   exStartDt;
+	private Date   exStart;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date   exEndDt;
+	private Date   exEnd;
 	
 	private String planHdCd;
 	
@@ -28,11 +28,14 @@ public class PlanVO {
 	private String planCd;
 	private int	   planCnt;
 	private String proCd;
+	
+	
 
 //	총 재고수량
 	private int stockCnt;
 //	주문량
 	private int orderCnt;
+	private String orderNo;
 	
 //	자재 정보 받아올 field
 	private String rscNm;

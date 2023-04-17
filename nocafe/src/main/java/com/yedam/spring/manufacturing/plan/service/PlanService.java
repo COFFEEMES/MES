@@ -34,4 +34,9 @@ public interface PlanService {
 
 //	자재이름으로 완제품 이름 받아오기
 	public List<PlanVO> getProNm(PlanVO planVO);
+	
+	
+	public int insertTest (List<PlanVO> test);
+	
+	public int updateOrderList(List<PlanVO> orderList);
 }

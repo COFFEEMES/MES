@@ -192,16 +192,24 @@ label {
 			};
 		};
 		class planInfo{
-			constructor(name, cnt){
-				this.proNm = name;
-				this.planCnt = cnt;
+			constructor(planCd,proNm, planCnt,exStart,exEnd,planDt){
+				this.planCd = planCd;
+				this.proNm = proNm;
+				this.planCnt = planCnt;
+				this.exStart = exStart;
+				this.exEnd = exEnd;
+				this.planDt = planDt;
 			};
 		};
-		
+		class orderInfo{
+			constructor(orderNo,planCd){
+				this.orderNo = orderNo;
+				this.planCd = planCd;
+			}
+		};
 		
 	    let proNmListAry = new Array; //계획 정보 담아 줄 배열
 		let orderListAry = new Array; //주문정보 담아 줄 배열
-		let dateListAry	 = new Array; //계획 일자 담아 줄 배열
 		let containorAry = new Array; //grid3에 뿌려줄 제품이름, 주문수량 포함 객체 넣어줄 배열
 
         //초기화
@@ -637,7 +645,7 @@ label {
 			};
 			console.log(ev.rowKey);
 		 	let rscNm = grid4.getData()[ev.rowKey].rscNm;
-		 	
+		 	console.log(rscNm)
 		 
 		 	$.ajax({
 		 		url : 'getRscLot',
@@ -724,6 +732,7 @@ label {
 					data : {planDt: data},
 					success: function (result){
 						code = result.planCd;
+						console.log(code)
 					},
 					error: function(err){
 						console.log(err);
@@ -845,6 +854,7 @@ label {
 				let startDt = $("#ex-start").val()
 				let endDt = $("#ex-end").val()
 				planDt =  $("#tui-date-picker-target").val();
+				let orderNm = new Array();
 				if(startDt == '' || endDt == ''){
 					Swal.fire({
 					      icon: 'error',
@@ -853,19 +863,68 @@ label {
 					    	'생산계획일자를 지정해 주세요!',
 					    })
 					    return
-				}
+				};
+				
 				
 				let data = grid2.getData();
 				console.log(data)
-				for(let i= 0; i<data.length;i++){
-					proNmListAry[i] = new planInfo(data[i].proNm,data[i].proCnt);
-				};
+				let resCnt = 0;
+				 $.ajax({
+					url : 'getPlanCd',
+					method : 'GET',
+					data : {planDt: planDt},
+					success: function (result){
+						code = result.planCd;
+						 for(let i= 0; i<data.length;i++){
+								proNmListAry[i] = new planInfo(code, data[i].proNm,data[i].proCnt,startDt,endDt,planDt);
+							};
+							
+							for(let i=0;i<orderListAry.length;i++){
+								console.log(orderListAry[i])
+								orderNm[i]= new orderInfo(orderListAry[i],code);
+							};
+						 	console.log(proNmListAry)
+							
+					 				$.ajax({
+				 					url : 'mkPlan',
+				 					method : 'POST',
+				 					dataType: 'json',
+				 			        contentType: 'application/json; charset=utf-8',
+				 					data : JSON.stringify(proNmListAry),
+				 					success: function (res){
+										resCnt += res
+				 						console.log(res);
+										
+				 						$.ajax({
+				 							url : 'updateOrder',
+				 							method : 'post',
+				 							dataType: 'json',
+						 			        contentType: 'application/json; charset=utf-8',
+						 					data : JSON.stringify(orderInfo),
+						 					success: function (res2){
+						 						resCnt += res2						 						
+						 					}
+				 						})
+				 						
+				 						
+				 					},
+				 					error: function(err){
+				 						console.log(err);
+				 					}
+				 				})
+							
+							
+							
+							
+					},
+					error: function(err){
+						console.log(err);
+					}
+				})
 				
-				dateListAry[0] = planDt;
-				dateListAry[1] = startDt
-				dateListAry[2] = endDt
 				
-				console.log(proNmListAry,dateListAry,orderListAry);
+				
+				
 				
 
 				

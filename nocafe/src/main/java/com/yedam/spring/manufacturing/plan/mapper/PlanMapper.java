@@ -36,5 +36,11 @@ public interface PlanMapper {
 //	자재 이름으로 완제품이름 받아오기
 	public List<PlanVO> getProNm(PlanVO planVO);
 	//-----------------------------------------------------------------------------------	사용중
+//	public List<String> getProCd(Map<String,Object>map);
 	
+	public int insertTest(PlanVO plan);
+	
+	public int updateTest(PlanVO obj);
+	
+	public int insertHeader(PlanVO plan);
 }

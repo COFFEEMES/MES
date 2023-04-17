@@ -151,5 +151,37 @@
 										FROM detail_code 
 										WHERE detail_explain = #{rscNm}))
 	</select>
+<!-- 	================================================ ==================== -->
+	<select id="getProCd" resultType="String">
+	select full_code pro_cd
+	from detail_code
+	where detail_explain in  <foreach collection="planInfo" item="arr" open="(" close=")" separator=",">
+															   			#{arr.proNm}
+																		</foreach>
+	</select>
+	
+	<insert id="insertTest" >
+		insert into plans (plan_cd,pro_cd,plan_cnt,ex_start_dt,ex_end_dt)
+		values (#{planCd},
+				(select full_code pro_cd
+				 from detail_code
+				 where detail_explain = #{proNm}),
+			     #{planCnt},#{exStart},#{exEnd})
+	</insert>
+	
+	<update id="updateTest" >
+	update order_sheet
+	set plan_no = #{planCd}
+	where order_no = #{orderNo} 
+															   			
+	</update>
+	
+	<insert id="insertHeader">
+	insert into plans_header (plan_cd,plan_dt)
+	values (#{planCd},#{planDt})
+	
+	</insert>
+	
+	
 
 </mapper>
