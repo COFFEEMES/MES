@@ -96,6 +96,14 @@ pageEncoding="UTF-8"%>
               style="width: 150px"
               disabled
             />
+              출고된수량<input
+              type="text"
+              id="sum"
+              name="sum"
+              class="form-control"
+              style="width: 150px"
+              disabled
+            />
             <input
               type="text"
               id="cnt"
@@ -167,10 +175,11 @@ pageEncoding="UTF-8"%>
           },
         },
         {
-          header: "가능여부",
-          name: "",
+          header: "출고된수량",
+          name: "sum",
           hidden: true,
         },
+        
       ],
     
     });
@@ -192,8 +201,13 @@ pageEncoding="UTF-8"%>
           );
           document.getElementById("vend").value =
             gridPro.getData()[ev.rowKey].vendNm;
+          
           document.getElementById("orderCntOut").value =
-            gridPro.getData()[ev.rowKey].orderCnt; //정보출력
+            gridPro.getData()[ev.rowKey].orderCnt;
+            
+          document.getElementById("sum").value =
+          gridPro.getData()[ev.rowKey].sum; //정보출력  
+            
 
           orderDetailNo = gridPro.getData()[ev.rowKey].orderDetailNo; //주문상세코드
           orderNo = gridPro.getData()[ev.rowKey].orderNo; //주문코드
@@ -224,6 +238,9 @@ pageEncoding="UTF-8"%>
         {
           header: "출고일자",
           name: "proOustDt",
+          formatter: function (data) {
+              return dateChange(data.value);
+            },
         },
         {
           header: "출고수량",

@@ -57,6 +57,7 @@ public class ReleaseController {
 	public int reAdd(@RequestParam(required = false) String orderNo, @RequestParam(required = false)  String orderDetailNo, @RequestParam(required = false) int orderCnt,
 			@RequestParam(required = false)  String proLotNo, @RequestParam(required = false)  String proNm) {
 		return releaseService.reAdd(orderNo, orderDetailNo, orderCnt, proLotNo, proNm);
+		
 	}
 	
 	

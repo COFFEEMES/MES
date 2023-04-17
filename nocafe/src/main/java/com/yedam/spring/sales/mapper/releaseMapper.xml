@@ -8,10 +8,15 @@
   	
      <!-- 진행중 주문서 조회 -->
 	<select id="getOrder" resultType="ReleaseVO">
-	SELECT s.order_no, order_detail_no, vend_nm, pro_nm, order_cnt, parrd_dt, order_dt
+	SELECT s.order_no, d.order_detail_no, vend_nm, pro_nm, order_cnt, parrd_dt, order_dt, 
+                (SELECT NVL(SUM(pro_oust_cnt),0)
+                 FROM  pro_oust p
+                 WHERE p.order_detail_no = d.order_detail_no
+                 GROUP BY p.order_detail_no) AS sum
 	FROM order_sheet s, order_detail d
 	WHERE s.order_no = d.order_no
 	AND order_sit_detail = '준비중'
+	AND order_cnt > 0
 	ORDER BY parrd_dt
 	</select>
   	

@@ -38,7 +38,7 @@
                      	<tbody>  
 	                     	<tr>  	
 								<th style="border-bottom-width: 0px" ><label><input type="radio" id ="receive"  name="radio" value="receive" checked="checked">입고</label><!-- </th> -->
-								<!-- <th style="border-bottom-width: 0px" > --><label><input type="radio" id="release" name="radio" value="release">출고</label></th>
+								<label><input type="radio" id="release" name="radio" value="release">출고</label></th>
 							<tr>
                      		<tr>
                      			<th style="border-bottom-width: 0px">제품명</th>
@@ -84,8 +84,6 @@
                           <br>         
                     <div id="proSpace" class="modal-body"></div>
                     <div class="modal-footer">
-                      <!--   <button type="button" id="proBtn" class="btn btn-primary"
-                            data-bs-dismiss="modal">확인</button> -->
                        <button type="button" id="clearBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
@@ -167,7 +165,7 @@ var gridRe = new tui.Grid({
   el: document.getElementById("grid"),
   scrollX: false,
   scrollY: true,
-  bodyHeight: 243,
+  //bodyHeight: 500,
 
   columns: [
     {
@@ -211,7 +209,7 @@ var gridRe = new tui.Grid({
    	 hidden: true
     }
   ],
-  bodyHeight: 300,
+  bodyHeight: 450,
   pageOptions: {
       useClient: true,
       type: 'scroll',
@@ -245,7 +243,6 @@ function reSearch() {
 	        data: { start: start, end: end, proNm: proNm },
 	        success: function(data) {  	
 	     	  gridRe.resetData(data)
-	     	  //console.log(data);
 	        },
 	        error: function (reject) {
 	          console.log(reject);
@@ -264,7 +261,6 @@ function relsearch() {
 	        data: { start: start, end: end, proNm: proNm },
 	        success: function(data) {  	
 	     	  gridRel.resetData(data)
-	     	  //console.log(data);
 	        },
 	        error: function (reject) {
 	          console.log(reject);
@@ -292,14 +288,12 @@ function dateChange(date) {
  
 //라디오버튼 출고클릭하면
 document.getElementById('release').addEventListener('click', function(){
-	//console.log("출고");
 	gridRe.el.hidden = true;
 	gridRel.el.hidden=false;
 	relsearch();
 });   
 //라디오버튼 입고클릭하면
 document.getElementById('receive').addEventListener('click', function(){
-	//console.log("입고");
 	gridRe.el.hidden = false;
 	gridRel.el.hidden=true;
 	

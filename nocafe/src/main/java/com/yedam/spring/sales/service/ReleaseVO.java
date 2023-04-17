@@ -36,6 +36,8 @@ public class ReleaseVO {
 	
 	private String proOustNo;
 	
+	private int sum;
+	
 	
 	
 	

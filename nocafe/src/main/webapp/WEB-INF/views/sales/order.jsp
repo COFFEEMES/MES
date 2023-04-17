@@ -33,6 +33,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       	left: 30%;
   		margin-left: 10px;
       }
+     .tui-grid-cell.not-allow-row {background-color : red}
     </style>
   </head>
   <body>
@@ -56,8 +57,10 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                 <button class="btn btn-primary" id="ReBtn">
                   <i class="fas fa-file"></i> 초기화
                 </button>
+                <button class="btn btn-primary" id="excel">
+                  <i class="bi bi-file-excel"></i> 엑셀
+                </button>
               </div>
-              <!-- onsubmit="return false" -->
               <form name="searchFrm" id="searchFrm" >
                 <table class="table" style="vertical-align: middle">
                   <colgroup>
@@ -115,8 +118,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                           <br>             
                     <div id="modGrid" class="modal-body"></div>
                     <div class="modal-footer">
-                       <!--  <button type="button" id="confirmBtn" class="btn btn-primary"
-                            data-bs-dismiss="modal">확인</button> -->
                         <button type="button" id="clearBtn2" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
@@ -173,8 +174,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                           <br>         
                     <div id="proSpace" class="modal-body"></div>
                     <div class="modal-footer">
-                      <!--   <button type="button" id="proBtn" class="btn btn-primary"
-                            data-bs-dismiss="modal">확인</button> -->
                        <button type="button" id="clearBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
@@ -260,8 +259,14 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
         method: "post",
         data: { start: start, end: end, vendNm: vendNm },
         success: function (data) {
-          grid.resetData(data); //그리드 적용
-          gridData = data;
+            grid.resetData(data); //그리드 적용
+            gridData = data;
+        data.forEach(row=>{	
+        	let detailCnt = Number(row.detailCnt);
+        	if(detailCnt==0)
+        		grid.addRowClassName(row.rowKey,'not-allow-row');
+        	else grid.removeRowClassName(row.rowKey,'not-allow-row');
+        })	       	
         },
         error: function (reject) {
           console.log(reject);
@@ -281,15 +286,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
         {
           header: "주문번호",
           name: "orderNo",
-          formatter: function(data) {
-        	  let orderNo = data.row.orderNo;
-        	  let detailCnt = data.row.detailCnt;
-        	  let color ="";
-        	  if(detailCnt==0) color = '<span style="color:red";>'+orderNo+'</span>';
-        	  else if (orderNo==null) color = "";
-        	  else color = '<span style="black";>'+orderNo+'</span>';
-        	  return color;
-          }
+          
         },
         {
           header: "거래처",
@@ -312,7 +309,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                 type: 'datePicker',
                 options: {
                   format: 'yyyy-MM-dd',
-                  //selectableRanges: [[todayForgrid,threeMonthsLater ]]
             	  date : getToday()
                 }
               }
@@ -339,7 +335,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
               type: 'datePicker',
               options: {
                 format: 'yyyy-MM-dd',
-                //selectableRanges: [[todayForgrid,threeMonthsLater ]]
               }
             }
      
@@ -347,8 +342,9 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
         {
             header: "주문제품개수",
             name: "detailCnt",
-            hidden: true
-          },
+            hidden: true,
+            },
+         
         
       ],
       bodyHeight: 400,
@@ -369,8 +365,9 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     	
     grid.on('checkAll', (ev) => {
     	checkLen = grid.getCheckedRows().length;
-    	//console.log(checkLen);
     	});
+
+    
     
     //창 뜨자마자 조회 됨
     window.onload = search;
@@ -383,15 +380,10 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
  	 	if(ev.targetType=='cell' && ev.columnName =='orderNo') {
  	 		console.log(ev);
  	 	orderNo = grid.getData()[ev.rowKey].orderNo;
- 	 	//console.log(orderNo);
  	 	orderDetailFct();
  	 	 }
  		}); 
-    
-    //셀 편집이 종료된 후
-     /*grid.on('editingFinish', (e)=>{
-    	console.log(e);
-    });*/
+
      
     //거래처 클릭했을때
     let clickEvent="";
@@ -400,9 +392,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     	 clickEvent="gridClick";
   	 	if(ev.targetType=='cell' && ev.columnName =='vendNm') {
   	 		vendRow = ev.rowKey;
-  	 		//console.log(vendRow);
   	 		$('#exampleModal').modal('show');	
-  	 	//orderNo = grid.getData()[ev.rowKey].orderNo;
 
   	 	 }
   		}); 
@@ -468,11 +458,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
  //거래처 검색 모달창 그리드 
 	  var gridVend = new tui.Grid({
       el: document.getElementById('modGrid'),
-/*       rowHeaders: [
-    	    {
-    	      type: 'checkbox'
-    	    }
-    	  ], */
       columns: [
    
           {
@@ -504,25 +489,17 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
 		})
 		
 		
- // 선택시 거래처명 변경
-/* 	 gridVend.on('check', (ev) => {
-		 vendSearch = gridVend.getCheckedRows()[0].vendNm; 
-	    }); */
 	 // 선택시 거래처명 변경
 	    gridVend.on('dblclick', (ev) => {
-	    //console.log(ev);
 	    if(clickEvent!="gridClick")
 	    {document.getElementById("vendNm").value = gridVend.getData()[ev.rowKey].vendNm;}
 	    else
 	    	{
 	    	let clickData = grid.getData();
-	    	//grid.getData()[vendRow].vendNm = gridVend.getData()[ev.rowKey].vendNm;
-	    	//console.log(gridVend.getData()[ev.rowKey].vendNm);
 	    	clickData[vendRow].vendNm = gridVend.getData()[ev.rowKey].vendNm;
 	    	grid.resetData(clickData);
 	    	clickEvent="";
 	    	}
-	    //console.log(vendSearch);
 	    gridVend.clear();
 	    vendNmSearch.value="";
 	    $('#exampleModal').modal('hide');
@@ -531,13 +508,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
 //거래처 모달 검색 버튼 동작 
 searchBtn.addEventListener("click", searchVend);  
  
-//거래처 모달창 확인버튼
-/* confirmBtn.addEventListener("click", function(){
-	vendNmInput.value=vendSearch;
-	gridVend.clear();
-	vendNmSearch.value="";
-}); 
-   */
     //삭제버튼 함수 
     function orderDel() {
   	let str="";
@@ -545,25 +515,21 @@ searchBtn.addEventListener("click", searchVend);
       for (let i = 0; i < checkLen; i++) {
         str += grid.getCheckedRows()[i].orderNo + ",";
       }
-      //console.log(str);
       $.ajax({
         url: "orderDelete",
         method: "post",
         data: { str: str },
         success: function (data) {
         	search();
-        	//console.log(data);
         	if(data>0) 
         		Swal.fire({
                     icon: 'success',
                     title: data+'건이 삭제되었습니다',
-                    //text: '값을 조회 후 사용가능합니다.',
                   });
         	else
         		Swal.fire({
                     icon: 'error',
                     title: '삭제할 주문서를 선택하세요',
-                    //text: '값을 조회 후 사용가능합니다.',
                   });
         		
         },
@@ -620,7 +586,6 @@ searchBtn.addEventListener("click", searchVend);
  //제품명 검색 그리드
  var gridPro = new tui.Grid({
     el: document.getElementById('proSpace'),
-  /*   rowHeaders: ['checkbox'], */
     columns: [
  
         {
@@ -645,21 +610,6 @@ searchBtn.addEventListener("click", searchVend);
 	 	if(ev.targetType=='cell' && ev.columnName =='proNm') {
 	 		$('#proModal').modal('show');
 	 		row = ev.rowKey;
-	 		//console.log(row);
-/*   	 	let proNm = proNmSearch.value;
- 	 
-			$.ajax({
-     			 url: "proSearch",
-     			 method: "post",
-      			data: {proNm: proNm },
-     			success: function(data) { 			
-     				$('#proModal').modal('show');
-     				//gridPro.resetData(data);
-      				},
-      			error: function (reject) {
-        			console.log(reject);
-      				},
-    			})  */  
 	 	 } 
 		});  
 
@@ -674,7 +624,6 @@ function searchPro() {
 		 method: "post",
 			data: {proNm: proNm },
 		success: function(data) { 			
-			//$('#proModal').modal('show');
 			gridPro.resetData(data);
 			  setTimeout(function () {
 				  gridPro.refreshLayout()
@@ -687,16 +636,6 @@ function searchPro() {
 		})	
 }   
 
-//제품명 모달창에서 확인버튼 누르면
-/*  document.getElementById('proBtn').addEventListener('click', savePro); 
-
-function savePro() {
-	val = gridPro.getCheckedRows()[0].proNm;
-	gridDetailData[row].proNm = val;
-	gridDetail.resetData(gridDetailData);
-	gridPro.clear();
-	
-} */
 
 //제품명 모달이 뜨면
 $('#proModal').on('shown.bs.modal', function (e) {
@@ -711,11 +650,9 @@ $('#proModal').on('hidden.bs.modal', function (e) {
  gridPro.on('dblclick', (ev) => {
 	gridDetailData[row].proNm = gridPro.getData()[ev.rowKey].proNm;
 	gridDetail.resetData(gridDetailData);
-	//console.log('gridDetail', gridDetail.getData());
 	gridPro.clear();
 	proNmSearch.value="";
 	$('#proModal').modal('hide');
-	//console.log('더블클릭', gridDetailData);
 	}); 
 	
    //오늘날짜로
@@ -766,7 +703,6 @@ $('#proModal').on('hidden.bs.modal', function (e) {
 				Swal.fire({
                     icon: 'success',
                     title: '주문서가 저장되었습니다.',
-                    //text: '값을 조회 후 사용가능합니다.',
                   });
 	    		   search();
         },
@@ -793,9 +729,7 @@ $('#proModal').on('hidden.bs.modal', function (e) {
 	for(let i=0; i<dataa.length; i++) {
 		dataa[i].orderNo = orderNo;
 	}
-	
-	//console.log(dataa);
-	
+		
     $.ajax({
         url: "saveOrder",
         method: "post",
@@ -806,8 +740,8 @@ $('#proModal').on('hidden.bs.modal', function (e) {
         	Swal.fire({
                 icon: 'success',
                 title: '주문서가 저장되었습니다.',
-                //text: '값을 조회 후 사용가능합니다.',
               });
+        	search();
 
         },
         error: function (reject) {
@@ -830,26 +764,46 @@ $('#proModal').on('hidden.bs.modal', function (e) {
  }
  
 
-//모달창 닫기 버튼 클릭시 초기화 
-  /*     $("#clearBtn").on("click", function(){
-       		gridPro.clear();
-          }) */
-/*         $("#clearBtn2").on("click", function(){
-       		gridVend.clear();
-       		vendNmSearch.value="";
-          }) */
-      /*   $("#clearBtn3").on("click", function(){
-       		gridDetail.clear();
-              })
-               */
  
        //초기화 버튼 누르면
        $("#ReBtn").on("click", function(){
     	   document.getElementById("vendNm").value="";
     	   document.getElementById("start").value="";
     	   document.getElementById("end").value="";
-    	  // console.log("!");
          }) 
-              
+            
+         
+  //엑셀버튼 클릭 이벤트
+      const options = {
+         includeHiddenColumns: false, //숨겨진 열 포함
+         onlySelected: true,
+         fileName: '주문서', //파일이름
+         useFormattedValue:true, //지정된 값을 내보낼지
+      };
+      
+        //엑셀버튼을 누르면 해당되는 발주상세목록을 엑셀로 만들어준다
+       $("#excel").on('click', function(){
+          Swal.fire({
+             title: '엑셀파일로 받아보시겠습니까?',
+             text: "원하지 않는다면 취소를 눌러주세요",
+             icon: 'question',
+             showCancelButton: true,
+             confirmButtonColor: '#3085d6',
+             cancelButtonColor: '#d33',
+             confirmButtonText: '확인',
+             cancelButtonText: '취소',
+             reverseButtons: true, // 버튼 순서 거꾸로
+             
+          }).then((result) => {
+             if (result.isConfirmed) {
+                grid.export('xlsx', options);  
+             } else {
+                Swal.fire({
+                   title: '취소되었습니다',
+                   icon : 'success'
+                });
+             }
+          });
+       });  
   </script>
 </html>

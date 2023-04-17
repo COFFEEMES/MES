@@ -46,51 +46,11 @@
                      	<col>
                      </colgroup>
                      <tbody>
-<!--                       <tr>
-                      <th for="edctsIstDt" class="form-label">제품생산일자</th> 
-                          <td><input type="date" id="start" name="start" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="end" name="end" class="form-control" style="width:150px;"></td>
-                     	<th></th>
-                     	<td></td>
-                     	<th></th>
-                     	<td></td>
-                     	<th></th>
-                     	<td></td>
-                     	<th></th>
-                     	<td></td>
-                     	<th></th>
-                     	<td></td>
-                     	</tr> -->
                      	<tr> 
                      		<th style="border-bottom-width: 0px">포장완료제품</th>
                      		<td style="border-bottom-width: 0px" ><input type="text" class="form-control" id="com" name="com" style="width:180px" readonly>
                      			<!-- 모달버튼 -->
     							<button type="button" class="btn btn-primary" id="comSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
-<!--     						</td>
-    						<th></th>
-    						<td></td>
-    						<th></th>
-    						<td></td>
-    						<th></th>
-    						<td></td>
-    						<th></th>
-    						<td></td>
-    						<th></th>
-    						<td></td>
-                     	</tr> -->
-<!--                      	<tr>
-                     		<th>검사수량</th>
-                     		<td><input type="text" class="form-control" id="inspCnt" name="inspCnt" style="width:150px;margin-left: 3px;" readonly></td>
-                     		<th>제품 입고수량</th>
-                     		<td><input type="text" class="form-control" id="edctsIstCnt" name="edctsIstCnt" style="width:150px;margin-left: 0px;"></td>                     		                     		
-                     		<th></th>
-    						<td></td>
-    						<th></th>
-    						<td></td>
-    						<th></th>
-    						<td></td>
-    						<th></th>
-    						<td></td>
-                     	</tr> -->
                      </tbody>
                        </div>
                        </table>
@@ -109,7 +69,7 @@
 		  <div class="modal-dialog modal-lg">xampleModa
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="lotModalLabel">검사완료 제품</h5>
+		        <h5 class="modal-title" id="lotModalLabel">포장완료 제품</h5>
 		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		      </div>
 		      <div class="modal-body">
@@ -168,12 +128,9 @@ var gridCom = new tui.Grid({
 
 //조회버튼 눌렀을 때
     function search() {
-       //start = document.getElementById("start").value;
-      //end = document.getElementById("end").value; 
       $.ajax({
         url: "testCom",
         method: "post",
-         //data: { start: start, end: end}, 
         success: function (data) {
         setTimeout(function () {
         	gridCom.refreshLayout()
@@ -197,7 +154,7 @@ var gridRe = new tui.Grid({
   el: document.getElementById("complete"),
   scrollX: false,
   scrollY: true,
-  bodyHeight: 243,
+  //bodyHeight: 243,
 
   columns: [
     {
@@ -241,7 +198,7 @@ var gridRe = new tui.Grid({
    	 hidden: true
     }
   ],
-  bodyHeight: 300,
+  bodyHeight: 500,
   pageOptions: {
       useClient: true,
       type: 'scroll',
@@ -315,7 +272,6 @@ function register(){
      	Swal.fire({
             icon: 'success',
             title: data + "건 입고 등록되었습니다",
-            //text: '값을 조회 후 사용가능합니다.',
           });
         },
         error: function (reject) {
@@ -335,7 +291,6 @@ function load() {
 	        method: "get",
 	        success: function(data) {  	
 	     	  gridRe.resetData(data)
-	     	  //console.log(data);
 	        },
 	        error: function (reject) {
 	          console.log(reject);
@@ -349,11 +304,6 @@ function load() {
 document.getElementById("ReBtn").addEventListener("click", returnFun);
 function returnFun() {
 	document.getElementById("com").value = "";
-	//document.getElementById("start").value = "";
-	//document.getElementById("end").value = "";
-/* 	for(let i=0; i<gridRe.getData().length; i++){
-			gridRe.removeRow(i,gridRe.getData()[i].proIstNo==null);
-	} */
 	gridRe.clear();
 	load();
 	

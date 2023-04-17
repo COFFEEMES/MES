@@ -10,7 +10,6 @@ import com.yedam.spring.sales.service.ReleaseVO;
 public interface ReceiveMapper {
 
 	//검사완료 제품 조회 모달창
-	//@Param("start")String start, @Param("end")String end
 	public List<ReceiveVO> testComplete();
 	
 	//입고등록

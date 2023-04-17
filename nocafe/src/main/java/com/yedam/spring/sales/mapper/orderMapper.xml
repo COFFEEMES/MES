@@ -14,7 +14,7 @@
 	           order_sit,
 	           parrd_dt,
 	           order_dt,
-	           nvl((SELECT COUNT(order_detail_no) 
+	           nvl((SELECT SUM(order_cnt)  
 	           		FROM order_detail d 
 	           		WHERE d.order_no = s.order_no 
 	           		GROUP BY d.order_no),0) AS "detail_cnt"
