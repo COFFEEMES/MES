@@ -25,7 +25,7 @@
 	<!-- 제품별 공정 조회 -->
 	<select id="getPrcsBom" resultType="ProcessVO">
 		SELECT *
-		  FROM process_tbl t, prcs_result r, prcs p, process_material m
+		  FROM process_tbl t, prcs_result r, prcs p, process_material m, emp e
 		 WHERE t.pr_order_cd = r.pr_order_cd
 		   AND t.pro_cd = r.pro_cd
 		   AND t.prcs_cd = r.prcs_cd
@@ -33,6 +33,7 @@
 		   AND t.pr_order_cd = m.pr_order_cd
 		   AND t.pro_cd = m.pro_cd
 		   AND t.prcs_cd = m.prcs_cd
+		   AND r.worker = e.emp_code(+)
 		   AND t.pr_order_cd = #{prOrderCd}
 		   AND t.pro_cd = #{proCd}
 		 ORDER BY t.bom_sq
@@ -57,6 +58,30 @@
 	
 	<!-- 작업 시작 -->
 	<select id="prcsStart" statementType="CALLABLE" parameterType="ProcessVO">
+		{ CALL prcs_start(
+			  #{prOrderCd}
+			, #{proCd}
+			, #{prcsCd}
+			, #{empCode}
+			, #{stock}
+			, #{eqmCd}
+			, #{bomSq}
+		  )
+		}
+	</select>
 	
+	<!-- 작업 끝 -->
+	<select id="prcsEnd" statementType="CALLABLE" parameterType="ProcessVO">
+		{ CALL prcs_end(
+			  #{prOrderCd}
+			, #{proCd}
+			, #{prcsCd}
+			, #{empCode}
+			, #{stock}
+			, #{eqmCd}
+			, #{bomSq}
+			, #{inferCnt}
+		  )
+		}
 	</select>
 </mapper>

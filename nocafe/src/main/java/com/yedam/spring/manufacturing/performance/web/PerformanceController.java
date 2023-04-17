@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.spring.manufacturing.performance.service.EqmVO;
@@ -52,6 +53,16 @@ public class PerformanceController {
 		InstVO instVO = new InstVO();
 		instVO.setPrOrderCd(processVO.getPrOrderCd());
 		instVO.setProCd(processVO.getProCd());
+		return service.getPrcsBom(instVO);
+	}
+	
+	@PostMapping("/prcsEnd")
+	@ResponseBody
+	public List<ProcessVO> prcsEnd(@RequestBody List<ProcessVO> list){
+		service.prcsEnd(list);
+		InstVO instVO = new InstVO();
+		instVO.setPrOrderCd(list.get(0).getPrOrderCd());
+		instVO.setProCd(list.get(0).getProCd());
 		return service.getPrcsBom(instVO);
 	}
 

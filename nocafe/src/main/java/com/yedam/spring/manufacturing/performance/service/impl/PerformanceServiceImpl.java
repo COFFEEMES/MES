@@ -63,4 +63,11 @@ public class PerformanceServiceImpl implements PerformanceService {
 		mapper.prcsStart(processVO);
 	}
 
+	@Override
+	public void prcsEnd(List<ProcessVO> list) {
+		for(ProcessVO processVO : list) {
+			mapper.prcsEnd(processVO);
+		}
+	}
+
 }

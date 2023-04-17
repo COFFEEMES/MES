@@ -12,4 +12,5 @@ public interface PerformanceService {
 	public List<EqmVO> getPrcsEqm(EqmVO eqmVO);
 	public List<EmpVO> getEmpList();
 	public void prcsStart(ProcessVO processVO);
+	public void prcsEnd(List<ProcessVO> list);
 }
