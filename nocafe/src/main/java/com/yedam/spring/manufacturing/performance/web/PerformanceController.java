@@ -1,20 +1,15 @@
 package com.yedam.spring.manufacturing.performance.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.spring.manufacturing.performance.service.DataForm;
 import com.yedam.spring.manufacturing.performance.service.EqmVO;
 import com.yedam.spring.manufacturing.performance.service.InstVO;
 import com.yedam.spring.manufacturing.performance.service.PerformanceService;
@@ -61,21 +56,14 @@ public class PerformanceController {
 		return service.getPrcsBom(instVO);
 	}
 	
-	@RequestMapping(value="prcsEnd", method={RequestMethod.POST})
+	@PostMapping("/prcsEnd")
 	@ResponseBody
-	public List<ProcessVO> prcsEnd(@RequestParam(value="dataForm[]") List<DataForm> dataForm, @RequestParam(value="gridData[]") List<ProcessVO> processVO){
-		Map<String, String> map = new HashMap<>();
-		for(DataForm temp : dataForm) {
-			map.put(temp.getName(), temp.getValue());
-		}
-		System.out.println(map);
-		System.out.println(processVO);
-//		service.prcsEnd(processVO);
-//		InstVO instVO = new InstVO();
-//		instVO.setPrOrderCd(processVO.getPrOrderCd());
-//		instVO.setProCd(processVO.getProCd());
-//		return service.getPrcsBom(instVO);
-		return null;
+	public List<ProcessVO> prcsEnd(@RequestBody List<ProcessVO> list){
+		service.prcsEnd(list);
+		InstVO instVO = new InstVO();
+		instVO.setPrOrderCd(list.get(0).getPrOrderCd());
+		instVO.setProCd(list.get(0).getProCd());
+		return service.getPrcsBom(instVO);
 	}
 
 }

@@ -637,6 +637,8 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         gridData4 = data;
         grid4.resetData(gridData4);
         setTimeout(()=> grid4.refreshLayout(), 300);
+        let selEqmIndex = grid4.getData().findIndex(i => i.eqmCd = grid3.getRow(rowKey).eqmCd);
+        grid4.addRowClassName(selEqmIndex, 'highlight')
       },
       error: function (reject) {
         console.log(reject);
@@ -651,7 +653,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         gridData5 = data;
         grid5.resetData(gridData5);
         setTimeout(()=> grid5.refreshLayout(), 300);
-        let rscTotalIndex = grid5.getData().findIndex(i => i.rsc_cd = grid3.getRow(rowKey).rscCd);
+        let rscTotalIndex = grid5.getData().findIndex(i => i.rscCd = grid3.getRow(rowKey).rscCd);
         grid5.setValue(rscTotalIndex, 'rscTotal', grid3.getValue(rowKey, 'rscTotal'));
       },
       error: function (reject) {
@@ -666,7 +668,9 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       $('#prcsCd').val(prcsCd);
       $('#stock').val(grid3.getValue(rowKey, 'stock'));
       $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'));
+      $('#empCode').val(grid3.getValue(rowKey, 'empCode'));
       $('#empName').val(grid3.getValue(rowKey, 'empName'));
+      $('#eqmCd').val(grid3.getValue(rowKey, 'eqmCd'));
       $('#prcsResult').modal('show');
     } else if( grid3.getValue(rowKey - 1, 'wkFrDttm') != null && grid3.getValue(rowKey - 1, 'wkToDttm') != null ){
       $('#proNm').val(grid2.getValue(selectedRowKey2, 'proNm'));
@@ -675,7 +679,9 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       $('#prcsCd').val(prcsCd);
       $('#stock').val(grid3.getValue(rowKey, 'stock'));
       $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'));
+      $('#empCode').val(grid3.getValue(rowKey, 'empCode'));
       $('#empName').val(grid3.getValue(rowKey, 'empName'));
+      $('#eqmCd').val(grid3.getValue(rowKey, 'eqmCd'));
       $('#prcsResult').modal('show');
     } else if( grid3.getData().length == 0) {
       alert('제품이 선택되지 않았습니다')
@@ -813,9 +819,9 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         data: $("#dataForm").serialize(),
         dataType: "json",
         success: function(data) {
-          gridData5 = data;
-          grid5.resetData(gridData5);
-          setTimeout(()=> grid5.refreshLayout(), 300);
+          gridData3 = data;
+          grid3.resetData(gridData3);
+          setTimeout(()=> grid3.refreshLayout(), 300);
         },
         error: function (reject) {
           console.log(reject);
@@ -832,19 +838,34 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         endAble = false;
       }
     }
-    let data = { dataForm : $("#dataForm").serializeArray(), gridData : grid5.getData() }
+    let data = grid5.getData();
+    for(let temp of data){
+      temp.proNm = $('#proNm').val();
+      temp.proCd = $('#proCd').val();
+      temp.prcsNm = $('#prcsNm').val();
+      temp.prcsCd = $('#prcsCd').val();
+      temp.empName = $('#empName').val();
+      temp.empCode = $('#empCode').val();
+      temp.stock = $('#stock').val();
+      temp.eqmCd = $('#eqmCd').val();
+      temp.prOrderCd = $('#prOrderCd').val();
+      temp.bomSq = $('#bomSq').val();
+      temp.inferCnt = $('#inferCnt').val();
+    }
+
+    console.log(data);
 
     if( endAble ){
       $.ajax({
         url: "prcsEnd",
         method: "POST",
-        data: data,
-        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        data: JSON.stringify(data),
+        contentType: 'application/json',
         dataType: "json",
         success: function(data) {
-          gridData5 = data;
-          grid5.resetData(gridData5);
-          setTimeout(()=> grid5.refreshLayout(), 300);
+          gridData3 = data;
+          grid3.resetData(gridData3);
+          setTimeout(()=> grid3.refreshLayout(), 300);
         },
         error: function (reject) {
           console.log(reject);
