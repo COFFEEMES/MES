@@ -52,11 +52,8 @@
   SELECT pro_ist_no, pro_ist_dt, 
 	      (SELECT pro_nm 
 	       FROM edcts 
-	       WHERE pro_cd = e.pro_cd) AS "pro_nm", pro_ist_cnt,
-	      (SELECT pro_lot_no 
-	       FROM pro_stc 
-	       WHERE pro_ist_no = e.pro_ist_no
-           AND pro_cd = e.pro_cd) AS "pro_lot_no"
+	       WHERE pro_cd = e.pro_cd) AS "pro_nm", pro_ist_cnt
+	      ,pro_lot_no
 	FROM edcts_ist e
 	<where>
 	<if test="proNm!=null and !proNm.equals('')">

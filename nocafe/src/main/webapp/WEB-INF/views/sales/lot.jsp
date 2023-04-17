@@ -91,7 +91,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                         </button>
                         
         
-        <!-- 제품명 Modal -->
+<!-- 제품명 Modal -->
  <div class="modal fade" id="proModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -278,7 +278,7 @@ var gridLot = new tui.Grid({
      }
     },
   ],
-  bodyHeight: 300,
+  bodyHeight: 450,
   pageOptions: {
       useClient: true,
       type: 'scroll',
@@ -296,7 +296,6 @@ gridLot.on('uncheck', (ev) => {
 	
 gridLot.on('checkAll', (ev) => {
 	checkLen = gridLot.getCheckedRows().length;
-	//console.log(checkLen);
 	});
 
 //날짜 변환
@@ -320,7 +319,6 @@ function lotSearch() {
 	        data: { start: start, end: end, proNm: proNm },
 	        success: function(data) {  	
 	     	  gridLot.resetData(data)
-	     	  //console.log(data);
 	        },
 	        error: function (reject) {
 	          console.log(reject);
@@ -346,26 +344,24 @@ function lotDel() {
   for (let i = 0; i < checkLen; i++) {
     str += gridLot.getCheckedRows()[i].proLotNo + ",";
   }
-  //console.log(str);
   $.ajax({
     url: "lotDelete",
     method: "post",
     data: { str: str },
     success: function (data) {
-    	lotSearch();
-    	//console.log(data);
-    	if(data>0) 
+    	if(data>0) {
     		Swal.fire({
                 icon: 'success',
-                title: data+'건이 삭제되었습니다',
-                //text: '값을 조회 후 사용가능합니다.',
+                title: '삭제되었습니다',
               });
-    	else
+    		lotSearch();
+    	}
+    	else {
     		Swal.fire({
                 icon: 'error',
                 title: '삭제할 주문서를 선택하세요',
-                //text: '값을 조회 후 사용가능합니다.',
               });
+    	}
     		
     },
     error: function (reject) {

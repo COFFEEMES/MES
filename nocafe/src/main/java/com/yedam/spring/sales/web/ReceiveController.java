@@ -32,7 +32,6 @@ public class ReceiveController {
 	//검사완료 조회 모달창
 	@PostMapping("/testCom")
 	@ResponseBody
-	//@RequestParam(required = false) String start, @RequestParam(required = false)  String end
 	public List<ReceiveVO> testCom() {
 		return receiveService.testComplete();
 	}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper
+	namespace="com.yedam.spring.sales.mapper.MaterialWareMapper">
+	
+	<!-- 자재발주 목록 -->
+	<select id="reList" resultType="MaterialWareVO">	
+		SELECT o.ordr_cd, ordr_req_dt, vend_cd
+		FROM rsc_ordr o , rsc_ordr_dtl d
+		WHERE o.ordr_cd = d.ordr_cd
+		<if test="vendNm!=null and !vendNm.equals('')">
+		AND vend_cd = 
+		               (SELECT vend_cd 
+		                FROM vend 
+		                WHERE vend_nm= #{vendNm})
+		</if>
+		<if test="start != null and !start.equals('')">
+		AND <![CDATA[paprd_cmnd_dt <= #{start}]]>
+		</if>
+		<if test="end != null and !end.equals('')">
+		AND <![CDATA[paprd_cmnd_dt <= #{end}]]>
+		</if>
+		ORDER BY paprd_cmnd_dt DESC
+</select>
+
+
+</mapper>
+  
