@@ -33,6 +33,7 @@ public class ProcessVO {
 	
 	private String prcsNm;
 	private String empCode;
+	private String empName;
 	private String eqmCd;
 
 }

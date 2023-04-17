@@ -257,7 +257,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
           <div class="linelist" style="width: 100%">
             <span>불량등록</span>
             <div class="pro-qty">
-              <input type="text" value="0" />
+              <input type="text" value="0" id="inferCnt" name="inferCnt" />
             </div>
 
             <button
@@ -518,7 +518,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         },
         {
           header: '담당자',
-          name: 'worker',
+          name: 'empName',
           align: 'center',
         },
         {
@@ -665,7 +665,8 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       $('#prcsNm').val(grid3.getValue(rowKey, 'prcsNm'));
       $('#prcsCd').val(prcsCd);
       $('#stock').val(grid3.getValue(rowKey, 'stock'));
-      $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'))
+      $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'));
+      $('#empName').val(grid3.getValue(rowKey, 'empName'));
       $('#prcsResult').modal('show');
     } else if( grid3.getValue(rowKey - 1, 'wkFrDttm') != null && grid3.getValue(rowKey - 1, 'wkToDttm') != null ){
       $('#proNm').val(grid2.getValue(selectedRowKey2, 'proNm'));
@@ -673,7 +674,8 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       $('#prcsNm').val(grid3.getValue(rowKey, 'prcsNm'));
       $('#prcsCd').val(prcsCd);
       $('#stock').val(grid3.getValue(rowKey, 'stock'));
-      $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'))
+      $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'));
+      $('#empName').val(grid3.getValue(rowKey, 'empName'));
       $('#prcsResult').modal('show');
     } else if( grid3.getData().length == 0) {
       alert('제품이 선택되지 않았습니다')
@@ -824,6 +826,30 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
 
   //작업 완료 버튼
   $('#prcsEnd').on('click', () => {
+    let endAble = true;
+    for( let temp of grid5.getData()){
+      if( temp.rscTotal == null || temp.rscTotal == ''){
+        endAble = false;
+      }
+    }
+    let data = { dataForm : $("#dataForm").serializeArray(), gridData : grid5.getData() }
 
+    if( endAble ){
+      $.ajax({
+        url: "prcsEnd",
+        method: "POST",
+        data: data,
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        success: function(data) {
+          gridData5 = data;
+          grid5.resetData(gridData5);
+          setTimeout(()=> grid5.refreshLayout(), 300);
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });
+    }
   })
 </script>
