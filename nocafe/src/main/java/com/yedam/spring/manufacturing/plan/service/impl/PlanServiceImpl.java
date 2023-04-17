@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yedam.spring.manufacturing.plan.mapper.PlanMapper;
 import com.yedam.spring.manufacturing.plan.service.PlanService;
@@ -60,7 +61,29 @@ public class PlanServiceImpl implements PlanService {
 	public List<PlanVO> getProNm(PlanVO planVO) {
 		return planMapper.getProNm(planVO);
 	}
+	@Override
+	@Transactional
+	public int insertTest(List<PlanVO> plan) {
+		System.out.println(plan);
+		int planResult =0;
+		
+		for(int i=0;i<plan.size();i++) {
+			planResult += planMapper.insertTest(plan.get(i));
+		};
+			planResult += planMapper.insertHeader(plan.get(0));
 
+	return planResult;
+	}
+	@Override
+	public int updateOrderList(List<PlanVO> orderList) {
+		int cnt = 0;
+		for(int i=0;i<orderList.size();i++) {
+		 cnt +=	planMapper.updateTest(orderList.get(i));
+		}
+		
+		
+		return cnt;
+	};
 
 
 	

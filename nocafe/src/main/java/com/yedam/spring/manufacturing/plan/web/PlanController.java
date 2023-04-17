@@ -94,6 +94,23 @@ public class PlanController {
 		return planService.getProNm(planVO);
 	}
 	
+	
+	@PostMapping("mkPlan")
+	@ResponseBody
+	public int insertTest(@RequestBody List<PlanVO> plan ) {
+		
+		return planService.insertTest(plan);
+	}
+	
+	@PostMapping("updateOrder")
+	@ResponseBody
+	public int updateOrderList(@RequestBody List<PlanVO> plan) {
+		
+		return planService.updateOrderList(plan);
+	}
+	
+	
+	
 //	/*
 //	 * @GetMapping("/") model.addAttribute("order", planService.getOrderlist());
 //	 */
