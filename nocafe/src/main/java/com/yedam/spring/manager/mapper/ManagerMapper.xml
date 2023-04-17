@@ -77,6 +77,7 @@
 		SELECT *
 		  FROM emp e, detail_code d
 		 WHERE e.emp_code = d.basic_code||d.detail_code
+		   AND d.detail_avail = 'Y'
 	</select>
 	
 	<!-- 자재 전체 조회 -->
@@ -100,8 +101,10 @@
 	<!-- 자재 상세 정보 조회 -->
 	<select id="getRsc" resultType="RscVO">
 		SELECT *
-		  FROM rsc
-		 WHERE rsc_cd = #{rscCd}
+		  FROM rsc r, detail_code d
+		 WHERE r.rsc_cd = d.full_code
+		   AND d.detail_avail = 'Y'
+		   AND rsc_cd = #{rscCd}
 		 ORDER BY rsc_cd
 	</select>
 	
@@ -184,8 +187,10 @@
 			 , b.prcs_cd
 			 , p.prcs_nm
 			 , p.prcs_explain
-		  FROM bom b, prcs p
+		  FROM bom b, prcs p, detail_code d
 		 WHERE b.prcs_cd = p.prcs_cd
+		   AND p.prcs_cd = d.full_code
+		   AND d.detail_avail = 'Y'
 		   AND b.pro_cd = #{proCd}
 		 GROUP BY b.bom_sq, b.prcs_cd, p.prcs_nm, p.prcs_explain
 		 ORDER BY b.bom_sq
@@ -198,28 +203,34 @@
 			 , b.use_cnt
 			 , r.rsc_unit
 			 , p.prcs_nm
-		  FROM bom b, rsc r, prcs p
+		  FROM bom b, rsc r, prcs p, detail_code d1, detail_code d2
 		 WHERE b.rsc_cd = r.rsc_cd
+		   AND r.rsc_cd = d1.full_code
+		   AND d1.detail_avail = 'Y'
 		   AND b.prcs_cd = p.prcs_cd
+		   AND p.prcs_cd = d2.full_code
+		   AND d2.detail_avail = 'Y'
 		   AND b.pro_cd = #{proCd}
 		   AND r.rsc_cd != 'RSCNOT001'
 		 ORDER BY b.bom_sq
 	</select>
 	
 	<!-- 공정별 필요 자재 조회 -->
-	<select id="getPrcsRcs" resultType="BomVO">
+	<select id="getPrcsRsc" resultType="BomVO">
 		SELECT b.rsc_cd
 			 , r.rsc_nm
 			 , b.use_cnt
 			 , r.rsc_unit
-		  FROM bom b, rsc r
+		  FROM bom b, rsc r, detail_code d
 		 WHERE b.rsc_cd = r.rsc_cd
+		   AND r.rsc_cd = d.full_code
+		   AND d.detail_avail = 'Y'
 		   AND b.pro_cd = #{proCd}
 		   AND b.prcs_cd = #{prcsCd}
 	</select>
 	
 	<!-- 공정 삭제 -->
-	<update id="delPrcs" statementType="CALLABLE" parameterType="BomVO">
+	<update id="delPrsc" statementType="CALLABLE" parameterType="BomVO">
 		{ CALL del_prcs(
 			  #{proCd}
 			, #{prcsCd}
@@ -237,14 +248,18 @@
 	<!-- 공정 전체 조회 -->
 	<select id="getAllPrcs" resultType="PrcsVO">
 		SELECT *
-		  FROM prcs
+		  FROM prcs p, detail_code d
+		 WHERE p.prcs_cd = d.full_code
+		   AND d.detail_avail = 'Y'
 		 ORDER BY prcs_cd
 	</select>
 	
 	<!-- 자재 전체 조회 -->
 	<select id="getAllRsc" resultType="RscVO">
 		SELECT *
-		  FROM rsc
+		  FROM rsc r, detail_code d
+		 WHERE r.rsc_cd = d.full_code
+		   AND d.detail_avail = 'Y'
 		 ORDER BY rsc_cd
 	</select>
 	

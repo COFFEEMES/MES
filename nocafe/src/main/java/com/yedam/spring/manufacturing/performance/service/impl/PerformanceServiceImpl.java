@@ -8,7 +8,9 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.spring.manager.service.EmpVO;
 import com.yedam.spring.manufacturing.performance.mapper.PerformanceMapper;
+import com.yedam.spring.manufacturing.performance.service.EqmVO;
 import com.yedam.spring.manufacturing.performance.service.InstVO;
 import com.yedam.spring.manufacturing.performance.service.PerformanceService;
 import com.yedam.spring.manufacturing.performance.service.ProcessVO;
@@ -44,6 +46,21 @@ public class PerformanceServiceImpl implements PerformanceService {
 	@Override
 	public List<ProcessVO> getPrcsBom(InstVO instVO) {
 		return mapper.getPrcsBom(instVO);
+	}
+
+	@Override
+	public List<EqmVO> getPrcsEqm(EqmVO eqmVO) {
+		return mapper.getPrcsEqm(eqmVO);
+	}
+	
+	@Override
+	public List<EmpVO> getEmpList() {
+		return mapper.getEmpList();
+	}
+
+	@Override
+	public void prcsStart(ProcessVO processVO) {
+		mapper.prcsStart(processVO);
 	}
 
 }

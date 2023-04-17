@@ -698,7 +698,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     });
 
     $.ajax({
-      url: "getUseRcs",
+      url: "getUseRsc",
       method: "POST",
       data: { proCd: grid.getValue(selectedRowKey, 'proCd')},
       success: function(data) {
@@ -815,7 +815,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 
     if( columnName != '_checked' && rowKey != undefined && columnName != 'prcsExplain' ){
       $.ajax({
-        url: "getPrcsRcs",
+        url: "getPrcsRsc",
         method: "POST",
         data: { proCd: selProCd, prcsCd: grid3.getValue(rowKey, 'prcsCd')},
         success: function(data) {
@@ -856,7 +856,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         contentType: 'application/json',
         success: function (result) {
           $.ajax({
-            url: "getUseRcs",
+            url: "getUseRsc",
             method: "POST",
             data: { proCd: selProCd},
               success: function(data) {
@@ -998,7 +998,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         contentType: 'application/json',
         success: function(result) {
           $.ajax({
-            url: "getUseRcs",
+            url: "getUseRsc",
             method: "POST",
             data: { proCd: selProCd},
               success: function(data) {

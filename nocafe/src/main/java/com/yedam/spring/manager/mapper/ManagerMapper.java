@@ -32,7 +32,7 @@ public interface ManagerMapper {
 	public void delPro(EdctsVO edctsVO);
 	public List<BomVO> getPrcs(EdctsVO edctsVO);
 	public List<BomVO> getUseRsc(EdctsVO edctsVO);
-	public List<BomVO> getPrcsRcs(BomVO bomVO);
+	public List<BomVO> getPrcsRsc(BomVO bomVO);
 	public void delPrcs(BomVO bomVO);
 	public void savePrcs(BomVO temp);
 	public List<PrcsVO> getAllPrcs();

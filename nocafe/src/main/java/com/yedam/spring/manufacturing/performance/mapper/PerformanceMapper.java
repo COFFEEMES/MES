@@ -2,15 +2,18 @@ package com.yedam.spring.manufacturing.performance.mapper;
 
 import java.util.List;
 
+import com.yedam.spring.manager.service.EmpVO;
+import com.yedam.spring.manufacturing.performance.service.EqmVO;
 import com.yedam.spring.manufacturing.performance.service.InstVO;
 import com.yedam.spring.manufacturing.performance.service.ProcessVO;
 
 public interface PerformanceMapper {
 
 	public List<InstVO> getAllInst();
-
 	public List<InstVO> getPrOrderDetail(InstVO instVO);
-
 	public List<ProcessVO> getPrcsBom(InstVO instVO);
+	public List<EqmVO> getPrcsEqm(EqmVO eqmVO);
+	public List<EmpVO> getEmpList();
+	public void prcsStart(ProcessVO processVO);
 
 }
