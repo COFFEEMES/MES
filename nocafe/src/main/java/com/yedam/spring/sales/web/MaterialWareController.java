@@ -31,4 +31,11 @@ public class MaterialWareController {
 	public List<MaterialWareVO> reList(@RequestParam(required = false) String start, @RequestParam(required = false)  String end, @RequestParam(required = false)  String vendNm) {
 			return materialWareMapper.reList(start, end, vendNm);
 		}
+	
+	//자재 발주 목록
+	@PostMapping("/detailList")
+	@ResponseBody
+	public List<MaterialWareVO> detailList(@RequestParam(required = false) String ordrCd) {
+			return materialWareMapper.detailList(ordrCd);
+		}
 }

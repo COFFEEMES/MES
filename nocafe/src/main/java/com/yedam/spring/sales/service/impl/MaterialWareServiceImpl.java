@@ -16,8 +16,13 @@ public class MaterialWareServiceImpl implements MaterialWareService {
 	MaterialWareMpper materialWareMapper;
 	
 	@Override
-	public List<MaterialWareVO> reList(String start, String end, String proNm) {
-		return materialWareMapper.reList(start, end, proNm);
+	public List<MaterialWareVO> reList(String start, String end, String vendNm) {
+		return materialWareMapper.reList(start, end, vendNm);
+	}
+
+	@Override
+	public List<MaterialWareVO> detailList(String ordrCd) {
+		return materialWareMapper.detailList(ordrCd);
 	}
 
 }

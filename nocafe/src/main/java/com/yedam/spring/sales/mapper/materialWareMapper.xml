@@ -2,13 +2,14 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
- <mapper
-	namespace="com.yedam.spring.sales.mapper.MaterialWareMapper">
+ <mapper namespace="com.yedam.spring.sales.mapper.MaterialWareMpper">
 	
 	<!-- 자재발주 목록 -->
 	<select id="reList" resultType="MaterialWareVO">	
-		SELECT o.ordr_cd, ordr_req_dt, vend_cd
+		SELECT DISTINCT o.ordr_cd, ordr_req_dt, paprd_cmnd_dt,
+			   (SELECT vend_nm 
+				FROM  vend 
+				WHERE vend_cd = o.vend_cd) AS "vend_nm"
 		FROM rsc_ordr o , rsc_ordr_dtl d
 		WHERE o.ordr_cd = d.ordr_cd
 		<if test="vendNm!=null and !vendNm.equals('')">
@@ -26,6 +27,12 @@
 		ORDER BY paprd_cmnd_dt DESC
 </select>
 
+	<select id="detailList" resultType="MaterialWareVO">	
+		SELECT ordr_cd, rsc_cd, ordr_cnt, rmn_cnt, paprd_cmnd_dt
+		FROM  rsc_ordr_dtl
+		WHERE ordr_cd = #{ordrCd}
+		ORDER BY paprd_cmnd_dt DESC
+	</select>
 
 </mapper>
   
