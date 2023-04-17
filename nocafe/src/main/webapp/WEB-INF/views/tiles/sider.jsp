@@ -90,7 +90,12 @@ pageEncoding="UTF-8"%>
             <a
               class="nav-link"
               href="${pageContext.request.contextPath }/mkrPlan"
-              >생산계획서 작성</a
+              >생산계획 작성</a
+            >
+             <a
+              class="nav-link"
+              href="mkDir"
+              >생산지시 작성</a
             >
             <a class="nav-link" href="performance"
               >생산실적 작성</a
