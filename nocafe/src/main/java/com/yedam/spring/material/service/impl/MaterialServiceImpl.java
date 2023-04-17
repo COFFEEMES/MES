@@ -10,9 +10,7 @@ import com.yedam.spring.material.mapper.MaterialMapper;
 import com.yedam.spring.material.service.MaterialLOTVO;
 import com.yedam.spring.material.service.MaterialOrderDetailVO;
 import com.yedam.spring.material.service.MaterialOrderVO;
-import com.yedam.spring.material.service.MaterialReceivingVO;
 import com.yedam.spring.material.service.MaterialService;
-import com.yedam.spring.material.service.MaterialShippingVO;
 import com.yedam.spring.material.service.MaterialTestDetailVO;
 import com.yedam.spring.material.service.MaterialVO;
 
@@ -40,22 +38,13 @@ public class MaterialServiceImpl implements MaterialService {
 		return materialMapper.getMaterialOrderDetail(materialOrderDetailVO);
 	}
 
-	//자재입고조회
-	@Override
-	public List<MaterialReceivingVO> getMaterialReceivingList() {
-		return materialMapper.selectMaterialReceivingList();
-	}
 
-	//자재출고조회
-	@Override
-	public List<MaterialShippingVO> getMaterialShippingList() {
-		return materialMapper.selectMaterialShippingList();
-	}
 	//자재LOT조회
 	@Override
 	public List<MaterialLOTVO> getMaterialLOTList() {
 		return materialMapper.selectMaterialLOTList();
 	}
+	
 	//자재입고검사조회
 	@Override
 	public List<MaterialTestDetailVO> getMaterialTestList() {
@@ -63,15 +52,38 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	
-
 	//자재검색
 	@Override
 	public List<MaterialLOTVO> materalSearch(@Param("rscNm") String rscNm) {
 		return materialMapper.materalSearch(rscNm);
 	}
 
+	//발주검색
+	@Override
+	public List<MaterialOrderVO> materalOrderSearch(@Param("vendNm") String vendNm) {
+		return materialMapper.materalOrderSearch(vendNm);
+	}
+
+	//발주디테일 모달
+	@Override
+	public List<MaterialOrderDetailVO> orderDetailList(MaterialOrderDetailVO materialOrderDetailVO) {
+		return materialMapper.orderDetailList(materialOrderDetailVO);
+	}
+
+	//발주조회페이지 수정
+	@Override
+	public void materialOrderUpdate(List<MaterialOrderDetailVO> materialOrderUpdate) {
+		for(MaterialOrderDetailVO materialOrderDetailVO : materialOrderUpdate) {
+			materialMapper.materialOrderUpdate(materialOrderDetailVO);
+		}
+	}
 	
-
-
-
+	//발주관리페이지 발주코드
+	@Override
+	public List<MaterialOrderVO> materialOrderCd(MaterialOrderVO materialOrderVO) {
+		return materialMapper.materialOrderCd(materialOrderVO);
+	}
+	
+	
+	
 }

@@ -104,13 +104,13 @@ tr {
                 name: 'rscSpec'
             },
             {
+            	header: '현재재고',
+            	name: 'lotCnt'
+            },
+            {
                 header: '단위',
                 name: 'rscUnit'
             },
-            {
-            	header: '현재재고',
-            	name: 'lotCnt'
-            },	
             {
                 header: '안전재고',
                 name: 'safRtc'
