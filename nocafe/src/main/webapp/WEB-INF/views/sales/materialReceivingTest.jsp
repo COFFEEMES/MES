@@ -60,7 +60,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
             <label style="margin-left:30px; width:100px;">납기예정일</label>
             <input
               type="date"
-              id="ex-strat"
+              id="start"
               name="tui-date-picker-target"
               class="form-control tragetDate"
               style="width: 150px"
@@ -68,7 +68,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
             -
             <input
               type="date"
-              id="ex-end"
+              id="end"
               name="tui-date-picker-target"
               class="form-control tragetDate"
               style="width: 150px"
@@ -226,7 +226,7 @@ $('#exampleModal').on('shown.bs.modal', function (e) {
 	})
 	
 // 선택시 거래처명 변경
-gridVend.on('dblclick', (ev) => {
+gridVend.on('click', (ev) => {
 	   document.getElementById("vendNm").value = gridVend.getData()[ev.rowKey].vendNm;
 	    $('#exampleModal').modal('hide');
 	    });
@@ -253,10 +253,32 @@ var grid = new tui.Grid({
         {
             header: '발주신청일',
             name: 'ordrReqDt',
+            formatter: function (data) {
+                return dateChange(data.value);
+              },
         },
        
     ],
 });  
+
+//발주 주문서 더블클릭하면 상세조회
+grid.on('dblclick', (ev) => {
+	//console.log(grid.getData()[ev.rowKey].ordrCd);
+	let ordrCd = grid.getData()[ev.rowKey].ordrCd;
+	 $.ajax({
+	     url: "detailList",
+	     method: "post",
+	     data: {ordrCd: ordrCd },
+	     success: function(data) {  	
+	  	   grid2.resetData(data);
+	     },
+	     error: function (reject) {
+	       console.log(reject);
+	     },
+
+	   }); 
+	
+});
 
 //발주 디테일 그리드
 var grid2 = new tui.Grid({
@@ -281,6 +303,9 @@ var grid2 = new tui.Grid({
         {
             header: '납기요청일',
             name: 'paprdCmndDt',
+            formatter: function (data) {
+                return dateChange(data.value);
+              },
         },
        
     ],
@@ -288,9 +313,9 @@ var grid2 = new tui.Grid({
 
 //자재발주목록 아작스
 function search() {
-    start = document.getElementById("start").value;
-    end = document.getElementById("end").value;
-    vendNm = document.getElementById("vendNm").value.toUpperCase();
+    let start = document.getElementById("start").value;
+    let end = document.getElementById("end").value;
+    let vendNm = document.getElementById("vendNm").value.toUpperCase();
     $.ajax({
       url: "reList",
       method: "post",
@@ -303,12 +328,23 @@ function search() {
       },
     });
   };
-	
+
+ //페이지 켜지면
+ window.onload = search;
 	
 //조회 버튼 누르면 동작
 document.getElementById("searchBtnList").addEventListener('click', search);
 
 
+//날짜 변환
+function dateChange(date) {
+  let date1 = new Date(date);
+  let date2 =
+    date1.getFullYear() + "-" + 
+    (date1.getMonth() < 10 ? "0" + (date1.getMonth() + 1): date1.getMonth() + 1) +"-" +
+    (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+  return date2;
+}
 
 
 

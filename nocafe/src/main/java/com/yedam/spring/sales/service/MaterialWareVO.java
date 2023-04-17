@@ -21,4 +21,6 @@ public class MaterialWareVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date paprdCmndDt;
 	
+	private String vendNm;
+	
 }
