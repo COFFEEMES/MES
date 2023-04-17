@@ -8,53 +8,99 @@
 	<!-- 발주관리페이지 자재목록 -->
 
 	<select id="selectMaterialLOTList" resultType="MaterialLOTVO">
-		SELECT r.rsc_cd, r.rsc_nm, o.vend_cd, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc
-		FROM rsc r, rsc_ordr o, rsc_lot l
+		SELECT r.rsc_cd,
+		r.rsc_nm, o.vend_cd, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc
+		FROM rsc r,
+		rsc_ordr o, rsc_lot l
 		WHERE r.rsc_cd = l.rsc_cd
-		AND o.ordr_cd = l.ordr_cd
+		AND o.ordr_cd =
+		l.ordr_cd
 		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd, r.saf_rtc
+	</select>
+
+	<!-- 발주관리페이지 발주코드 -->
+	<select id="materialOrderCd" resultType="MaterialOrderVO">
+		select LPAD(count(*), 3,0) as "ordrSCnt"
+		from rsc_ordr where ordr_cd like '%'||#{ordrSCnt}||'%'
 	</select>
 
 	<!-- 발주관리페이지 자재검색 -->
 	<select id="materalSearch" resultType="MaterialLOTVO">
-	SELECT r.rsc_cd, r.rsc_nm, o.vend_cd, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc
+		SELECT r.rsc_cd, r.rsc_nm, o.vend_cd, SUM(l.lot_cnt) AS "LOT_CNT",
+		r.saf_rtc
 		FROM rsc r JOIN rsc_lot l
 		ON r.rsc_cd = l.rsc_cd
-		JOIN rsc_ordr o
+		JOIN rsc_ordr
+		o
 		ON o.ordr_cd = l.ordr_cd
 		WHERE 1 = 1
-			<if test="rscNm != null and !rscNm.equals('')">
-		AND rsc_nm LIKE '%' || #{rscNm} || '%'
-			</if>
+		<if test="rscNm != null and !rscNm.equals('')">
+			AND rsc_nm LIKE '%' || #{rscNm} || '%'
+		</if>
 		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd, r.saf_rtc
+	</select>
+
+	<!-- 발주조회페이지 발주검색 -->
+	<select id="materalOrderSearch" resultType="MaterialOrderVO">
+		select r.ordr_cd, r.ordr_req_dt, v.vend_cd, v.vend_nm
+		from rsc_ordr r
+		join vend v
+		on r.vend_cd = v.vend_cd
+		<if test="vendNm != null"> AND v.VEND_NM LIKE '%'||#{vendNm}||'%'</if>
+	</select>
+
+	<!-- 발주조회페이지 발주모달 -->
+	<select id="orderDetailList" resultType="MaterialOrderDetailVO">
+		SELECT r.rsc_cd,
+		r.rsc_nm, o.vend_cd, v.vend_nm, od.ordr_cd, od.ordr_cnt,
+		SUM(l.lot_cnt) AS "LOT_CNT", r.RSC_UNIT, r.saf_rtc, od.paprd_cmnd_dt
+		FROM rsc r
+		join RSC_ORDR_DTL od on r.rsc_cd = od.rsc_cd
+		join RSC_LOT l
+		on r.rsc_cd = l.rsc_cd
+		join RSC_ORDR o on od.ordr_cd = o.ordr_cd
+		join
+		VEND v on o.vend_cd = v.vend_cd
+		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd,
+		v.vend_nm, od.ordr_cd, od.ordr_cnt,
+		r.RSC_UNIT, r.saf_rtc,
+		od.paprd_cmnd_dt
 	</select>
 
 	<!-- 발주관리페이지 자재발주 -->
 	<select id="getMaterialOrderDetail"
 		resultType="MaterialOrderDetailVO">
-		SELECT r.rsc_cd, r.rsc_nm, o.vend_cd, o.ordr_cd, d.ordr_cnt, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc, d.paprd_cmnd_dt
+		SELECT r.rsc_cd, r.rsc_nm, o.vend_cd, o.ordr_cd,
+		d.ordr_cnt, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc, d.paprd_cmnd_dt
 		FROM rsc r JOIN rsc_lot l
-        ON r.rsc_cd = l.rsc_cd 
-        JOIN rsc_ordr o 
-        ON o.ordr_cd = l.ordr_cd
-        JOIN rsc_ordr_dtl d
-        ON o.ordr_cd = d.ordr_cd
-        WHERE where r.rsc_cd = #{rscCd}
-		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd, o.ordr_cd, d.ordr_cnt, r.saf_rtc, d.paprd_cmnd_dt;
+		ON r.rsc_cd = l.rsc_cd
+		JOIN rsc_ordr o
+		ON
+		o.ordr_cd = l.ordr_cd
+		JOIN rsc_ordr_dtl d
+		ON o.ordr_cd = d.ordr_cd
+		WHERE r.rsc_cd = #{rscCd}
+		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd,
+		o.ordr_cd, d.ordr_cnt, r.saf_rtc, d.paprd_cmnd_dt
 	</select>
 
+
+	<!-- 발주조회페이지 -->
 	<select id="selectMaterialOrderList"
 		resultType="MaterialOrderVO">
-		SELECT a.rsc_cd,
-		a.rsc_nm,
-		b.vend_cd,
-		b.ordr_cd,
-		c.ordr_cnt,
-		c.paprd_cmnd_dt
-		FROM rsc a, rsc_ordr b, rsc_ordr_dtl c
-		WHERE a.rsc_cd = c.rsc_cd
-		AND c.ordr_cd = b.ordr_cd
+		SELECT r.ordr_cd, v.vend_cd, v.vend_nm, r.ordr_req_dt
+		FROM
+		rsc_ordr r JOIN vend v
+		ON r.vend_cd = v.vend_cd
 	</select>
+
+
+	<!-- 발주조회페이지 수정 -->
+	<update id="materialOrderUpdate" parameterType="MaterialOrderDetailVO">
+		update rsc_ordr_dtl
+		set ordr_cnt = #{ordrCnt}, paprd_cmnd_dt = #{paprdCmndDt}
+		WHERE ordr_cd = #{ordrCd} and rsc_cd = #{rscCd}
+	</update>
 
 	<!-- 자재조회 -->
 	<select id="selectMaterialList" resultType="MaterialVO">
@@ -68,52 +114,14 @@
 		l.rsc_cd,
 		SUM(l.lot_cnt) AS "lot_cnt"
 		FROM rsc r, rsc_lot l
-		WHERE r.rsc_cd = l.rsc_cd
-		GROUP BY r.rsc_nm, r.rsc_typ, r.rsc_spec, r.rsc_unit, r.saf_rtc,
+		WHERE r.rsc_cd =
+		l.rsc_cd
+		GROUP BY r.rsc_nm, r.rsc_typ, r.rsc_spec, r.rsc_unit,
+		r.saf_rtc,
 		r.rsc_avail, l.rsc_cd
 	</select>
 
 
 
-
-
-	<!-- 자재입고조회 -->
-	<select id="selectMaterialReceivingList"
-		resultType="MaterialReceivingVO">
-		SELECT ist_cd,
-		rsc_cd,
-		ist_cnt,
-		ist_dt,
-		ist_typ
-		FROM rsc_ist
-		ORDER BY ist_cd
-	</select>
-
-	<!-- 자재출고조회 -->
-	<select id="selectMaterialShippingList"
-		resultType="MaterialShippingVO">
-		SELECT rsc_oust_cd,
-		rsc_cd,
-		oust_dt,
-		oust_typ,
-		oust_cnt
-		FROM rsc_oust
-		ORDER BY rsc_oust_cd
-	</select>
-
-
-
-	<!-- 자재입고검사조회 -->
-	<select id="selectMaterialTestList"
-		resultType="MaterialTestDetailVO">
-		SELECT rsc_insp_cd,
-		ordr_cd,
-		rsc_cd,
-		insp_cnt,
-		insp_pass_cnt,
-		insp_fail_cnt
-		FROM rsc_insp_dtl
-		ORDER BY rsc_insp_cd
-	</select>
 
 </mapper>

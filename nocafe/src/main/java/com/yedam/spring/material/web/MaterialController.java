@@ -8,11 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.spring.material.service.MaterialLOTVO;
 import com.yedam.spring.material.service.MaterialOrderDetailVO;
+import com.yedam.spring.material.service.MaterialOrderVO;
 import com.yedam.spring.material.service.MaterialService;
 
 @Controller
@@ -28,18 +30,26 @@ public class MaterialController {
 		return "material/materialOrder";
 	}
 	
-	@GetMapping("/material")
-	public String getMaterial(Model model) {
-		model.addAttribute("materialList", materialService.getMaterialList());
-		return "material/materialList";
+	//발주관리페이지 - 발주코드
+	@PostMapping("/materialOrderCd")
+	@ResponseBody
+	public List<MaterialOrderVO> rscOrdrCd(MaterialOrderVO materialOrderVO) {
+		List<MaterialOrderVO> materialOrderCd = materialService.materialOrderCd(materialOrderVO);
+		return materialOrderCd;		
 	}
-	
 	
 	//자재검색
 	@PostMapping("/materalSearch")
 	@ResponseBody
 	public List<MaterialLOTVO> materalSearch(@RequestParam(required = false) String rscNm){
 		return materialService.materalSearch(rscNm);
+	};
+	
+	//발주검색
+	@PostMapping("/materalOrderSearch")
+	@ResponseBody
+	public List<MaterialOrderVO> materalOrderSearch(@RequestParam(required = false) String vendNm){
+		return materialService.materalOrderSearch(vendNm);
 	};
 	
 	//발주관리페이지
@@ -49,7 +59,6 @@ public class MaterialController {
 		List<MaterialOrderDetailVO> getMaterialOrderDetail = materialService.getMaterialOrderDetail(materialOrderDetailVO);
 		return getMaterialOrderDetail;		
 	}
-		
 
 	
 	//자재재고조회
@@ -66,20 +75,22 @@ public class MaterialController {
 		return "material/materialOrderList";
 	}
 	
-
-	//자재입고조회
-	@GetMapping("/materialReceivingList")
-	public String getMaterialReceivingList(Model model) {
-		model.addAttribute("materialReceivingList", materialService.getMaterialReceivingList());
-		return "material/materialReceivingList";
+	//발주조회디테일
+	@PostMapping("/orderDetailList")
+	@ResponseBody
+	public List<MaterialOrderDetailVO> orderDetailList (MaterialOrderDetailVO materialOrderDetailVO){
+		return materialService.orderDetailList(materialOrderDetailVO);
 	}
 	
-	//자재출고조회
-	@GetMapping("/materialShippingList")
-	public String getMaterialShippingList(Model model) {
-		model.addAttribute("materialShippingList", materialService.getMaterialShippingList());
-		return "material/materialShippingList";
+	//발주 수정
+	@PostMapping("/materialOrderUpdate")
+	@ResponseBody
+	public List<MaterialOrderDetailVO> materialOrderUpdate(@RequestBody List<MaterialOrderDetailVO> materialOrderList, MaterialOrderDetailVO materialOrderDetailVO){
+		materialService.materialOrderUpdate(materialOrderList);
+		return materialOrderList;
 	}
+	
+	
 	
 	//자재입고검사조회
 	@GetMapping("/materialTestList")

@@ -10,57 +10,69 @@
 	href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css" />
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 <head>
-	<meta charset="UTF-8">
+<meta charset="UTF-8">
 </head>
 
 <body>
 
 
-		<div class="container-fluid px-4">
-			<h1 class="mt-4">자재발주</h1>
-			<ol class="breadcrumb mb-4">
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">자재발주</h1>
+		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="/"><i
-						class="fas fa-home"></i></a></li>
-				<li class="breadcrumb-item">> 자재관리</li>
-				<li class="breadcrumb-item active">> 자재발주관리</li>
-			</ol>
+					class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item">> 자재관리</li>
+			<li class="breadcrumb-item active">> 자재발주관리</li>
+		</ol>
 
-			<div class="card mb-4">
-				<div class="card-body">
+		<div class="card mb-4">
+			<div class="card-body">
 
-					<tr>
-						<th>자재명</th>
-						<td><input class="form-control" type="text" id="rscNm" name="rscNm" style="width: 150px"></td>
-						<button style="margin-bottom:3px" class="btn btn-primary" id="SearchBtn"><i
-								class="fas fa-search"></i></button>
-						&nbsp&nbsp
+				<tr>
+					<th>자재명</th>
+					<td><input class="form-control" type="text" id="rscNm"
+						name="rscNm" style="width: 150px"></td>
+					<button style="margin-bottom: 3px" class="btn btn-primary"
+						id="SearchBtn">
+						<i class="fas fa-search"></i>
+					</button>
+
+					&nbsp&nbsp
+				</tr>
 
 
-					<br><br>
-					<div id="grid"><h6>자재목록</h6></div>
+				<br> <br>
+				<div id="grid">
+					<h6>자재목록</h6>
 				</div>
 			</div>
+		</div>
 
-			<div class="card mb-4">
-				<div class="card-body">
+		<div class="card mb-4">
+			<div class="card-body">
 
-					<div class="linelist" style="float: right;">
-						<button class="btn btn-primary" id="minusBtn"><i class="fas fa-minus"></i> 삭제</button>
-						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 발주</button>
-						<br> <br>
-					</div>
+				<div class="linelist" style="float: right;">
+					<button class="btn btn-primary" id="minusBtn">
+						<i class="fas fa-minus"></i> 삭제
+					</button>
+					<button class="btn btn-primary" id="saveBtn">
+						<i class="fas fa-save"></i> 발주
+					</button>
+					<br> <br>
+				</div>
 
-					<br><br>
-					
-					<div id="grid2"><h6>자재발주</h6></div>
+				<br> <br>
+
+				<div id="grid2">
+					<h6>자재발주</h6>
 				</div>
 			</div>
+		</div>
 
 
 
-			<script>
+		<script>
 			let today = new Date();
 			let year = today.getFullYear();
 			let month = today.getMonth() + 1;
@@ -167,7 +179,28 @@
 						},
 						success: function (result) {}
 					})
+					
+						let ordrSCnt = format;
+					$.ajax({
 
+						url: 'materialOrderCd',
+						method: 'POST',
+						data: {
+							ordrSCnt: ordrSCnt
+						},
+						success: function (result) {
+							index = result[0].ordrSCnt;
+
+							function makeCd() {
+								var reCd = 'ORD' + ordrSCnt + String(Number(index) + 1).padStart(3, '0');
+								return reCd
+							}
+							code = makeCd()
+							for (let i = 0; i < grid2.getRowCount(); i++) {
+								grid2.setValue(i, 'ordrCd', code)
+							}
+						}
+					})
 	
 				})
     
@@ -216,7 +249,7 @@
 						editor: {
 							type: 'datePicker',
 							options: {
-								datetimeFormat: "yyyy/MM/dd"
+								datetimeFormat: "yyyy-MM-dd"
 							}
 						}
 					}],
@@ -237,7 +270,31 @@
 							}
 						})
 					})
+				
+				
+				grid2.on('editingFinish', function (ev) {
+					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
+					var lotCnt = grid2.getValue(ev.rowKey, 'lotCnt')
+					var safRtc = grid2.getValue(ev.rowKey, 'safRtc')
+					var isValid = true;
+
+					ordrCnt = Number(ordrCnt);
+					lotCnt = Number(lotCnt);
+
+					var allStc = ordrCnt + lotCnt
 					
+					grid2.setValue(ev.rowKey, 'allStc', allStc)
+					grid2.check(ev);
+					if(Number(allStc)<Number(safRtc)){
+						grid2.addRowClassName(ev.rowKey, 'addClass')
+					}
+					if(Number(allStc)>=Number(safRtc)){
+						grid2.removeRowClassName(ev.rowKey, 'addClass')
+					}
+					
+					
+				})
+				
 				$('#minusBtn').on('click', function (ev) {
 					var data = grid2.getCheckedRows();
 					var isValid = true;
@@ -251,5 +308,4 @@
 					alert('정상적으로 삭제되었습니다.');
 				})
 			</script>
-
 </body>

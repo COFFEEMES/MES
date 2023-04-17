@@ -10,10 +10,13 @@ import lombok.Data;
 public class MaterialOrderVO {
 	//자재발주
 	private String ordrCd; 		//발주번호
+	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date ordrReqDt;		//발주신청일
+	
 	private String vendCd;		//거래처코드
 	
+	private String vendNm;		//거래처명
 	
 	private String rscCd;
 	private String rscNm;
@@ -21,4 +24,5 @@ public class MaterialOrderVO {
 	private String ordrCnt;
 	private String paprdCmndDt;
 	
+	private String ordrSCnt;
 }
