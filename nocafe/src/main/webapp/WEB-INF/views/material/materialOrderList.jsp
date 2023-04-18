@@ -113,11 +113,10 @@
 						align: 'center',
 						name: 'ordrReqDt',
 						formatter: function(data) {
-					        return dateChange(data.value);
-					  }
-					}]
+							return dateChange(data.value);
+						}
+				    }]
 				});
-				
 
 				
 				$('#rscSearchBtn').on('click', function () {

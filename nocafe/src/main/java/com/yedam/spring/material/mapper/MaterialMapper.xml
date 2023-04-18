@@ -7,6 +7,18 @@
 
 	<!-- 발주관리페이지 자재목록 -->
 
+	<select id="rscCOrdrList" resultType="MaterialLOTVO">
+	SELECT r.rsc_cd,
+		r.rsc_nm, o.vend_cd, v.vend_nm, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc
+		FROM rsc r,
+		rsc_ordr o, rsc_lot l, vend v
+		WHERE r.rsc_cd = l.rsc_cd
+		AND o.ordr_cd = l.ordr_cd
+		AND o.vend_cd = v.vend_cd
+		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd, v.vend_nm, r.saf_rtc
+	</select>
+
+
 	<select id="selectMaterialLOTList" resultType="MaterialLOTVO">
 		SELECT r.rsc_cd,
 		r.rsc_nm, o.vend_cd, v.vend_nm, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc
@@ -112,17 +124,36 @@
 		r.rsc_spec,
 		r.rsc_unit,
 		r.saf_rtc,
-		r.rsc_avail,
 		l.rsc_cd,
 		SUM(l.lot_cnt) AS "lot_cnt"
 		FROM rsc r, rsc_lot l
 		WHERE r.rsc_cd =
 		l.rsc_cd
 		GROUP BY r.rsc_nm, r.rsc_typ, r.rsc_spec, r.rsc_unit,
-		r.saf_rtc,
-		r.rsc_avail, l.rsc_cd
+		r.saf_rtc, l.rsc_cd
 	</select>
 
+	<!-- 자재별 재고조회 -->
+	<select id="getRscStcList" parameterType="MaterialVO" resultType="MaterialVO">
+        select distinct r.RSC_CD,
+        r.RSC_NM,
+        r.RSC_TYP,
+        r.RSC_SPEC,
+        r.RSC_UNIT,
+        r.SAF_RTC,
+        rsh.PRVMM_STC,
+        rs.AVAL_STC,
+        (PRVMM_STC + sum(distinct nvl(ri.IST_CNT, 0)) over (partition by rsc.RSC_CD)
+        - sum(distinct nvl(ro.OUST_CNT, 0)) over (partition by rsc.RSC_CD)) as stcCnt
+        from RSC
+        full join RSC_STC_HIST rsh on (rsh.RSC_CD = rsc.RSC_CD and rsh.CLS_YYMM = to_char(sysdate, 'yyyyMM'))
+        full join RSC_IST ri on (ri.RSC_CD = rsc.RSC_CD and ri.IST_DT between trunc(#{inqDt}, 'MM') and #{inqDt})
+        full join RSC_OUST ro on (ro.RSC_CD = rsc.RSC_CD and ro.OUST_DT between trunc(#{inqDt}, 'MM') and #{inqDt})
+        full join RSC_STC rs on (rs.RSC_CD = rsc.RSC_CD)
+        where rsc.RSC_CD is not null
+        <if test="rscCd != null and rscCd != ''">and rsh.RSC_CD = #{rscCd}</if>
+        order by rsc.RSC_CD
+    </select>
 
    <select id="getResources" resultType="MaterialVO">
         select RSC_CD, RSC_NM, RSC_UNIT

@@ -112,6 +112,7 @@
     <script>
         window.addEventListener('load', function () {
             getRscListInit();
+            getRscStcList();
         });
 
 
@@ -120,7 +121,6 @@
         bodyHeight: 450,
         scrollX: false,
         scrollY: true,
-        
         columns: [
             {
                 header: '자재코드',
@@ -161,6 +161,12 @@
         ]
     });
 
+    let gridOption = {
+            row: {
+                hover: {background: 'rgba(19,78,94,0.2)'}
+            }
+        }
+        tui.Grid.applyTheme('default', gridOption);
 
         let rscGrid = new tui.Grid({
             el: document.getElementById('rsc-grid'),
@@ -225,7 +231,16 @@
         let schBtn = document.getElementById('schBtn');
         schBtn.addEventListener('click', getRscStcList);
 
-  
+        function getRscStcList() {
+            let url = 'getRscStcList'
+            let data = new FormData(schParam)
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                grid.resetData(res)
+            })
+        }
 
         reloadBtn.addEventListener('click', e => {
             location.reload();
