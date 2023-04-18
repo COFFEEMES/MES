@@ -48,11 +48,11 @@ public class PerformanceController {
 	
 	@PostMapping("/prcsStart")
 	@ResponseBody
-	public List<ProcessVO> prcsStart(ProcessVO processVO){
-		service.prcsStart(processVO);
+	public List<ProcessVO> prcsStart(@RequestBody List<ProcessVO> list){
+		service.prcsStart(list);
 		InstVO instVO = new InstVO();
-		instVO.setPrOrderCd(processVO.getPrOrderCd());
-		instVO.setProCd(processVO.getProCd());
+		instVO.setPrOrderCd(list.get(0).getPrOrderCd());
+		instVO.setProCd(list.get(0).getProCd());
 		return service.getPrcsBom(instVO);
 	}
 	
@@ -64,6 +64,25 @@ public class PerformanceController {
 		instVO.setPrOrderCd(list.get(0).getPrOrderCd());
 		instVO.setProCd(list.get(0).getProCd());
 		return service.getPrcsBom(instVO);
+	}
+	
+	@PostMapping("/getUseCnt")
+	@ResponseBody
+	public List<ProcessVO> getUseCnt(ProcessVO processVO){
+		return service.getUseCnt(processVO);
+	}
+	
+	@GetMapping("/inspection")
+	public String getAllInpection(Model model) {
+		model.addAttribute("insList", service.getAllInspection());
+		model.addAttribute("empList", service.getEmpList());
+		return "manufacture/inspection";
+	}
+	
+	@PostMapping("/getProTest")
+	@ResponseBody
+	public List<ProcessVO> getProTest(ProcessVO processVO){
+		return service.getProTest(processVO);
 	}
 
 }

@@ -27,13 +27,25 @@ public class ProcessVO {
 	private int prodCnt;
 	private String note;
 	
+	private String testCd;
+	private String testCnt;
+	private String testItem;
+	private String testAmt;
+	private String testGood;
+	private String testBad;
+	
 	private String rscCd;
 	private String rscLotCd;
 	private String rscTotal;
+	private String rscUse;
 	
 	private String prcsNm;
+	private String proNm;
 	private String empCode;
 	private String empName;
 	private String eqmCd;
+	private String stanNm;
+	private String stanIt;
+	private String stanPs;
 
 }

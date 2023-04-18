@@ -100,6 +100,9 @@ pageEncoding="UTF-8"%>
             <a class="nav-link" href="performance"
               >생산실적 작성</a
             >
+            <a class="nav-link" href="inspection"
+              >제품 품질 검사</a
+            >
           </nav>
         </div>
         <a

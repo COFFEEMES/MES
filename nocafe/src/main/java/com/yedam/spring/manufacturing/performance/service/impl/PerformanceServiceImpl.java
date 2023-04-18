@@ -59,8 +59,10 @@ public class PerformanceServiceImpl implements PerformanceService {
 	}
 
 	@Override
-	public void prcsStart(ProcessVO processVO) {
-		mapper.prcsStart(processVO);
+	public void prcsStart(List<ProcessVO> list) {
+		for(ProcessVO processVO : list) {
+			mapper.prcsStart(processVO);
+		}
 	}
 
 	@Override
@@ -68,6 +70,21 @@ public class PerformanceServiceImpl implements PerformanceService {
 		for(ProcessVO processVO : list) {
 			mapper.prcsEnd(processVO);
 		}
+	}
+
+	@Override
+	public List<ProcessVO> getUseCnt(ProcessVO processVO) {
+		return mapper.getUseCnt(processVO);
+	}
+
+	@Override
+	public List<ProcessVO> getAllInspection() {
+		return mapper.getAllInspection();
+	}
+
+	@Override
+	public List<ProcessVO> getProTest(ProcessVO processVO) {
+		return mapper.getProTest(processVO);
 	}
 
 }

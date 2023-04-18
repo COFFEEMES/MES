@@ -227,6 +227,7 @@
 		   AND d.detail_avail = 'Y'
 		   AND b.pro_cd = #{proCd}
 		   AND b.prcs_cd = #{prcsCd}
+		 ORDER BY 1
 	</select>
 	
 	<!-- 공정 삭제 -->

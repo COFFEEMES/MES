@@ -207,7 +207,6 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
                 maxlength="50"
                 readonly
               />
-              <input type="hidden" id="proCd" name="proCd" />
             </li>
             <li>
               <label>공정명</label>
@@ -220,7 +219,6 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
                 maxlength="50"
                 readonly
               />
-              <input type="hidden" id="prcsCd" name="prcsCd" />
             </li>
             <li>
               <label>작업자</label>
@@ -233,7 +231,6 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
                 maxlength="50"
                 readonly
               />
-              <input type="hidden" id="empCode" name="empCode" />
             </li>
             <li>
               <label>투입량</label>
@@ -246,6 +243,9 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
                 maxlength="50"
                 readonly
               />
+              <input type="hidden" id="prcsCd" name="prcsCd" />
+              <input type="hidden" id="empCode" name="empCode" />
+              <input type="hidden" id="proCd" name="proCd" />
               <input type="hidden" id="eqmCd" name="eqmCd" />
               <input type="hidden" id="prOrderCd" name="prOrderCd" />
               <input type="hidden" id="bomSq" name="bomSq" />
@@ -332,216 +332,250 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   </div>
 </div>
 <script language="Javascript">
-    let gridData = [
-    <c:forEach items="${instList }" var="inst">
+  let gridData = [
+  <c:forEach items="${instList }" var="inst">
+    {
+      prOrderCd : '${inst.prOrderCd}',
+      prOrderDt : '${inst.formedDate}',
+    },
+  </c:forEach>
+  ];
+
+  let searchData = [];
+
+  const grid = new tui.Grid({
+    el: document.getElementById('grid'),
+    data: gridData,
+    scrollY: true,
+    bodyHeight: 480,
+    rowHeaders: ['rowNum'],
+    columns: [
       {
-        prOrderCd : '${inst.prOrderCd}',
-        prOrderDt : '${inst.formedDate}',
+        header: '생산 지시 코드',
+        name: 'prOrderCd',
+        align: 'center',
       },
-    </c:forEach>
-    ];
-
-    let searchData = [];
-
-    const grid = new tui.Grid({
-      el: document.getElementById('grid'),
-      data: gridData,
-      scrollY: true,
-      bodyHeight: 480,
-      rowHeaders: ['rowNum'],
-      columns: [
-        {
-          header: '생산 지시 코드',
-          name: 'prOrderCd',
-          align: 'center',
+      {
+        header: '지시 일자',
+        name: 'prOrderDt',
+        align: 'center',
+        formatter: function (data) {
+      	  let dateVal = '';
+      	  if(data.value != null ){
+      		  dateVal = dateChange(data.value);
+      	  }else{
+      		  dateVal = getToday();
+      	  }
+          return dateVal;
         },
-        {
-          header: '지시 일자',
-          name: 'prOrderDt',
-          align: 'center',
-          formatter: function (data) {
-        	  let dateVal = '';
-        	  if(data.value != null ){
-        		  dateVal = dateChange(data.value);
-        	  }else{
-        		  dateVal = getToday();
-        	  }
-            return dateVal;
-          },
-        },
-      ]
-    });
+      },
+    ]
+  });
 
-    function dateChange(date) {
-      let date1 = new Date(date);
-      let date2 = date1.getFullYear() + "-"
-                + (date1.getMonth() < 10 ? "0" + (date1.getMonth() + 1): date1.getMonth() + 1) + "-"
-                + (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
-      return date2;
-    }
+  function dateChange(date) {
+    let date1 = new Date(date);
+    let date2 = date1.getFullYear() + "-"
+              + (date1.getMonth() < 10 ? "0" + (date1.getMonth() + 1): date1.getMonth() + 1) + "-"
+              + (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+    return date2;
+  }
 
-    //테마 호버
-    let hoverOption = {
-        row: {
-            hover: {
-                background: 'rgba(19,78,94,0.2)'
-            }
-        }
-    }
-    tui.Grid.applyTheme('default', hoverOption);
-
-    let gridData2 = [];
-
-    const grid2 = new tui.Grid({
-      el: document.getElementById('grid2'),
-      scrollY: false,
-      bodyHeight: 480,
-      rowHeaders: ['rowNum'],
-      columns: [
-        {
-          header: '제품 코드',
-          name: 'proCd',
-          align: 'center',
-        },
-        {
-          header: '제품명',
-          name: 'proNm',
-          align: 'center',
-        },
-        {
-          header: '지시 수량',
-          name: 'orderOutput',
-          align: 'center',
-        },
-        {
-          header: '진행상태',
-          name: 'prEndtDt',
-          align: 'center',
-          formatter: function (data) {
-            if (data.row.prStartDt == null){
-              return '진행전';
-            } else if(data.row.prEndtDt == null) {
-              return '진행중';
-            } else {
-              return '생산 완료';
-            }
-          },
-        },
-      ]
-    });
-
-    var selectedRowKey = null;
-    var prOrderCd = '';
-
-    grid.on('click', ev => {
-      prOrderCd = grid.getValue(ev.rowKey, 'prOrderCd');
-      $('#prOrderCd').val(prOrderCd);
-
-      //셀 클릭시 로우 하이라이팅
-      if (selectedRowKey != ev.rowKey) {
-        grid.removeRowClassName(selectedRowKey, 'highlight');
+  //테마 호버
+  let hoverOption = {
+    row: {
+      hover: {
+        background: 'rgba(19,78,94,0.2)'
       }
-      selectedRowKey = ev.rowKey;
-      grid.addRowClassName(selectedRowKey, 'highlight');
-
-      grid3.clear();
-
-      //생산지시 상세 list 호출
-      $.ajax({
-        url: "getPrOrderDetail",
-        method: "POST",
-        data: { prOrderCd: prOrderCd},
-        success: function(data) {
-          gridData2 = data;
-          grid2.resetData(gridData2);
-        },
-        error: function (reject) {
-          console.log(reject);
-        },
-      });
-    });
-
-    //검색버튼
-    $('#searchBtn').click(ev => {
-      search();
-    })
-
-    function search() {
-      var keyword = $('#searchBcode').val()
-      searchData = gridData.filter( function (Bcode) {
-        return Bcode.basicName.indexOf(keyword) != -1
-      })
-      grid.resetData(searchData);
     }
+  }
 
-    let gridData3 = [];
+  tui.Grid.applyTheme('default', hoverOption);
 
-    const grid3 = new tui.Grid({
-      el: document.getElementById('grid3'),
-      scrollY: true,
-      bodyHeight: 480,
-      rowHeaders: ['rowNum'],
-      columns: [
-        {
-          header: '공정 코드',
-          name: 'prcsCd',
-          align: 'center',
+  let gridData2 = [];
+
+  const grid2 = new tui.Grid({
+    el: document.getElementById('grid2'),
+    scrollY: false,
+    bodyHeight: 480,
+    rowHeaders: ['rowNum'],
+    columns: [
+      {
+        header: '제품 코드',
+        name: 'proCd',
+        align: 'center',
+      },
+      {
+        header: '제품명',
+        name: 'proNm',
+        align: 'center',
+      },
+      {
+        header: '지시 수량',
+        name: 'orderOutput',
+        align: 'center',
+      },
+      {
+        header: '진행상태',
+        name: 'prEndtDt',
+        align: 'center',
+        formatter: function (data) {
+          if (data.row.prStartDt == null){
+            return '진행전';
+          } else if(data.row.prEndtDt == null) {
+            return '진행중';
+          } else {
+            return '생산 완료';
+          }
         },
-        {
-          header: '공정명',
-          name: 'prcsNm',
-          align: 'center',
-        },
-        {
-          header: '투입량',
-          name: 'stock',
-          align: 'center',
-          formatter: function (data) {
-            if (data.row.stock == 0){
-              return '';
-            } else {
-              return data.row.stock;
-            }
-          },
-        },
-        {
-          header: '생산량',
-          name: 'output',
-          align: 'center',
-          formatter: function (data) {
-            if (data.row.output == 0){
-              return '';
-            } else {
-              return data.row.output;
-            }
-          },
-        },
-        {
-          header: '담당자',
-          name: 'empName',
-          align: 'center',
-        },
-        {
-          header: '공정 진행 상태',
-          name: 'completed',
-          align: 'center',
-          formatter: function (data) {
-            if (data.row.wkFrDttm == null){
-              return '진행전';
-            } else if( data.row.wkToDttm == null) {
-              return '진행중';
-            } else {
-              return '완료';
-            }
-          },
-        },
-      ]
+      },
+    ]
+  });
+
+  var selectedRowKey = null;
+  var prOrderCd = '';
+
+  grid.on('click', ev => {
+    prOrderCd = grid.getValue(ev.rowKey, 'prOrderCd');
+    $('#prOrderCd').val(prOrderCd);
+
+    //셀 클릭시 로우 하이라이팅
+    if (selectedRowKey != ev.rowKey) {
+      grid.removeRowClassName(selectedRowKey, 'highlight');
+    }
+    selectedRowKey = ev.rowKey;
+    grid.addRowClassName(selectedRowKey, 'highlight');
+
+    grid3.clear();
+
+    //생산지시 상세 list 호출
+    $.ajax({
+      url: "getPrOrderDetail",
+      method: "POST",
+      data: { prOrderCd: prOrderCd},
+      success: function(data) {
+        gridData2 = data;
+        grid2.resetData(gridData2);
+      },
+      error: function (reject) {
+        console.log(reject);
+      },
     });
+  });
+
+  //검색버튼
+  $('#searchBtn').click(ev => {
+    search();
+  })
+
+  function search() {
+    var keyword = $('#searchBcode').val()
+    searchData = gridData.filter( function (Bcode) {
+      return Bcode.basicName.indexOf(keyword) != -1
+    })
+    grid.resetData(searchData);
+  }
+
+  let gridData3 = [];
+
+  const grid3 = new tui.Grid({
+    el: document.getElementById('grid3'),
+    scrollY: true,
+    bodyHeight: 480,
+    rowHeaders: ['rowNum'],
+    columns: [
+      {
+        header: '공정 코드',
+        name: 'prcsCd',
+        align: 'center',
+      },
+      {
+        header: '공정명',
+        name: 'prcsNm',
+        align: 'center',
+      },
+      {
+        header: '투입량',
+        name: 'stock',
+        align: 'center',
+        formatter: function (data) {
+          if (data.row.stock == 0){
+            return '';
+          } else {
+            return data.row.stock;
+          }
+        },
+      },
+      {
+        header: '불량량',
+        name: 'badQuantity',
+        align: 'center',
+        formatter: function (data) {
+          if (data.row.badQuantity == 0){
+            return '';
+          } else {
+            return data.row.badQuantity;
+          }
+        },
+      },
+      {
+        header: '생산량',
+        name: 'output',
+        align: 'center',
+        formatter: function (data) {
+          if (data.row.output == 0){
+            return '';
+          } else {
+            return data.row.output;
+          }
+        },
+      },
+      {
+        header: '담당자',
+        name: 'empName',
+        align: 'center',
+      },
+      {
+        header: '공정 진행 상태',
+        name: 'completed',
+        align: 'center',
+        formatter: function (data) {
+          if (data.row.wkFrDttm == null){
+            return '진행전';
+          } else if( data.row.wkToDttm == null) {
+            return '진행중';
+          } else {
+            return '완료';
+          }
+        },
+      },
+      {
+        header: '시작 시간',
+        name: 'wkFrDttm',
+        align: 'center',
+      },
+      {
+        header: '완료 시간',
+        name: 'wkToDttm',
+        align: 'center',
+      },
+    ]
+  });
+
+  function dateChange2(date) {
+    function pad(n) { return n<10 ? "0"+n : n }
+    d = new Date(date);
+    d.setHours(d.getHours() + 9);
+    return d.getFullYear()+"-"+
+    pad(d.getMonth()+1)+"-"+
+    pad(d.getDate())+" "+
+    pad(d.getHours())+":"+
+    pad(d.getMinutes())
+  }
 
 
-    //제품 선택시 공정 출력
-    var selectedRowKey2 = null;
-    var proCd = '';
+  //제품 선택시 공정 출력
+  var selectedRowKey2 = null;
+  var proCd = '';
 
   grid2.on('click', (ev) => {
     proCd = grid2.getValue(ev.rowKey, 'proCd');
@@ -557,6 +591,14 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       method: "POST",
       data: { prOrderCd: prOrderCd, proCd: proCd},
       success: function(data) {
+        for(let temp of data) {
+          if( temp.wkFrDttm != null ) {
+            temp.wkFrDttm = dateChange2(temp.wkFrDttm);
+          }
+          if( temp.wkToDttm != null ) {
+            temp.wkToDttm = dateChange2(temp.wkToDttm);
+          }
+        }
         gridData3 = data;
         grid3.resetData(gridData3);
         let addClass = grid3.getData();
@@ -615,7 +657,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       },
       {
         header: '사용량',
-        name: 'rscTotal',
+        name: 'rscUse',
         align: 'center',
         editor: 'text',
       },
@@ -624,10 +666,13 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
 
   //공정 선택시 실적 입력 모달
   let prcsCd = '';
+  let selectedRowKey3 = 0;
 
   grid3.on('click', (ev) => {
     let { columnName, rowKey } = ev;
     prcsCd = grid3.getValue(rowKey, 'prcsCd');
+
+    selectedRowKey3 = rowKey;
 
     $.ajax({
       url: "getPrcsEqm",
@@ -652,27 +697,42 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       success: function(data) {
         gridData5 = data;
         grid5.resetData(gridData5);
-        setTimeout(()=> grid5.refreshLayout(), 300);
-        let rscTotalIndex = grid5.getData().findIndex(i => i.rscCd = grid3.getRow(rowKey).rscCd);
-        grid5.setValue(rscTotalIndex, 'rscTotal', grid3.getValue(rowKey, 'rscTotal'));
+        $.ajax({
+          url: "getUseCnt",
+          method: "POST",
+          data: { prOrderCd:prOrderCd, proCd:proCd ,prcsCd:prcsCd },
+          success: function(data2) {
+            for(let temp of data2){
+              let g5 = grid5.getData();
+              for(let i = 0;  i < g5.length; i++){
+                if(temp.rscCd == g5[i].rscCd){
+                  grid5.setValue(i, 'rscUse', temp.rscUse);
+                }
+              }
+            }
+            setTimeout(()=> grid5.refreshLayout(), 300);
+          },
+          error: function (reject) {
+            console.log(reject);
+          },
+        });
       },
       error: function (reject) {
         console.log(reject);
       },
     });
 
-    if( rowKey == 0 || grid3.getValue(rowKey - 1, 'wkFrDttm') != null && grid3.getValue(rowKey - 1, 'wkToDttm') != null){
-      $('#proNm').val(grid2.getValue(selectedRowKey2, 'proNm'));
-      $('#proCd').val(proCd);
-      $('#prcsNm').val(grid3.getValue(rowKey, 'prcsNm'));
-      $('#prcsCd').val(prcsCd);
-      $('#stock').val(grid3.getValue(rowKey, 'stock'));
-      $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'));
-      $('#empCode').val(grid3.getValue(rowKey, 'empCode'));
-      $('#empName').val(grid3.getValue(rowKey, 'empName'));
-      $('#eqmCd').val(grid3.getValue(rowKey, 'eqmCd'));
-      $('#prcsResult').modal('show');
-    } else if( grid3.getValue(rowKey - 1, 'wkFrDttm') != null && grid3.getValue(rowKey - 1, 'wkToDttm') != null ){
+
+    if( grid3.getValue(rowKey, 'wkFrDttm') != null && grid3.getValue(rowKey, 'wkToDttm') != null) {
+      alert('완료된 공정입니다')
+    } else if( rowKey == 0 || grid3.getValue(rowKey - 1, 'wkFrDttm') != null && grid3.getValue(rowKey - 1, 'wkToDttm') != null){
+      if(grid3.getRow(rowKey).prcsCd.indexOf('PRCTES') != -1){
+        if(confirm('픔질 검사중인 제품입니다\n품질 검사 페이지로 이동하시겠습니까?')){
+          location.href = "inspection";
+        } else {
+          return;
+        }
+      }
       $('#proNm').val(grid2.getValue(selectedRowKey2, 'proNm'));
       $('#proCd').val(proCd);
       $('#prcsNm').val(grid3.getValue(rowKey, 'prcsNm'));
@@ -796,14 +856,16 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   var eqmCd = '';
 
   grid4.on('click', (ev) => {
-    eqmCd = grid4.getValue(ev.rowKey, 'eqmCd');
-    $('#eqmCd').val(eqmCd);
+    if( grid3.getValue(selectedRowKey3, 'wkFrDttm') == null){
+      eqmCd = grid4.getValue(ev.rowKey, 'eqmCd');
+      $('#eqmCd').val(eqmCd);
 
-    if (selectedRowKey4 != ev.rowKey) {
-      grid4.removeRowClassName(selectedRowKey4, 'highlight');
+      if (selectedRowKey4 != ev.rowKey) {
+        grid4.removeRowClassName(selectedRowKey4, 'highlight');
+      }
+      selectedRowKey4 = ev.rowKey;
+      grid4.addRowClassName(selectedRowKey4, 'highlight');
     }
-    selectedRowKey4 = ev.rowKey;
-    grid4.addRowClassName(selectedRowKey4, 'highlight');
   });
 
   //작업 시작 버튼
@@ -813,15 +875,44 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
     } else if($('#eqmCd').val() == null ||  $('#eqmCd').val() == ''){
       alert('설비가 선택되지 않았습니다')
     } else {
+      let data = grid5.getData();
+      for(let temp of data){
+        temp.proNm = $('#proNm').val();
+        temp.proCd = $('#proCd').val();
+        temp.prcsNm = $('#prcsNm').val();
+        temp.prcsCd = $('#prcsCd').val();
+        temp.empName = $('#empName').val();
+        temp.empCode = $('#empCode').val();
+        temp.stock = $('#stock').val();
+        temp.eqmCd = $('#eqmCd').val();
+        temp.prOrderCd = $('#prOrderCd').val();
+        temp.bomSq = $('#bomSq').val();
+        temp.inferCnt = $('#inferCnt').val();
+      }
+
+      for(let i = 1; i < data.length; i++){
+        data[i].inferCnt = 0;
+      }
+
+      $('#prcsResult').modal('hide');
       $.ajax({
         url: "prcsStart",
         method: "POST",
-        data: $("#dataForm").serialize(),
+        data: JSON.stringify(data),
+        contentType: 'application/json',
         dataType: "json",
         success: function(data) {
           gridData3 = data;
           grid3.resetData(gridData3);
           setTimeout(()=> grid3.refreshLayout(), 300);
+          let addClass = grid3.getData();
+          for(let i = 0; i < addClass.length; i++) {
+            if(addClass[i].wkFrDttm != null && addClass[i].wkToDttm == null ){
+              grid3.addRowClassName(i, 'highlight2');
+            } else {
+              grid3.removeRowClassName(i, 'highlight2');
+            }
+          }
         },
         error: function (reject) {
           console.log(reject);
@@ -834,10 +925,16 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   $('#prcsEnd').on('click', () => {
     let endAble = true;
     for( let temp of grid5.getData()){
-      if( temp.rscTotal == null || temp.rscTotal == ''){
+      if( temp.rscUse == null || temp.rscUse == ''){
         endAble = false;
       }
     }
+
+    if( grid3.getValue(selectedRowKey3, 'wkFrDttm') == null ){
+      alert('시작되지 않은 공정입니다!');
+      return;
+    }
+
     let data = grid5.getData();
     for(let temp of data){
       temp.proNm = $('#proNm').val();
@@ -853,9 +950,12 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       temp.inferCnt = $('#inferCnt').val();
     }
 
-    console.log(data);
+    for(let i = 1; i < data.length; i++){
+      data[i].inferCnt = 0;
+    }
 
     if( endAble ){
+      $('#prcsResult').modal('hide');
       $.ajax({
         url: "prcsEnd",
         method: "POST",
@@ -866,6 +966,14 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
           gridData3 = data;
           grid3.resetData(gridData3);
           setTimeout(()=> grid3.refreshLayout(), 300);
+          let addClass = grid3.getData();
+          for(let i = 0; i < addClass.length; i++) {
+            if(addClass[i].wkFrDttm != null && addClass[i].wkToDttm == null ){
+              grid3.addRowClassName(i, 'highlight2');
+            } else {
+              grid3.removeRowClassName(i, 'highlight2');
+            }
+          }
         },
         error: function (reject) {
           console.log(reject);
