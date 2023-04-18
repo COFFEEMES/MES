@@ -2,12 +2,30 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
- <mapper namespace="com.yedam.spring.manufacturing.direction.mapper.DirMapper">
-	
-	
-	
-	
-	
+<mapper
+	namespace="com.yedam.spring.manufacturing.direction.mapper.DirMapper">
 
+	<select id="getPlanList" resultType="DirVO">
+		select  plan_cd,
+				plan_cnt, 
+				(select detail_explain
+				 from detail_code
+				 where full_code = pro_cd) as pro_nm
+		from plans
+		order by 1
+	</select>
+	
+	<select id="getDataForGrid" resultType="DirVO">
+	select p.plan_cd, p.pro_cd, p.plan_cnt, p.ex_start_dt, p.ex_end_dt,h.plan_dt,d.detail_explain pro_nm
+	from plans p join plans_header h
+	on   p.plan_cd = h.plan_cd
+		        join detail_code d
+		        on p.pro_cd = d.full_code
+	where p.plan_cd in <foreach collection="array" item="arr" open="(" close=")" separator=",">
+						#{arr}
+						</foreach>
+	</select>
+	
+	
 
 </mapper>
