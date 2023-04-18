@@ -11,6 +11,9 @@ public interface PerformanceService {
 	public List<ProcessVO> getPrcsBom(InstVO instVO);
 	public List<EqmVO> getPrcsEqm(EqmVO eqmVO);
 	public List<EmpVO> getEmpList();
-	public void prcsStart(ProcessVO processVO);
+	public void prcsStart(List<ProcessVO> list);
 	public void prcsEnd(List<ProcessVO> list);
+	public List<ProcessVO> getUseCnt(ProcessVO processVO);
+	public List<ProcessVO> getAllInspection();
+	public List<ProcessVO> getProTest(ProcessVO processVO);
 }

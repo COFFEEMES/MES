@@ -16,5 +16,8 @@ public interface PerformanceMapper {
 	public List<EmpVO> getEmpList();
 	public void prcsStart(ProcessVO processVO);
 	public void prcsEnd(ProcessVO processVO);
+	public List<ProcessVO> getUseCnt(ProcessVO processVO);
+	public List<ProcessVO> getAllInspection();
+	public List<ProcessVO> getProTest(ProcessVO processVO);
 
 }
