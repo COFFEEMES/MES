@@ -14,12 +14,14 @@ public class MaterialLOTVO {
 	private String ordrCd;		//발주번호
 	private String istCd;		//입고코드
 	private int lotCnt;			//LOT수량
+	
 	private Date expDt ;		//유통기한
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	
 	private String rscCd;		//자재코드
 
 	private String rscNm;		//자재명
 	private String vendCd;		//업체코드
+	private String vendNm;
 	
 	private String safRtc;		//안전재고
 }

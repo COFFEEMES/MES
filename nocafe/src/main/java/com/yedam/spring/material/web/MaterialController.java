@@ -1,5 +1,6 @@
 package com.yedam.spring.material.web;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -7,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,9 +19,11 @@ import com.yedam.spring.material.service.MaterialLOTVO;
 import com.yedam.spring.material.service.MaterialOrderDetailVO;
 import com.yedam.spring.material.service.MaterialOrderVO;
 import com.yedam.spring.material.service.MaterialService;
+import com.yedam.spring.material.service.MaterialVO;
 
 @Controller
 public class MaterialController {
+	
 
 	@Autowired
 	MaterialService materialService;
@@ -97,6 +102,20 @@ public class MaterialController {
 	public String getMaterialTestList(Model model) {
 		model.addAttribute("materialTestList", materialService.getMaterialTestList());
 		return "material/materialTestList";
+	}
+	
+	
+    @RequestMapping("getResources")
+    @ResponseBody
+    public List<MaterialVO> getResources(@ModelAttribute MaterialVO materialVO) {
+        return materialService.getResources(materialVO);
+    }
+	
+	@PostMapping("materialOrderInsert")
+	@ResponseBody
+	public List<MaterialOrderVO> rscOrdrInsert(@RequestBody List<MaterialOrderVO> OrdrList, MaterialOrderVO vo){
+		materialService.rscOrdrInsert(OrdrList);
+		return OrdrList;
 	}
 	
 	}

@@ -409,7 +409,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
 	   			gridDetail.resetData(data);
 	   		 setTimeout(function () {
  	    		   gridDetail.refreshLayout()
- 	    		   }, 100);
+ 	    		   }, 300);
 	   			gridDetailData = data;
 	   		
    				},
@@ -424,7 +424,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
 		  gridDetail.resetData(gridDetailData);
 		  setTimeout(function () {
 	    		   gridDetail.refreshLayout()
-	    		   }, 0);
+	    		   }, 300);
 
 		})
 		
@@ -446,7 +446,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
     	   gridVend.resetData(data);
     	   setTimeout(function () {
     		   gridVend.refreshLayout()
-    		   }, 0);
+    		   }, 300);
        },
        error: function (reject) {
          console.log(reject);
@@ -627,7 +627,7 @@ function searchPro() {
 			gridPro.resetData(data);
 			  setTimeout(function () {
 				  gridPro.refreshLayout()
-  	    		   }, 100);
+  	    		   }, 300);
 
 				},
 			error: function (reject) {
@@ -741,6 +741,7 @@ $('#proModal').on('hidden.bs.modal', function (e) {
                 icon: 'success',
                 title: '주문서가 저장되었습니다.',
               });
+        	$('#detailModal').modal('hide');
         	search();
 
         },

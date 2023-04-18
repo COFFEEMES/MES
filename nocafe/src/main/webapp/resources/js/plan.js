@@ -383,6 +383,22 @@
 			},
 			
 			],
+			summary: {
+        height: 40,
+        position: 'bottom', // or 'top'
+        columnContent: {
+          lotCnt: {
+            template: function(valueMap) {
+              return `합계 : ${valueMap.sum}`;
+            }
+          },
+          exCnt: {
+            template: function(valueMap) {
+              return `합계: ${valueMap.sum}`;
+            }
+          }
+        }
+      }
 		});
 		
 		
@@ -686,6 +702,11 @@
 													text: 
 													'데이터가 성공적으로 저장되었습니다!',
 												})
+												grid.clear()
+										   		grid2.clear()
+										   		grid3.clear()
+										   		grid4.clear()
+										   		grid5.clear()
 											}
 										}
 									})

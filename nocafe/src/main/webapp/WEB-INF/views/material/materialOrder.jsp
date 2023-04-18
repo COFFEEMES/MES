@@ -6,12 +6,19 @@
 <html>
 <head>
 <meta charset="UTF-8" />
+   <link
+      rel="stylesheet"
+      href="https://uicdn.toast.com/grid/latest/tui-grid.css"
+    />
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <link rel="stylesheet"
-	href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css" />
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<head>
-<meta charset="UTF-8">
+    href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+
 </head>
 
 <body>
@@ -84,6 +91,7 @@
           {	  rscCd :  '${material.rscCd}',
         	  rscNm :  '${material.rscNm}',
         	  vendCd : '${material.vendCd}',
+        	  vendNm : '${material.vendNm}',
         	  lotCnt : '${material.lotCnt}',
         	  safRtc : '${material.safRtc}'
           },
@@ -115,14 +123,21 @@
                 sortable: true
             },
             {
+                header: '업체명',
+                name: 'vendNm',
+                sortingType: 'asc',
+                sortable: true
+            },
+            {
                 header: '현재재고',
                 name: 'lotCnt'
             },
             {
             	header: '안전재고',
             	name: 'safRtc'
-            	}
-  
+        		
+            	
+			}
         ]
     });
     var isValid = true;
@@ -140,6 +155,7 @@
 					var rscCd = grid.getValue(ev.rowKey, 'rscCd')
 					var rscNm = grid.getValue(ev.rowKey, 'rscNm')
 					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
+					var vendNm = grid.getValue(ev.rowKey, 'vendNm')
 					var lotCnt = grid.getValue(ev.rowKey, 'lotCnt')
 					if (lotCnt==0 || lotCnt==null || lotCnt == ''){
 						lotCnt =0;} 
@@ -167,6 +183,7 @@
 						"rscCd": rscCd,
 						"rscNm": rscNm,
 						"vendCd": vendCd,
+						"vendNm": vendNm,
 						"lotCnt": lotCnt,
 						"safRtc": safRtc,
 					})
@@ -226,6 +243,10 @@
 						align: 'center',
 						name: 'vendCd'
 					}, {
+						header: '업체명',
+						align: 'center',
+						name: 'vendNm'
+					}, {
 						header: '발주코드',
 						align: 'center',
 						name: 'ordrCd'
@@ -246,17 +267,45 @@
 						header: '납기요청일',
 						align: 'center',
 						name: 'paprdCmndDt',
-						editor: {
-							type: 'datePicker',
-							options: {
-								datetimeFormat: "yyyy-MM-dd"
-							}
-						}
+				        formatter: function (data) {        	  
+				        	  let dateVal = '';
+				        	  if(data.value != null ){
+				        		  dateVal = dateChange(data.value);
+				        	  }else{
+				        		  dateVal = getToday();
+				        	  }
+				              return dateVal;
+				            },
+				          editor: {
+				              type: 'datePicker',
+				              options: {
+				                format: 'yyyy-MM-dd',
+				              }
+				            }
 					}],
 				});
 				
-				  
-				  
+    function getToday(){
+        const date = new Date();
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const seconds = String(date.getSeconds()).padStart(2, "0");
+        const years = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        
+        return years + "-" + month + "-" + day;
+     } 
+				
+    	function dateChange(date) {
+    	   let date1 = new Date(date);
+    	   let date2 =
+    	     date1.getFullYear() + "-" + 
+    	     (date1.getMonth() < 10 ? "0" + (date1.getMonth() + 1): date1.getMonth() + 1) +"-" +
+    	     (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+    	   return date2;
+    	 }
+    
 				  $('#SearchBtn').on('click', function () {
 						let rscNm = $('#rscNm').val()
 						$.ajax({
@@ -271,6 +320,19 @@
 						})
 					})
 				
+				grid.on('editingFinish', function (ev) {
+					var lotCnt = grid2.getValue(ev.rowKey, 'lotCnt')
+					var safRtc = grid2.getValue(ev.rowKey, 'safRtc')
+					var isValid = true;
+					
+					if(Number(lotCnt)<Number(safRtc)){
+						grid.addRowClassName(ev.rowKey)
+					}
+					if(Number(lotCnt)>Number(safRtc)){
+						grid.removeRowClassName(ev.rowKey)
+					}
+				})
+					
 				
 				grid2.on('editingFinish', function (ev) {
 					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
@@ -284,16 +346,15 @@
 					var allStc = ordrCnt + lotCnt
 					
 					grid2.setValue(ev.rowKey, 'allStc', allStc)
-					grid2.check(ev);
 					if(Number(allStc)<Number(safRtc)){
 						grid2.addRowClassName(ev.rowKey, 'addClass')
 					}
 					if(Number(allStc)>=Number(safRtc)){
 						grid2.removeRowClassName(ev.rowKey, 'addClass')
 					}
-					
-					
 				})
+				
+				
 				
 				$('#minusBtn').on('click', function (ev) {
 					var data = grid2.getCheckedRows();
@@ -306,6 +367,47 @@
 					}
 					grid2.removeCheckedRows()
 					alert('정상적으로 삭제되었습니다.');
+				})
+				
+				
+				$('#saveBtn').click(ev => {
+					var data = grid2.getCheckedRows();
+					var isValid = true;
+					
+					if(data.length == null || data.length == 0){
+						alert('체크된 발주 내역이 없습니다.');
+						isValid = false;
+						return false;
+					}
+					
+					for (i = 0; i < data.length; i++) {
+						if (Number(data[i].allStc)<Number(data[i].safRtc)) {
+							alert('안전재고 이상으로 발주를 진행해주세요.');
+							isValid = false;
+							return false;
+
+						}} 
+					
+
+					for (i = 0; i < data.length; i++) {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].ordrCnt == '') {
+							alert('발주신청 내역 내 공란이 존재합니다.');
+							isValid = false;
+							return false;
+
+						} else {
+							$.ajax({
+								url: 'materialOrderInsert',
+								method: 'POST',
+								data: JSON.stringify(data),
+								contentType: 'application/json'
+							}).done(function (result) {
+								alert('발주 신청이 완료되었습니다.');
+								grid2.removeCheckedRows()
+								grid2.uncheckAll()
+							})
+						}
+					}
 				})
 			</script>
 </body>

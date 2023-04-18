@@ -35,4 +35,12 @@ public interface MaterialService {
 	
 	//자재입고검사조회
 	public List<MaterialTestDetailVO> getMaterialTestList();
+	
+	
+	public List<MaterialVO> getResources(MaterialVO materialVO);
+	
+	//발주신청
+	public void rscOrdrInsert(List<MaterialOrderVO> ordrList);
+	
+	public void rscOrdrFInsert(List<MaterialOrderVO> ordrFList);
 }

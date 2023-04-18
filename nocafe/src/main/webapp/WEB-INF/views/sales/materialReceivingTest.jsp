@@ -111,11 +111,11 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       </div>
     </div>
   </div>
-<!--   <div class="row">
+  <div class="row">
     <div class="card col-xl-11">
       <div class="linelist" style="margin-top: 16px">
         <h3 style="width: 100px; display: inline; padding-left: 15px">
-          공정 목록
+         입고검사
         </h3>
         <button class="btn btn-primary" id="savePrcs" style="float: right">
           <i class="fas fa-save"></i> 저장
@@ -125,7 +125,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
           id="newPrcs"
           style="float: right; margin: 0 16px"
         >
-          <i class="fas fa-file"></i> 새 공정
+          <i class="fas fa-file"></i> 추가
         </button>
         <button class="btn btn-primary" id="delPrcs" style="float: right">
           <i class="fas fa-trash"></i> 삭제
@@ -136,7 +136,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       </div>
     </div>
   </div>
-</div> -->
+</div>
 <!-- 거래처 검색 Modal -->
          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -169,6 +169,56 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         </div>   
       </div>
         <!-- 거래처 검색 Modal 끝-->
+        <!-- 검사 Modal -->
+         <div class="modal fade" id="testModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">불량상세</h5>
+                        <br><br>                    
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><br>
+                    <div>
+                    <div id="grid4" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" id="inputBtn" class="btn btn-primary" data-bs-dismiss="modal">입력</button>
+                    </div>
+                </div>
+            </div>
+        </div>   
+      </div>
+        <!-- 거래처 검색 Modal 끝-->
+        <!-- 검사자 모달-->
+ 		<div class="modal fade" id="empModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">사원 검색</h5>
+                        <br><br>                    
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><br>
+                    <div>
+          <!--           <label style="margin-left: 20px;">사원 이름</label>                    
+                     <input
+                          type="text"
+                          id="empSearch"
+                          class="form-control"
+                          style="width: 150px; display:inline-block;" />
+                     <button
+                          type="button"
+                          id="empBtn"
+                          class="btn btn-primary" style="width: 43px;">
+                          <i class="fas fa-search"></i></button>    
+                          </div>   
+                          <br>   -->           
+                    <div id="empGrid" class="modal-body"></div>
+                   <!-- <div class="modal-footer">  -->
+                   <!--      <button type="button" id="clearBtn2" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
+                   <br> 
+                    </div>
+                </div>
+            </div>
+        </div>   
 <script language="Javascript">
 
 //업체명 모달창 그리드 
@@ -205,7 +255,7 @@ function searchVend() {
   	   gridVend.resetData(data);
   	   setTimeout(function () {
   		   gridVend.refreshLayout()
-  		   }, 0);
+  		   }, 300);
      },
      error: function (reject) {
        console.log(reject);
@@ -262,15 +312,16 @@ var grid = new tui.Grid({
 });  
 
 //발주 주문서 더블클릭하면 상세조회
-grid.on('dblclick', (ev) => {
+grid.on('click', (ev) => {
 	//console.log(grid.getData()[ev.rowKey].ordrCd);
 	let ordrCd = grid.getData()[ev.rowKey].ordrCd;
 	 $.ajax({
 	     url: "detailList",
 	     method: "post",
 	     data: {ordrCd: ordrCd },
-	     success: function(data) {  	
+	     success: function(data) {  
 	  	   grid2.resetData(data);
+	  	   grid3.resetData(data);
 	     },
 	     error: function (reject) {
 	       console.log(reject);
@@ -347,6 +398,258 @@ function dateChange(date) {
 }
 
 
+//검사버튼
+let btn="";
+class testBtn {
+            constructor(props) {
+                btn = document.createElement('button');
+                btn.innerHTML = '검사';
+                btn.id = 'testBtn';
+                this.el = btn;
+            }
+            getElement() {
+                return this.el;
+            }
+        }
+        
+//입고검사 그리드
+var grid3 = new tui.Grid({
+    el: document.getElementById('grid3'),
+    scrollX: false,
+    scrollY: true,
+    bodyHeight: 400,
+    columns: [
+        {
+            header: '발주번호',
+            name: 'ordrCd',
+            hidden: true,
+        },
+ 
+        {
+            header: '자재코드',
+            name: 'rscCd',
+        },
+        {
+            header: '자재명',
+            name: 'rscNm',
+        },
+        {
+            header: '규격',
+            name: 'rscSpec',
+        },
+        {
+            header: '단위',
+            name: 'rscUnit',
+        },
+        {
+            header: '가입고량',
+            name: 'cnt',
+            editor: 'text',
+            hidden: true,
+           
+        },
+        {
+            header: '검사량',
+            name: 'inspCnt',
+            editor: 'text',
+            formatter : function (data) {
+            	if(data.value==0) {
+            		return "";
+            	}else return data.value;
+            }
+        },
+        {
+            header: '검사',
+            name: 'test',
+            renderer: {type:testBtn},
+            align: 'center',
+            formatter : function (data) {
+            	if(data.value==0) {
+            		return "";
+            	}else return data.value;
+            }
+            
+        },
+        {
+            header: '합격량',
+            name: 'inspPassCnt',
+            editor: 'text',
+            formatter : function (data) {
+            	if(data.value==0) {
+            		return "";
+            	}else return data.value;
+            }
+        },
+        {
+            header: '불량수량',
+            name: 'inspFailCnt',
+            editor: 'text',
+            formatter : function (data) {
+            	if(data.value==0) {
+            		return "";
+            	}else return data.value;
+            }
+        },
+        {
+        	header:'검사자',
+        	name:'empNm',
+        	//hidden: true,
+        	
+        },
+        {
+            header: '사원코드',
+            name: 'inspTstr',
+           hidden: true,
+            
+        },
+       
+    ],
+});  
 
+
+
+let rowTest = 0; //검사클릭
+let rowEmp = 0; //검사자 클릭 
+grid3.on('click', (ev) => {
+	//검사 클릭하면
+  	if(ev.targetType=='cell' && ev.columnName =='test') {
+ 		rowTest = ev.rowKey;
+        	$('#testModal').modal('show');
+  			setTimeout(function () {
+  				grid4.refreshLayout()
+    	    		 }, 300);  
+  			
+  			//아작스 호출
+  		    $.ajax({
+  		      url: "testPoor",
+  		      method: "get",
+  		      success: function (data) {
+  		          grid4.resetData(data);      	
+  		      },
+  		      error: function (reject) {
+  		        console.log(reject);
+  		      },
+  		    });  
+  	}
+	//검사자 클릭하면   	
+  	else if(ev.targetType=='cell' && ev.columnName =='empNm'){
+  		rowEmp = ev.rowKey;
+  		$('#empModal').modal('show');	
+			//아작스 호출
+		    $.ajax({
+		      url: "empList",
+		      method: "get",
+		      success: function (data) {
+		    	  gridEmp.resetData(data); 
+		    	  setTimeout(function () {
+		    		  gridEmp.refreshLayout()
+		    	    		 }, 300);  
+		  			
+		      },
+		      error: function (reject) {
+		        console.log(reject);
+		      },
+		    });  
+  		
+  		}
+	});  
+	
+//모달창에서 입력 버튼 누르면
+let gridData = [];
+document.getElementById('inputBtn').addEventListener("click", function(){
+	let sum = 0;
+	for(let i=0; i<grid4.getData().length; i++) {
+		sum += Number(grid4.getData()[i].inferCnt)
+	}
+	
+	//console.log(sum);
+	$('#testModal').modal('hide');
+	grid4.clear();
+	//grid3.getData()[rowTest].inspFailCnt = sum;
+	
+	gridData = grid3.getData();	
+	gridData[rowTest].inspFailCnt = sum;
+	gridData[rowTest].inspPassCnt = Number(gridData[rowTest].inspCnt) -Number(gridData[rowTest].inspFailCnt);
+	grid3.resetData(gridData); 
+	
+});
+	
+
+//검사모달창
+var grid4 = new tui.Grid({
+    el: document.getElementById('grid4'),
+    scrollX: false,
+    scrollY: true,
+    bodyHeight: 200,
+    columns: [
+ 
+        {
+            header: '불량코드',
+            name: 'detailCode',
+        },
+        {
+            header: '불량사유',
+            name: 'detailName',
+        },
+        {
+            header: '불량수량',
+            name: 'inferCnt',
+            editor: 'text',
+        },      
+    ],
+}); 
+	
+
+//저장버튼 누르면
+document.getElementById('savePrcs').addEventListener("click", function(){
+	$.ajax({
+        url: "saveRsc",
+        method: "post",
+        dataType : 'json',
+        contentType : 'application/json',
+        data: JSON.stringify(grid3.getData()),
+        success: function (data) {
+				Swal.fire({
+                    icon: 'success',
+                    title: '저장되었습니다.',
+                  });
+	    		   
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });	
+})
+
+//사원 그리드
+var gridEmp = new tui.Grid({
+    el: document.getElementById('empGrid'),
+    scrollX: false,
+    scrollY: true,
+    bodyHeight: 200,
+    columns: [
+ 
+        {
+            header: '사원코드',
+            name: 'empCode',
+        },
+        {
+            header: '사원명',
+            name: 'empName',
+        },     
+    ],
+}); 
+gridEmp.on('dblclick', (ev) => {
+	
+	let empCode = gridEmp.getData()[ev.rowKey].empCode;
+	let empName = gridEmp.getData()[ev.rowKey].empName;
+	gridData = grid3.getData();
+	gridData[rowEmp].empNm = empName;
+	gridData[rowEmp].inspTstr = empCode;
+	grid3.resetData(gridData);
+	
+	 $('#empModal').modal('hide');
+
+})
 
 </script>

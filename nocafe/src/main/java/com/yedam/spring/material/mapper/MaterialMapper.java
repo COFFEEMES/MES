@@ -30,6 +30,11 @@ public interface MaterialMapper {
 	//발주디테일
 	public List<MaterialOrderDetailVO> getMaterialOrderDetail(MaterialOrderDetailVO materialOrderDetailVO);
 	
+	//발주버튼
+	public void rscOrdrInsert(MaterialOrderVO ordrList);
+	
+	public void rscOrdrFInsert(MaterialOrderVO vo);
+	
 	//발주조회
 	public List<MaterialOrderVO> selectMaterialOrderList();
 	
@@ -42,4 +47,11 @@ public interface MaterialMapper {
 	//자재입고검사조회
 	public List<MaterialTestDetailVO> selectMaterialTestList();
 
+	
+	//자재조회페이지
+	public List<MaterialVO> getResources(MaterialVO materialVO);
+
+	
+    // 자재별 재고조회
+    public List<MaterialVO> getRscStcList(MaterialVO materialVO);
 }

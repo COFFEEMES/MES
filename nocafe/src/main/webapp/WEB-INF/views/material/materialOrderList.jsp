@@ -76,12 +76,11 @@
 
 
 	<script>
-			
 			const gridData = [
 		        <c:forEach items="${materialOrderList }" var="material">
 		          {	  ordrCd :  '${material.ordrCd}',
 		        	  vendCd :  '${material.vendCd}',
-		        	  vendNm : '${material.vendNm}',
+		        	  vendNm : 	'${material.vendNm}',
 		        	  ordrReqDt : '${material.ordrReqDt}'
 		          },
 		        </c:forEach>
@@ -90,7 +89,7 @@
 				const grid = new tui.Grid({
 					el: document.getElementById('grid'),
 					scrollX: false,
-					bodyHeight: 600,
+					bodyHeight: 450,
 					rowHeight: 35,
 					data: gridData,
 					rowHeaders: ['rowNum'],
@@ -113,11 +112,13 @@
 						header: '발주신청일',
 						align: 'center',
 						name: 'ordrReqDt',
-				
-
+						formatter: function(data) {
+					        return dateChange(data.value);
+					  }
 					}]
 				});
 				
+
 				
 				$('#rscSearchBtn').on('click', function () {
 					let vendNm = $('#vendNm').val()
@@ -132,14 +133,6 @@
 					}
 				})
 			})
-
-$('#grid').mouseleave(ev => {
-     grid.finishEditing();
- })
- 
- $('#grid2').mouseleave(ev => {
-     grid2.finishEditing();
- })
 			
 					grid.on('dblclick', ev => {
 					var ordrCd = grid.getValue(ev.rowKey, 'ordrCd')
@@ -226,32 +219,14 @@ $('#grid').mouseleave(ev => {
 					}, {
 						header: '납기요청일',
 						align: 'center',
-						name: 'paprdCmndDt'
-				
+						name: 'paprdCmndDt',
+						formatter: function(data) {
+						    return dateChange(data.value);
+						  }
 					}],
 				});
 
-				grid2.on('editingFinish', function (ev) {
-					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
-					var lotCnt = grid2.getValue(ev.rowKey, 'lotCnt')
-					var safRtc = grid2.getValue(ev.rowKey, 'safRtc')
-					var isValid = true;
 
-					ordrCnt = Number(ordrCnt);
-					lotCnt = Number(lotCnt);
-
-					var allStc = ordrCnt + lotCnt
-
-					grid2.setValue(ev.rowKey, 'allStc', allStc)
-					grid2.check(ev);
-					if (Number(allStc) < Number(safRtc)) {
-						grid2.addRowClassName(ev.rowKey, 'addClass')
-					}
-					if (Number(allStc) >= Number(safRtc)) {
-						grid2.removeRowClassName(ev.rowKey, 'addClass')
-					}
-
-				})
 
 				
 					$('#saveBtn').click(ev => {
@@ -290,7 +265,6 @@ $('#grid').mouseleave(ev => {
 							return false;
 
 						} else {
-							console.log(data)
 							$.ajax({
 								url: 'materialOrderUpdate',
 								method: 'POST',
@@ -307,13 +281,29 @@ $('#grid').mouseleave(ev => {
 			
 				
 				//엑셀 그리드 다운
-  $("#excelBtn").click((ev) => {
-    const options = {
-      includeHiddenColumns: false,
-      fileName: "vend_list",
-    };
-    grid2.export("xlsx", options);
-  });
+  				$("#excelBtn").click((ev) => {
+    				const options = {
+      				includeHiddenColumns: false,
+      				fileName: "vend_list",
+    				};
+    				grid2.export("xlsx", options);
+  				});
+					
+					
+					function dateChange(date) {
+					      let date1 = new Date(date);
+					      let date2 =
+					        date1.getFullYear() +
+					        "-" +
+					        (date1.getMonth() < 10
+					          ? "0" + (date1.getMonth() + 1)
+					          : date1.getMonth() + 1) +
+					        "-" +
+					        (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+					      return date2;
+					    };
+						
+
 			</script>
 
 </body>

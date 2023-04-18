@@ -123,6 +123,7 @@
 																		</foreach>
                                      )
                    )
+         AND r.rsc_cd != 'RSCNOT001'
  		 GROUP BY r.rsc_cd, d.detail_explain, s.ex_cnt
 	</select>
 	

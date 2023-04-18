@@ -21,7 +21,8 @@ public class MaterialOrderDetailVO {
 	private String ordrCd;
 	private int ordrCnt;
 	private String safRtc;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date paprdCmndDt;
 	
 	
