@@ -25,4 +25,28 @@ public class MaterialWareServiceImpl implements MaterialWareService {
 		return materialWareMapper.detailList(ordrCd);
 	}
 
+	@Override
+	public List<MaterialWareVO> testPoor() {
+		return materialWareMapper.testPoor();
+	}
+
+	/*
+	 * @Override public int saveRsc(List<MaterialWareVO> materialWareVO) { int
+	 * result = 0; for(int i=0; i<materialWareVO.size(); i++) { result +=
+	 * materialWareMapper.saveRsc(materialWareVO.get(i)); } return result; }
+	 */
+
+	@Override
+	public List<MaterialWareVO> empList() {
+		return materialWareMapper.empList();
+	}
+
+	//전체저장
+	@Override
+	public int saveTotal(MaterialWareVO materialwareVO) {
+		return materialWareMapper.saveTotal(materialwareVO);
+	}
+
+
+
 }

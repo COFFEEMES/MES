@@ -193,7 +193,7 @@ pageEncoding="UTF-8"%>
         success: function (data) {
           setTimeout(function () {
             gridInven.refreshLayout();
-          }, 0);
+          }, 300);
           gridInven.resetData(data); //그리드 적용
 
           document.getElementById("orderDt").value = dateChange(

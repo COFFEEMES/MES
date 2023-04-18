@@ -134,7 +134,7 @@ var gridCom = new tui.Grid({
         success: function (data) {
         setTimeout(function () {
         	gridCom.refreshLayout()
- 		   }, 0);
+ 		   }, 300);
         gridCom.resetData(data); 
         },
         error: function (reject) {

@@ -19,7 +19,7 @@
 		                WHERE vend_nm= #{vendNm})
 		</if>
 		<if test="start != null and !start.equals('')">
-		AND <![CDATA[paprd_cmnd_dt <= #{start}]]>
+		AND <![CDATA[paprd_cmnd_dt >= #{start}]]>
 		</if>
 		<if test="end != null and !end.equals('')">
 		AND <![CDATA[paprd_cmnd_dt <= #{end}]]>
@@ -27,12 +27,28 @@
 		ORDER BY paprd_cmnd_dt DESC
 </select>
 
+<!-- 상세 목록 조회 -->
 	<select id="detailList" resultType="MaterialWareVO">	
-		SELECT ordr_cd, rsc_cd, ordr_cnt, rmn_cnt, paprd_cmnd_dt
-		FROM  rsc_ordr_dtl
-		WHERE ordr_cd = #{ordrCd}
+		SELECT ordr_cd, o.rsc_cd, ordr_cnt, rmn_cnt, paprd_cmnd_dt, rsc_nm, rsc_spec, rsc_unit
+		FROM  rsc_ordr_dtl o, rsc r
+		WHERE o.rsc_cd = r.rsc_cd
+		AND ordr_cd = #{ordrCd}
 		ORDER BY paprd_cmnd_dt DESC
 	</select>
+
+<!-- 검사 불량 -->
+	<select id = "testPoor" resultType="MaterialWareVO">
+		SELECT detail_code, detail_name, full_code
+		FROM detail_code
+		WHERE basic_code = 'ERR'
+	</select>
+	
+<!-- 사원 모달창 -->	
+	<select id="empList" resultType="MaterialWareVO">
+	SELECT emp_code, emp_name 
+	FROM emp
+	</select>
+	
 
 </mapper>
   

@@ -120,7 +120,7 @@ function searchPro() {
 			gridPro.resetData(data);
 			  setTimeout(function () {
 				  gridPro.refreshLayout()
-  	    		   }, 100);
+  	    		   }, 300);
 				},
 			error: function (reject) {
 			console.log(reject);
