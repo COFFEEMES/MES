@@ -205,33 +205,29 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
               />
               <input type="hidden" id="proCd" name="proCd" />
               <input type="hidden" id="prcsCd" name="prcsCd" />
+              <input type="hidden" id="testCd" name="testCd" />
               <input type="hidden" id="empCode" name="empCode" />
               <input type="hidden" id="prOrderCd" name="prOrderCd" />
             </li>
           </ul>
           <div class="linelist" style="width: 100%">
-            <span>불량등록</span>
-            <div class="pro-qty">
-              <input type="text" value="0" id="inferCnt" name="inferCnt" />
-            </div>
-
             <button
               data-bs-toggle="modal"
               class="btn btn-primary"
-              id="prcsEnd"
+              id="testEnd"
               data-bs-target="#exampleModal"
               style="float: right; margin-left: 8px; margin-top: 12px"
             >
-              <i class="fas fa-search"></i> 작업 완료
+              <i class="fas fa-search"></i> 검사 완료
             </button>
             <button
               data-bs-toggle="modal"
               class="btn btn-primary"
-              id="prcsStart"
+              id="testStart"
               data-bs-target="#exampleModal"
               style="float: right; margin-top: 12px"
             >
-              <i class="fas fa-search"></i> 작업 시작
+              <i class="fas fa-search"></i> 검사 시작
             </button>
           </div>
         </form>
@@ -349,13 +345,18 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         align: 'center',
       },
       {
-        header: '검사량',
-        name: 'testCnt',
+        header: '기준',
+        name: 'stanPs',
         align: 'center',
       },
       {
-        header: '합격량',
-        name: 'testGood',
+        header: '검출량',
+        name: 'testAmt',
+        align: 'center',
+      },
+      {
+        header: '합격여부',
+        name: 'testPsOrNot',
         align: 'center',
       },
     ]
@@ -409,8 +410,11 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
     $('#proCd').val(proCd);
     $('#proNm').val(grid2.getValue(ev.rowKey, 'proNm'));
     $('#stock').val(grid2.getValue(ev.rowKey, 'testCnt'));
+    $('#testCd').val(testCd);
     $('#testItem').val(grid2.getValue(ev.rowKey, 'testItem'));
     $('#prcsCd').val(grid2.getValue(ev.rowKey, 'prcsCd'));
+    $('#empCode').val(grid2.getValue(ev.rowKey, 'empCode'));
+    $('#empName').val(grid2.getValue(ev.rowKey, 'empName'));
 
     $('#testResult').modal('show');
   });
@@ -419,25 +423,10 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
     $('#testResult').modal('hide');
   })
 
-  //불량 갯수 증감 버튼
-  var proQty = $('.pro-qty');
-    proQty.prepend('<span class="dec qtybtn">-</span>');
-    proQty.append('<span class="inc qtybtn">+</span>');
-    proQty.on('click', '.qtybtn', function () {
-      var $button = $(this);
-      var oldValue = $button.parent().find('input').val();
-      if ($button.hasClass('inc')) {
-        var newVal = parseFloat(oldValue) + 1;
-      } else {
-        // Don't allow decrementing below zero
-        if (oldValue > 0) {
-          var newVal = parseFloat(oldValue) - 1;
-        } else {
-          newVal = 0;
-        }
-      }
-      $button.parent().find('input').val(newVal);
-  });
+  //모달이 꺼지면 내부 인풋 초기화
+  $('#testResult').on('hidden.bs.modal', function (e) {
+    $("#testAmt").val('');
+  })
 
   //담당사원 전체조회
   $("#empName").on('click', searchEmp)
@@ -503,5 +492,59 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   //사원 검색 닫기 버튼
   $('#closeEmpBtn').on('click', () => {
     $('#empModal').modal('hide');
+  })
+
+  //검사 시작
+  $('#testStart').on('click', () => {
+    if($('#empCode').val() == null || $('#empCode').val() == ''){
+      alert('담당자가 선택되지 않았습니다')
+    } else {
+      $('#testResult').modal('hide');
+
+      $.ajax({
+        url: "testStart",
+        method: "POST",
+        data: $("#dataForm").serialize(),
+        dataType: 'json',
+        success: function(data) {
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });
+    }
+  })
+
+  //검사 완료
+  $('#testEnd').on('click', () => {
+    if($('#testAmt').val() == null || $('#testAmt').val() == ''){
+      alert('검출량이 입력되지 않았습니다');
+    } else {
+      $('#testResult').modal('hide');
+
+      $.ajax({
+        url: "testEnd",
+        method: "POST",
+        data: $("#dataForm").serialize(),
+        dataType: 'json',
+        success: function(data) {
+          gridData2 = data;
+          grid2.resetData(gridData2);
+          let reload = true;
+          for(let temp of data){
+            if(temp.testPsOrNot == null){
+              reload = false;
+            }
+          }
+          if( reload ) {
+            grid.removeRow(selectedRowKey);
+            grid2.clear();
+          }
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });
+    }
   })
 </script>
