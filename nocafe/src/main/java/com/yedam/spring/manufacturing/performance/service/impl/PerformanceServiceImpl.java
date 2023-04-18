@@ -87,4 +87,14 @@ public class PerformanceServiceImpl implements PerformanceService {
 		return mapper.getProTest(processVO);
 	}
 
+	@Override
+	public void testStart(ProcessVO processVO) {
+		mapper.testStart(processVO);
+	}
+
+	@Override
+	public void testEnd(ProcessVO processVO) {
+		mapper.testEnd(processVO);
+	}
+
 }

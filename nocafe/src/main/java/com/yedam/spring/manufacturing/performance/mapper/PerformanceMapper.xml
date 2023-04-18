@@ -101,23 +101,51 @@
 		SELECT i.pr_order_cd, i.pro_cd, e.pro_nm
 		  FROM product_inspection i, edcts e
 		 WHERE i.pro_cd = e.pro_cd
- 		GROUP BY i.pr_order_cd, i.pro_cd, e.pro_nm
- 		ORDER BY i.pr_order_cd, i.pro_cd, e.pro_nm
+           AND i.test_amt IS NULL
+ 		 GROUP BY i.pr_order_cd, i.pro_cd, e.pro_nm
+ 		 ORDER BY i.pr_order_cd, i.pro_cd, e.pro_nm
 	</select>
 	
 	<!-- 제품별 품질 검사 항목 조회 -->
 	<select id="getProTest" resultType="ProcessVO">
-		SELECT *
-		  FROM product_inspection i, edcts e, process_tbl t, prcs_result r
+		 SELECT *
+		  FROM product_inspection i, edcts e, process_tbl t, prcs_result r, emp m, edcts_stan s
 		 WHERE i.pro_cd = e.pro_cd
 		   AND i.pr_order_cd = t.pr_order_cd
 		   AND i.pro_cd = t.pro_cd
 		   AND t.pr_order_cd = r.pr_order_cd
 		   AND t.pro_cd = r.pro_cd
 		   AND t.prcs_cd = r.prcs_cd
+           AND r.worker = m.emp_code(+)
+           AND i.test_cd = s.stan_cd
 		   AND i.pr_order_cd = #{prOrderCd}
 		   AND i.pro_cd = #{proCd}
 		   AND t.prcs_cd LIKE 'PRCTES%'
 		 ORDER BY i.test_item
 	</select>
+	
+	<!-- 검사 시작 -->
+	<update id="testStart" statementType="CALLABLE" parameterType="ProcessVO">
+		{ CALL test_start(
+			  #{prOrderCd}
+			, #{proCd}
+			, #{testCd}
+			, #{empCode}
+			, #{stock}
+		  )
+		}
+	</update>
+	
+	<!-- 검사 끝 -->
+	<update id="testEnd" statementType="CALLABLE" parameterType="ProcessVO">
+		{ CALL test_end(
+			  #{prOrderCd}
+			, #{proCd}
+			, #{testCd}
+			, #{empCode}
+			, #{stock}
+			, #{testAmt}
+		  )
+		}
+	</update>
 </mapper>

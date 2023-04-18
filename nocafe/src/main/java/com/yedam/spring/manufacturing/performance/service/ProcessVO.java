@@ -31,8 +31,7 @@ public class ProcessVO {
 	private String testCnt;
 	private String testItem;
 	private String testAmt;
-	private String testGood;
-	private String testBad;
+	private String testPsOrNot;
 	
 	private String rscCd;
 	private String rscLotCd;

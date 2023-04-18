@@ -421,7 +421,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         formatter: function (data) {
           if (data.row.prStartDt == null){
             return '진행전';
-          } else if(data.row.prEndtDt == null) {
+          } else if(data.row.prEndDt == null) {
             return '진행중';
           } else {
             return '생산 완료';
@@ -552,11 +552,25 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         header: '시작 시간',
         name: 'wkFrDttm',
         align: 'center',
+        formatter: function (data) {
+          if( data.row.wkFrDttm == null) {
+            return '';
+          } else {
+            return dateChange2(data.row.wkFrDttm);
+          }
+        },
       },
       {
         header: '완료 시간',
         name: 'wkToDttm',
         align: 'center',
+        formatter: function (data) {
+          if( data.row.wkToDttm == null) {
+            return '';
+          } else {
+            return dateChange2(data.row.wkToDttm);
+          }
+        },
       },
     ]
   });
@@ -591,14 +605,6 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       method: "POST",
       data: { prOrderCd: prOrderCd, proCd: proCd},
       success: function(data) {
-        for(let temp of data) {
-          if( temp.wkFrDttm != null ) {
-            temp.wkFrDttm = dateChange2(temp.wkFrDttm);
-          }
-          if( temp.wkToDttm != null ) {
-            temp.wkToDttm = dateChange2(temp.wkToDttm);
-          }
-        }
         gridData3 = data;
         grid3.resetData(gridData3);
         let addClass = grid3.getData();
@@ -682,8 +688,6 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         gridData4 = data;
         grid4.resetData(gridData4);
         setTimeout(()=> grid4.refreshLayout(), 300);
-        let selEqmIndex = grid4.getData().findIndex(i => i.eqmCd = grid3.getRow(rowKey).eqmCd);
-        grid4.addRowClassName(selEqmIndex, 'highlight')
       },
       error: function (reject) {
         console.log(reject);
@@ -927,6 +931,8 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
     for( let temp of grid5.getData()){
       if( temp.rscUse == null || temp.rscUse == ''){
         endAble = false;
+        alert('자재 사용량을 입력해 주세요');
+        return;
       }
     }
 
