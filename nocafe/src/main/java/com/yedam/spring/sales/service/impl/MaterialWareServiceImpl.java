@@ -30,23 +30,26 @@ public class MaterialWareServiceImpl implements MaterialWareService {
 		return materialWareMapper.testPoor();
 	}
 
-	/*
-	 * @Override public int saveRsc(List<MaterialWareVO> materialWareVO) { int
-	 * result = 0; for(int i=0; i<materialWareVO.size(); i++) { result +=
-	 * materialWareMapper.saveRsc(materialWareVO.get(i)); } return result; }
-	 */
-
 	@Override
 	public List<MaterialWareVO> empList() {
 		return materialWareMapper.empList();
 	}
 
-	//전체저장
 	@Override
-	public int saveTotal(MaterialWareVO materialwareVO) {
-		return materialWareMapper.saveTotal(materialwareVO);
+	public String makeTr() {
+		return materialWareMapper.makeCd();
 	}
 
+	@Override
+	public int saveDetail(List<MaterialWareVO> materialWareVO) {
+		String cd = materialWareMapper.makeCd(); //검사코드 생성
+		int result = 0;
+		for(int i=0; i<materialWareVO.size(); i++) {
+			materialWareVO.get(i).setInspCd(cd);
+			result += materialWareMapper.saveDetail(materialWareVO.get(i));	
+		}
+		return result;
+	}
 
 
 }

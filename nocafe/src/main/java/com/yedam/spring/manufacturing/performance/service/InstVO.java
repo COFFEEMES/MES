@@ -21,7 +21,7 @@ public class InstVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date   prStartDt;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date   prEndtDt;
+	private Date   prEndDt;
 	
 	private String rscNm;
 	private String proNm;

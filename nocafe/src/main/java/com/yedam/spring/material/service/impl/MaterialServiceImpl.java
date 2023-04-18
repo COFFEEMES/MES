@@ -103,5 +103,10 @@ public class MaterialServiceImpl implements MaterialService {
 		MaterialOrderVO vo = ordrList.get(0);
 		materialMapper.rscOrdrFInsert(vo);
 	}
+
+	@Override
+	public List<MaterialLOTVO> rscCOrdrList(MaterialLOTVO materialLOTVO) {
+		return materialMapper.rscCOrdrList(materialLOTVO);
+	}
 	
 }

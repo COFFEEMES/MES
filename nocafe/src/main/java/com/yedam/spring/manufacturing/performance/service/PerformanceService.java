@@ -16,4 +16,6 @@ public interface PerformanceService {
 	public List<ProcessVO> getUseCnt(ProcessVO processVO);
 	public List<ProcessVO> getAllInspection();
 	public List<ProcessVO> getProTest(ProcessVO processVO);
+	public void testStart(ProcessVO processVO);
+	public void testEnd(ProcessVO processVO);
 }

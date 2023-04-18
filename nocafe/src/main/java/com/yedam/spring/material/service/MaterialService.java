@@ -9,6 +9,8 @@ public interface MaterialService {
 	//자재조회
 	public List<MaterialVO> getMaterialList();
 	
+	public List<MaterialLOTVO> rscCOrdrList(MaterialLOTVO materialLOTVO);
+	
 	//자재검색
 	public List<MaterialLOTVO> materalSearch(@Param("rscNm") String rscNm);
 	
