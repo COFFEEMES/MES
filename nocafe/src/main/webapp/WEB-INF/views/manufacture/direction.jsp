@@ -127,6 +127,19 @@ label {
 	let cd ;
 	let cnt = 0;
 	let cntt = 0;
+
+	//		↓↓↓↓↓오늘 날짜
+	let todayForgrid = new Date();
+//         console.log(todayForgrid);
+		let threeMonthsLater = new Date();
+		threeMonthsLater.setMonth(todayForgrid.getMonth() + 3);
+	
+	    let today = dateChange(todayForgrid);
+	    let after = dateChange(threeMonthsLater);
+
+
+
+
 	 $('#grid').mouseleave(ev => {
 			grid.finishEditing();
 		})
@@ -208,7 +221,7 @@ label {
 		        contentType: 'application/json; charset=utf-8',
 				data : JSON.stringify(planCd),
 				success : function(res){
-				console.log(res)
+				 grid.resetData(res)
 				},error: function(err){
 					console.log(err);
 				}
@@ -328,7 +341,10 @@ label {
 	        {
 	          header: '마감일자',
 	          name: 'exEndDt',
-	          align : 'left'
+	          align : 'center',
+						formatter: function(data){
+							return dateChange(data.value)
+						}
 	        },
 	        {
 	          header: '제품명',
@@ -367,7 +383,14 @@ label {
 	        {
 	          header: '지시수량',
 	          name: 'orderOutput',
-	          align : 'right'
+	          align : 'right',
+						validation :{
+							dataType : 'number',
+							required : 'true'
+						},
+						editor: {
+							type : 'text'
+						}
 	        },
 	        {
 	          header: '작업지시일',
@@ -375,7 +398,10 @@ label {
 	          align : 'center',
 	          editor : 'datePicker'
 	        }
-	      ]
+	      ],
+				onGridUpdated(ev){
+					grid.setColumnValues('indicaDt',today)
+				}
 	    });
 	    
     
@@ -467,6 +493,18 @@ label {
 		 }
 		 tui.Grid.applyTheme('default', hoverOption);   
 	
-
+		// 		↓↓↓↓↓↓↓날짜 포맷 적용함수
+		function dateChange(date) {
+		      let date1 = new Date(date);
+		      let date2 =
+		        date1.getFullYear() +
+		        "-" +
+		        (date1.getMonth() < 10
+		          ? "0" + (date1.getMonth() + 1)
+		          : date1.getMonth() + 1) +
+		        "-" +
+		        (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
+		      return date2;
+		    };
 
 	</script>
