@@ -35,6 +35,13 @@ public class MaterialController {
 		return "material/materialOrder";
 	}
 	
+	@GetMapping("rscCOrdrList")
+	@ResponseBody
+	public List<MaterialLOTVO> rscOrdrList(MaterialLOTVO materialLOTVO){
+		List<MaterialLOTVO> rscCOrdrList = materialService.rscCOrdrList(materialLOTVO);
+		return rscCOrdrList;
+	}
+	
 	//발주관리페이지 - 발주코드
 	@PostMapping("/materialOrderCd")
 	@ResponseBody

@@ -6,19 +6,18 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-   <link
-      rel="stylesheet"
-      href="https://uicdn.toast.com/grid/latest/tui-grid.css"
-    />
-    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<link rel="stylesheet"
-    href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 
+	<style>
+
+		label {
+			width: 100px;
+			float: left;
+		}
+		
+		.tui-grid-cell.cell-red{
+			background-color:rgba(255,0,0,0.3)
+		}
+	</style>
 </head>
 
 <body>
@@ -86,22 +85,11 @@
 			let date = today.getDate();
 			let format = year + (("00" + month.toString()).slice(-2)) + (("00" + date.toString()).slice(-2));
 				
-			const gridData = [
-        <c:forEach items="${materialLOTList }" var="material">
-          {	  rscCd :  '${material.rscCd}',
-        	  rscNm :  '${material.rscNm}',
-        	  vendCd : '${material.vendCd}',
-        	  vendNm : '${material.vendNm}',
-        	  lotCnt : '${material.lotCnt}',
-        	  safRtc : '${material.safRtc}'
-          },
-        </c:forEach>
-      ];
+			const gridData = [];
     
     const grid = new tui.Grid({
         el: document.getElementById('grid'),
         bodyHeight: 450,
-        data: gridData,
         rowHeaders: ["rowNum"],
         columns: [
             {
@@ -140,7 +128,32 @@
 			}
         ]
     });
+    
     var isValid = true;
+    
+    $.ajax({
+		url: "rscCOrdrList",
+		method: 'GET',
+		dataType: 'JSON',
+		success: 
+			function (result) {
+		    for (res in result){
+		        var lotCnt = result[res].lotCnt;
+		        grid.resetData(result);
+		        if(lotCnt == null || lotCnt == '' || lotCnt == 0){
+		            result[res].lotCnt = 0;
+		            var lotCntValue = parseFloat(lotCnt);
+		            var safRtc = grid.getValue(res, 'safRtc');
+		            var safRtcValue = parseFloat(safRtc.replace(/[^0-9.-]/g, ''));
+		            
+		            if(lotCntValue < safRtcValue){
+		                grid.addRowClassName(res, 'cell-red');
+		            }
+		        }
+		    }
+		}
+	})
+    
     
     $('#grid').mouseleave(ev => {
         grid.finishEditing();

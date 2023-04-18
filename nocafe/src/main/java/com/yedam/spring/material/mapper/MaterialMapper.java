@@ -15,6 +15,8 @@ public interface MaterialMapper {
 	//자재관리
 	public List<MaterialVO> selectMaterialList();
 	
+	public List<MaterialLOTVO> rscCOrdrList(MaterialLOTVO materialLOTVO);
+	
 	//자재검색
 	public List<MaterialLOTVO> materalSearch(@Param("rscNm") String rscNm);
 	
