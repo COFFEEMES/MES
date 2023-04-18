@@ -11,7 +11,7 @@ public class MaterialOrderVO {
 	//자재발주
 	private String ordrCd; 		//발주번호
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date ordrReqDt;		//발주신청일
 	
 	private String vendCd;		//거래처코드
@@ -22,6 +22,8 @@ public class MaterialOrderVO {
 	private String rscNm;
 	
 	private String ordrCnt;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String paprdCmndDt;
 	
 	private String ordrSCnt;

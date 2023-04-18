@@ -83,7 +83,25 @@ public class MaterialServiceImpl implements MaterialService {
 	public List<MaterialOrderVO> materialOrderCd(MaterialOrderVO materialOrderVO) {
 		return materialMapper.materialOrderCd(materialOrderVO);
 	}
-	
-	
+
+	@Override
+	public List<MaterialVO> getResources(MaterialVO materialVO) {
+		return materialMapper.getResources(materialVO);
+	}
+
+	//발주버튼
+	@Override
+	public void rscOrdrInsert(List<MaterialOrderVO> ordrList) {
+		MaterialOrderVO vo = ordrList.get(0);
+		materialMapper.rscOrdrFInsert(vo);
+		for (MaterialOrderVO ordrDtl : ordrList) {
+			materialMapper.rscOrdrInsert(ordrDtl);
+		}
+	}
+	@Override
+	public void rscOrdrFInsert(List<MaterialOrderVO> ordrList) {
+		MaterialOrderVO vo = ordrList.get(0);
+		materialMapper.rscOrdrFInsert(vo);
+	}
 	
 }

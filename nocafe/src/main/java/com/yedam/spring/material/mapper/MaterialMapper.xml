@@ -9,13 +9,13 @@
 
 	<select id="selectMaterialLOTList" resultType="MaterialLOTVO">
 		SELECT r.rsc_cd,
-		r.rsc_nm, o.vend_cd, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc
+		r.rsc_nm, o.vend_cd, v.vend_nm, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc
 		FROM rsc r,
-		rsc_ordr o, rsc_lot l
+		rsc_ordr o, rsc_lot l, vend v
 		WHERE r.rsc_cd = l.rsc_cd
-		AND o.ordr_cd =
-		l.ordr_cd
-		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd, r.saf_rtc
+		AND o.ordr_cd = l.ordr_cd
+		AND o.vend_cd = v.vend_cd
+		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd, v.vend_nm, r.saf_rtc
 	</select>
 
 	<!-- 발주관리페이지 발주코드 -->
@@ -70,7 +70,7 @@
 	<!-- 발주관리페이지 자재발주 -->
 	<select id="getMaterialOrderDetail"
 		resultType="MaterialOrderDetailVO">
-		SELECT r.rsc_cd, r.rsc_nm, o.vend_cd, o.ordr_cd,
+		SELECT r.rsc_cd, r.rsc_nm, o.vend_cd, v.vend_nm, o.ordr_cd,
 		d.ordr_cnt, SUM(l.lot_cnt) AS "LOT_CNT", r.saf_rtc, d.paprd_cmnd_dt
 		FROM rsc r JOIN rsc_lot l
 		ON r.rsc_cd = l.rsc_cd
@@ -79,8 +79,10 @@
 		o.ordr_cd = l.ordr_cd
 		JOIN rsc_ordr_dtl d
 		ON o.ordr_cd = d.ordr_cd
+		JOIN vend v
+		ON o.vend_cd = v.vend_cd
 		WHERE r.rsc_cd = #{rscCd}
-		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd,
+		GROUP BY r.rsc_cd, r.rsc_nm, o.vend_cd, v.vend_nm,
 		o.ordr_cd, d.ordr_cnt, r.saf_rtc, d.paprd_cmnd_dt
 	</select>
 
@@ -122,6 +124,20 @@
 	</select>
 
 
+   <select id="getResources" resultType="MaterialVO">
+        select RSC_CD, RSC_NM, RSC_UNIT
+        from RSC
+        where RSC_NM like '%${rscNm}%'
+          and RSC_CD like '%${rscCd}%'
+   </select>
 
+	<!-- 발주신청 -->
+	<insert id="rscOrdrInsert" parameterType="MaterialOrderVO">
+		insert into rsc_ordr_dtl (ordr_cd, rsc_cd, ordr_cnt, paprd_cmnd_dt) values(#{ordrCd}, #{rscCd}, #{ordrCnt}, #{paprdCmndDt})
+	</insert>
+
+	<insert id="rscOrdrFInsert" parameterType="MaterialOrderVO">
+		insert into rsc_ordr values(#{ordrCd}, sysdate, #{vendCd})
+	</insert>
 
 </mapper>
