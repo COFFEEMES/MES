@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.spring.sales.service.MaterialWareService;
 import com.yedam.spring.sales.service.MaterialWareVO;
+import com.yedam.spring.sales.service.OrderVO;
 
 @Controller
 public class MaterialWareController {
@@ -46,20 +47,19 @@ public class MaterialWareController {
 			return materialWareService.testPoor();
 		}
 	
-		/*
-		 * //저장 -> 쿼리문 짜야함
-		 * 
-		 * @PostMapping("/saveRsc")
-		 * 
-		 * @ResponseBody public int saveRsc(@RequestBody List<MaterialWareVO>
-		 * materialwareVO) { return materialWareService.saveRsc(materialwareVO); }
-		 */
-	
 	//사원정보
 	@GetMapping("/empList")
 	@ResponseBody
 	public List<MaterialWareVO> empList() {
 		return materialWareService.empList();
 	}
+	
+	
+	//상세 저장
+	@PostMapping("/saveDetail")
+	@ResponseBody
+	public int saveDetail(@RequestBody List<MaterialWareVO> materialWareVO) {
+			return materialWareService.saveDetail(materialWareVO);
+		}
 	
 }

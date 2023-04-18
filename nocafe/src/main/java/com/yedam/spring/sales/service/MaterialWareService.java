@@ -13,12 +13,12 @@ public interface MaterialWareService {
 	//검사 모달 
 	public List<MaterialWareVO> testPoor();
 	
-	//저장
-	//public int saveRsc(List<MaterialWareVO> materialWareVO);
-	
 	//사원 검색
 	public List<MaterialWareVO> empList();
 	
-	//자재입고 검사 저장
-	public int saveTotal(MaterialWareVO materialwareVO);
+	//검사코드 만들기
+	public String makeTr();
+	
+	//검사상세 저장
+	public int saveDetail(List<MaterialWareVO> materialWareVO);
 }

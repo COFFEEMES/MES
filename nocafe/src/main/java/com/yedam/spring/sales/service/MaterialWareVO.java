@@ -47,4 +47,5 @@ public class MaterialWareVO {
 	private String empName; //사원명
 	
 	
+	
 }

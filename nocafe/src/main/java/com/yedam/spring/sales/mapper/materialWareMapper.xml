@@ -49,6 +49,20 @@
 	FROM emp
 	</select>
 	
+<!--검사코드 생성  -->
+   <select id= "makeCd" resultType="String">
+     SELECT 'RSC'||SUBSTR(TO_CHAR(sysdate, 'yyyyMMdd'),3) ||     -- 출고번호 생성
+            (SELECT LPAD(NVL(MAX(SUBSTR(insp_cd,12,2)+1),1),4,'0')
+             FROM rsc_insp
+             WHERE TO_CHAR(insp_tstr,'yyyyMMdd')=TO_CHAR(sysdate,'yyyyMMdd'))
+    	FROM dual
+   </select>
+   
+   <!--디테일 저장  -->
+	<insert id="saveDetail"   parameterType="MaterialWareVO">
+	INSERT INTO rsc_insp_dtl
+	VALUES #{rscInspCd}, #{ordrCd}, #{rscCd}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt}
+	</insert>
 
 </mapper>
   
