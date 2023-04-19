@@ -306,7 +306,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //저장 버튼
   $('#saveRsc').click(ev => {
     if( $('#rscTyp').val() == '' || $("#rscNm").val() == null || $('#rscNm').val() == '' ) {
-      alert('필수 입력 사항을 입력해 주세요')
+      Swal.fire({
+        icon: "error",
+        title: '필수 입력 사항을 입력해 주세요',
+        text: '',
+      });
     } else {
       $("#rscTyp").attr('disabled', false);
       $.ajax({
@@ -324,7 +328,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
             }
           }
           grid.resetData(fixedData)
-          alert('성공적으로 저장되었습니다.');
+          Swal.fire({
+            icon: "success",
+            title: '성공적으로 저장되었습니다.',
+            text: '',
+          });
           $("#rscTyp").attr('disabled', true);
         }
       })
@@ -334,7 +342,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //삭제
   $("#delBtn").click((ev) => {
     if( $("#rscCd").val() == '' || $("#rscCd").val() == null) {
-      alert('선택된 자재가 없습니다')
+      Swal.fire({
+        icon: "error",
+        title: '선택된 자재가 없습니다',
+         text: '',
+      });
     } else {
       $.ajax({
         url: "delRsc",
@@ -350,7 +362,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
               rscNm : result[i].detailExplain,
             }
           }
-          alert("비활성화되었습니다.");
+          Swal.fire({
+            icon: "success",
+            title: '비활성화되었습니다.',
+            text: '',
+          });
           grid.resetData(fixedData);
           $('body').find('form')[1].reset();
           $("#hInput").val('');

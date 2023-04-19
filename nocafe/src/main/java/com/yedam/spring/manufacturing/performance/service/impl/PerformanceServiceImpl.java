@@ -1,6 +1,7 @@
 package com.yedam.spring.manufacturing.performance.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -84,7 +85,11 @@ public class PerformanceServiceImpl implements PerformanceService {
 
 	@Override
 	public List<ProcessVO> getProTest(ProcessVO processVO) {
-		return mapper.getProTest(processVO);
+		List<ProcessVO> list = new ArrayList<>();
+		for(ProcessVO temp : mapper.getProTest(processVO)) {
+			list.add(mapper.getProTest2(temp));
+		};
+		return list;
 	}
 
 	@Override

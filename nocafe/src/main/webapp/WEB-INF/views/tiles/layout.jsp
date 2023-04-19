@@ -12,7 +12,7 @@ uri="http://tiles.apache.org/tags-tiles"%>
     />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>No Capain No Gain</title>
+    <title>No Cafein No Gain</title>
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
     <link
       rel="stylesheet"
@@ -37,6 +37,11 @@ uri="http://tiles.apache.org/tags-tiles"%>
       href="${pageContext.request.contextPath }/resources/css/styles.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
   </head>
   <body class="sb-nav-fixed">
     <tiles:insertAttribute name="header"></tiles:insertAttribute>

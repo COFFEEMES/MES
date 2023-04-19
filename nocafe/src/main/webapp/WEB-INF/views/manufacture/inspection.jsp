@@ -359,8 +359,43 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         name: 'testPsOrNot',
         align: 'center',
       },
+      {
+        header: '검사 시작 시간',
+        name: 'wkFrDttm',
+        align: 'center',
+        formatter: function (data) {
+          if( data.row.wkFrDttm == null) {
+            return '';
+          } else {
+            return dateChange2(data.row.wkFrDttm);
+          }
+        },
+      },
+      {
+        header: '검사 완료 시간',
+        name: 'wkToDttm',
+        align: 'center',
+        formatter: function (data) {
+          if( data.row.wkToDttm == null) {
+            return '';
+          } else {
+            return dateChange2(data.row.wkToDttm);
+          }
+        },
+      },
     ]
   });
+
+  function dateChange2(date) {
+    function pad(n) { return n<10 ? "0"+n : n }
+    d = new Date(date);
+    d.setHours(d.getHours() + 9);
+    return d.getFullYear()+"-"+
+    pad(d.getMonth()+1)+"-"+
+    pad(d.getDate())+" "+
+    pad(d.getHours())+":"+
+    pad(d.getMinutes())
+  }
 
   var selectedRowKey = null;
   var prOrderCd = '';
@@ -401,22 +436,38 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   grid2.on('click', (ev) => {
     testCd = grid2.getValue(ev.rowKey, 'testCd');
 
-    if (selectedRowKey2 != ev.rowKey) {
-      grid2.removeRowClassName(selectedRowKey2, 'highlight');
+    if( grid2.getValue(ev.rowKey, 'wkFrDttm') != null && grid2.getValue(ev.rowKey, 'wkToDttm') != null){
+      Swal.fire({
+        icon: "error",
+        title: '이미 완료된 검사입니다',
+        text: '',
+      });
+    } else {
+
+      if(testCd == 'LEATEST'){
+        $('#testAmt').attr('step', '0.00001')
+      } else if (testCd == 'TINTEST'){
+        $('#testAmt').attr('step', '0.001')
+      } else {
+        $('#testAmt').attr('step', '1')
+      }
+
+      if (selectedRowKey2 != ev.rowKey) {
+        grid2.removeRowClassName(selectedRowKey2, 'highlight');
+      }
+      selectedRowKey2 = ev.rowKey;
+      grid2.addRowClassName(selectedRowKey2, 'highlight');
+
+      $('#proCd').val(proCd);
+      $('#proNm').val(grid2.getValue(ev.rowKey, 'proNm'));
+      $('#stock').val(grid2.getValue(ev.rowKey, 'testCnt'));
+      $('#testCd').val(testCd);
+      $('#testItem').val(grid2.getValue(ev.rowKey, 'testItem'));
+      $('#empCode').val(grid2.getValue(ev.rowKey, 'empCode'));
+      $('#empName').val(grid2.getValue(ev.rowKey, 'empName'));
+
+      $('#testResult').modal('show');
     }
-    selectedRowKey2 = ev.rowKey;
-    grid2.addRowClassName(selectedRowKey2, 'highlight');
-
-    $('#proCd').val(proCd);
-    $('#proNm').val(grid2.getValue(ev.rowKey, 'proNm'));
-    $('#stock').val(grid2.getValue(ev.rowKey, 'testCnt'));
-    $('#testCd').val(testCd);
-    $('#testItem').val(grid2.getValue(ev.rowKey, 'testItem'));
-    $('#prcsCd').val(grid2.getValue(ev.rowKey, 'prcsCd'));
-    $('#empCode').val(grid2.getValue(ev.rowKey, 'empCode'));
-    $('#empName').val(grid2.getValue(ev.rowKey, 'empName'));
-
-    $('#testResult').modal('show');
   });
 
   $('#closeTestBtn').on('click', () => {
@@ -426,6 +477,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   //모달이 꺼지면 내부 인풋 초기화
   $('#testResult').on('hidden.bs.modal', function (e) {
     $("#testAmt").val('');
+    $('#empName').val('');
   })
 
   //담당사원 전체조회
@@ -497,7 +549,11 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   //검사 시작
   $('#testStart').on('click', () => {
     if($('#empCode').val() == null || $('#empCode').val() == ''){
-      alert('담당자가 선택되지 않았습니다')
+      Swal.fire({
+        icon: "error",
+        title: '담당자가 선택되지 않았습니다',
+        text: '',
+      });
     } else {
       $('#testResult').modal('hide');
 
@@ -507,6 +563,8 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         data: $("#dataForm").serialize(),
         dataType: 'json',
         success: function(data) {
+          gridData2 = data;
+          grid2.resetData(gridData2);
         },
         error: function (reject) {
           console.log(reject);
@@ -517,8 +575,18 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
 
   //검사 완료
   $('#testEnd').on('click', () => {
-    if($('#testAmt').val() == null || $('#testAmt').val() == ''){
-      alert('검출량이 입력되지 않았습니다');
+    if(grid2.getValue(selectedRowKey2, 'wkFrDttm') == null) {
+      Swal.fire({
+        icon: "error",
+        title: '시작되지 않은 검사입니다',
+        text: '',
+      });
+    } else if($('#testAmt').val() == null || $('#testAmt').val() == ''){
+      Swal.fire({
+        icon: "error",
+        title: '검출량이 입력되지 않았습니다',
+        text: '',
+      });
     } else {
       $('#testResult').modal('hide');
 
@@ -531,11 +599,19 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
           gridData2 = data;
           grid2.resetData(gridData2);
           let reload = true;
+
           for(let temp of data){
             if(temp.testPsOrNot == null){
               reload = false;
             }
           }
+
+          for(let temp of data){
+            if(temp.testPsOrNot == 'N'){
+              reload = true;
+            }
+          }
+
           if( reload ) {
             grid.removeRow(selectedRowKey);
             grid2.clear();
