@@ -28,6 +28,7 @@ label {
 	width : 100px;
 	
 }
+.tui-grid-cell.not-allow-row {background-color : rgb(239, 246, 230)}
 </style>
 </head>
 <body>
@@ -77,9 +78,11 @@ label {
 		<br>
 		<div class="card mb-4">
 			<div class="card-body">
-				<div class="d-flex flex-row justify-content-between">
-					<div id="grid2" style="width: 1000px;">공정자재</div>
-					<div id="grid3" style="width: 500px;">자재지시</div>
+<!-- 				<div class="d-flex flex-row justify-content-between"> -->
+					<div>
+<!-- 					<div id="grid2" style="width: 1500px;">공정자재</div> -->
+					<div id="grid2">공정자재</div>
+<!-- 					<div id="grid3" style="width: 500px;">자재지시</div> -->
 				</div>
 			</div>
 		</div>
@@ -127,6 +130,8 @@ label {
 	let cd ;
 	let cnt = 0;
 	let cntt = 0;
+	let secGridData;
+	let totalData;
 
 	//		↓↓↓↓↓오늘 날짜
 	let todayForgrid = new Date();
@@ -157,7 +162,7 @@ label {
 	   			dataType : 'JSON',
 	   			success: function (result) {
 // 	   				modGrid.resetData(result);
-// 	   				console.log(result)
+	   				console.log(result)
 	   				let i = 0
 	   				let j = 0
 	   				for( ;i<result.length;i++){
@@ -208,18 +213,16 @@ label {
 	   	
 	 	//grid에 모달 내용 띄우기
    	 $("#confirmBtn").on("click", function(){
-        	let data = modGrid.getCheckedRows()
+        	let data = modGrid.getCheckedRows()[0].planCd
         	console.log(data)
-        	let planCd=new Array
-        	for(let i=0;i<data.length;i++){
-        		planCd.push(data[i].planCd)
-        	}
+        	
+        	
         	$.ajax({
 				url : 'getDataForGrid',
 				method : 'POST',
 				dataType: 'json',
 		        contentType: 'application/json; charset=utf-8',
-				data : JSON.stringify(planCd),
+				data : data,
 				success : function(res){
 				 grid.resetData(res)
 				},error: function(err){
@@ -230,66 +233,66 @@ label {
      })
      
      
-   	//grid2에 내용 띄우기 grid에서 엔터(keyCode=13) 누르면 넘어감
-   	$("#grid").on("keyup", function(key) {
-   		let edctsCd = grid.getData()[0].edctsCd;
+//    	//grid2에 내용 띄우기 grid에서 엔터(keyCode=13) 누르면 넘어감
+//    	$("#grid").on("keyup", function(key) {
+//    		let edctsCd = grid.getData()[0].edctsCd;
    		
-   		if(key.keyCode == 13) {
-   			$.ajax({
-   				url : 'getRsc',
-   				method : 'GET',
-   				data : {"edctsCd" : edctsCd},
-   				success: function (result) {
-   					$.each(result, function(index, item) {
-						item.useCnt = item.useCnt * grid.getData()[0].indicaCnt
-					})
+//    		if(key.keyCode == 13) {
+//    			$.ajax({
+//    				url : 'getRsc',
+//    				method : 'GET',
+//    				data : {"edctsCd" : edctsCd},
+//    				success: function (result) {
+//    					$.each(result, function(index, item) {
+// 						item.useCnt = item.useCnt * grid.getData()[0].indicaCnt
+// 					})
 					
-					console.log(result)
-   					grid2.resetData(result); 
-   					grid3.resetData(result);
-   				}
-   			})
-   		}
-   }) 
+// 					console.log(result)
+//    					grid2.resetData(result); 
+// //    					grid3.resetData(result);
+//    				}
+//    			})
+//    		}
+//    }) 
    	
    	//그리드에 띄운 데이터들을 저장 버튼을 눌렀을 때 테이블 두 개에 저장하기+ 지시가 내려졌으므로 계획 테이블 상태 업데이트
    	$("#regiBtn").on("click", function() {
-   		let gridData = grid.getData()
-   		console.log(gridData)
+//    		let gridData = grid.getData()
+//    		console.log(gridData)
    		
-   		let linePsch = grid.getData()[0].linePsch
-		console.log(linePsch)
-		let indicaDt = grid.getData()[0].indicaDt
-		console.log(indicaDt)
+//    		let linePsch = grid.getData()[0].linePsch
+// 		console.log(linePsch)
+// 		let indicaDt = grid.getData()[0].indicaDt
+// 		console.log(indicaDt)
    			
-		gridData[0].linePsch = linePsch 
-		gridData[0].indicaDt = indicaDt
-   		console.log(JSON.stringify(gridData))
+// 		gridData[0].linePsch = linePsch 
+// 		gridData[0].indicaDt = indicaDt
+//    		console.log(JSON.stringify(gridData))
    		
-   		let planCd = grid.getData()[0].planCd;
+//    		let planCd = grid.getData()[0].planCd;
    		
-   		$.ajax({
-   			url : 'indInsert',
-   			method : 'post',
-   			contentType : 'application/json',
-   			data : JSON.stringify(gridData),
-   			error : function(error){
-   				console.log("error!")
-   			},
-   			success : function() {
-   				toastr.success("저장되었습니다.")  
-   				modGrid.clear()
-        		grid.clear()
-		   		grid2.clear()
-		   		grid3.clear()
-		   		grid4.clear()
-		   		grid5.clear()
-   			}
-   		})
-   		$.ajax({
-   			url : 'updatePlan',
-   			data : {"planCd" : planCd}
-   		})
+//    		$.ajax({
+//    			url : 'indInsert',
+//    			method : 'post',
+//    			contentType : 'application/json',
+//    			data : JSON.stringify(gridData),
+//    			error : function(error){
+//    				console.log("error!")
+//    			},
+//    			success : function() {
+//    				toastr.success("저장되었습니다.")  
+//    				modGrid.clear()
+//         		grid.clear()
+// 		   		grid2.clear()
+// // 		   		grid3.clear()
+// 		   		grid4.clear()
+// 		   		grid5.clear()
+//    			}
+//    		})
+//    		$.ajax({
+//    			url : 'updatePlan',
+//    			data : {"planCd" : planCd}
+//    		})
    		
    	})
    	
@@ -301,7 +304,6 @@ label {
                 columnOptions: {
                     minWidth: 180
                   },
-                rowHeaders: ['checkbox'],
                 columns: [{
                     header: '생산계획코드',
                     name: 'planCd',
@@ -320,7 +322,7 @@ label {
    	$("#clearBtn").on("click", function(){
    		grid.clear()
    		grid2.clear()
-   		grid3.clear()
+//    		grid3.clear()
    		modGrid.clear()
    	})  	
    	
@@ -351,30 +353,6 @@ label {
 	          name: 'proNm',
 	          align : 'center'
 	        },
-	       
-	        {
-	          header: '라인책임자',
-	          name: 'linePsch',
-	          align : 'left',
-	          editor: {
-                  type: 'select',
-                  options: {
-                      listItems: [{
-                              text: '강길동',
-                              value: '강길동'
-                          },
-                          {
-                              text: '유길동',
-                              value: '유길동'
-                          },
-                          {
-                              text: '장길동',
-                              value: '장길동'
-                          }
-                      ]
-                  }
-              }
-	        },
 	        {
 	          header: '필요수량',
 	          name: 'planCnt',
@@ -401,6 +379,10 @@ label {
 	      ],
 				onGridUpdated(ev){
 					grid.setColumnValues('indicaDt',today)
+					
+					let gridData = grid.getData();
+					console.log(gridData)
+			    	writeSecGrid(gridData,0)
 				}
 	    });
 	    
@@ -416,67 +398,36 @@ label {
 	      scrollX: false,
 	      scrollY: true,
 	      columns: [
-	        {
-	          header: '공정코드',
-	          name: 'prcsCd',
+	    	{
+	          header: '순서',
+	          name	: 'bomSq',
+	          align : 'center',
+	          width	: 50
+		     },
+	    	{
+	          header: '공정명',
+	          name	: 'prcsNm',
 	          align : 'center'
 	        },
 	        {
 	          header: '자재명',
-	          name: 'rscNm',
-	          align : 'left'
-	        },
-	        {
-	          header: 'LOT번호',
-	          name: 'rscLotCd',
+	          name	: 'rscNm',
 	          align : 'center'
 	        },
+	    
 	        {
 	          header: '재고수량',
-	          name: 'lotRmnCnt',
-	          align : 'right'
-	        },
-	        {
-	          header: '출고수량',
-	          name: 'holdCnt',
+	          name	: 'lotCnt',
 	          align : 'right'
 	        },
 	        {
 	          header: '사용량',
-	          name: 'useCnt',
+	          name	: 'exCnt',
 	          align : 'right'
 	        }
 	      ]
 	    });
 	    
-   	    
-   
-   const gridData3 = [];
-  
-   const grid3 = new tui.Grid({
-	      el: document.getElementById('grid3'),
-	      //data: gridData2,
-	      bodyHeight : 169,
-	      scrollX: false,
-	      scrollY: true,
-	      columns: [
-	        {
-	          header: '자재명',
-	          name: 'rscNm',
-	          align : 'center'
-	        },
-	        {
-	          header: 'LOT번호',
-	          name: 'rscLotCd',
-	          align : 'center'
-	        },
-	        {
-	          header: '출고수량',
-	          name: 'holdCnt',
-	          align : 'right'
-	        }
-	      ]
-	    });
 	    
 	modalBtn.addEventListener('click', function () {
                 setTimeout(function () {
@@ -506,5 +457,30 @@ label {
 		        (date1.getDate() < 10 ? "0" + date1.getDate() : date1.getDate());
 		      return date2;
 		    };
+		    
+		 function writeSecGrid(data,num){
+			 $.ajax({
+					url : 'getDataForSecGrid',
+					method : 'POST',
+					dataType: 'json',
+			        contentType: 'application/json; charset=utf-8',
+					data : JSON.stringify(data),
+					success : function(res){
+						grid2.resetData(res[num]);
+						secGridData = res;
+						console.log(secGridData)
+					},error: function(err){
+						console.log(err);
+					}
+				})
+			 
+		 }
+		 
+		 grid.on('dblclick',function(ev){
+			 let gridData = grid.getRow(ev.rowKey)
+			 grid2.resetData(secGridData[ev.rowKey])
+			 
+		 })
+		 
 
 	</script>

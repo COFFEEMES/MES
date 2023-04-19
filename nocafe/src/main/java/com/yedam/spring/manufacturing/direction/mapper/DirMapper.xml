@@ -21,11 +21,85 @@
 	on   p.plan_cd = h.plan_cd
 		        join detail_code d
 		        on p.pro_cd = d.full_code
-	where p.plan_cd in <foreach collection="array" item="arr" open="(" close=")" separator=",">
-						#{arr}
-						</foreach>
+	where p.plan_cd = #{planCd}					
+	order by 2
 	</select>
 	
+	<select id="getPrcsEndCnt" resultType="DirVO">
+	select distinct t.pro_cd, t.output, e.bom_sq
+	from
+	(select pro_cd, sum(output) output ,bom_sq
+	from process_tbl 
+	where pr_order_cd in(select distinct o.pr_order_cd
+	                     from pr_order_header h join pr_order o
+	                     on  h.pr_order_cd = o.pr_order_cd
+	                     where h.plan_no = #{planCd}) 
+	group by pro_cd,bom_sq
+	order by 1) t 
+	join
+	(select pro_cd, max(bom_sq) bom_sq
+	from bom
+	where pro_cd = #{proCd}
+	group by pro_cd
+	order by 1) e
+	on t.pro_cd = e.pro_cd
+	where t.bom_sq = e.bom_sq
+	</select>
+	<select id="getDataForSecGrid" resultType="DirVO">
+	 select n.bom_sq, n.pro_cd, n.rsc_cd, n.prcs_cd, n.rsc_nm, n.prcs_nm, m.lot_cnt, m.ex_cnt
+        from(SELECT 	b.bom_sq,
+				b.pro_cd, 
+				NVL(b.rsc_cd,'이전 공정 결과물')AS rsc_cd,
+				b.prcs_cd, 
+				b.use_cnt,	
+				NVL(d.detail_explain,'이전 공정의 결과물') AS rsc_nm ,
+				e.detail_name
+		AS 		prcs_nm
+		FROM 	bom b LEFT OUTER Join detail_code d
+		ON	 	b.rsc_cd = d.full_code
+								 JOIN detail_code e
+								 ON b.prcs_cd = e.full_code
+		WHERE 	b.pro_cd = (select full_code from detail_code where detail_explain = #{proNm}) AND b.rsc_cd != 'RSCNOT001'
+		ORDER BY 1) n
+        join
+        (
+		SELECT  r.rsc_cd, 
+				SUM(r.lot_cnt) lot_cnt, 
+				d.detail_explain rsc_nm, 
+				s.ex_cnt
+  		FROM 	rsc_lot r, detail_code d, (SELECT 	rsc_cd, 
+  													SUM(
+  													CASE pro_cd
+  													
+                                                   WHEN (SELECT full_code 
+                                                   				FROM detail_code 
+                                                   				WHERE detail_explain = #{proNm}) 
+                                                   
+                                                   THEN use_cnt * #{orderOutput}
+										        	
+                                                 	END
+                                                 	) ex_cnt
+                                    	FROM bom
+                                   		WHERE pro_cd IN (SELECT full_code
+                                                      	 FROM detail_code 
+                                                     	 WHERE detail_explain = #{proNm}
+                                                    )
+                                   		GROUP BY rsc_cd
+                                  ) s
+		 WHERE 	r.rsc_cd = d.full_code
+   		 AND 	r.rsc_cd = s.rsc_cd
+  		 AND 	r.rsc_cd IN(SELECT DISTINCT rsc_cd
+                     	 	FROM bom
+                    	 	WHERE pro_cd IN (SELECT DISTINCT full_code
+                                       		 FROM detail_code 
+                                      		 WHERE detail_explain = #{proNm}
+                                     )
+                   )
+         AND r.rsc_cd != #{planCd}
+ 		 GROUP BY r.rsc_cd, d.detail_explain, s.ex_cnt) m
+         on n.rsc_cd  = m.rsc_cd
 	
+	
+	</select>
 
 </mapper>

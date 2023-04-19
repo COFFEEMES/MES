@@ -6,7 +6,10 @@ public interface DirService {
 
 	public List<DirVO>getPlanList();
 	
-	public List<DirVO>getDataForGrid(String[] DirVO);
+	public List<DirVO>getDataForGrid(String dirVO);
 	
+	public List<DirVO>getPrcsEndcnt(List<DirVO>dirVO);
+	
+	public List<List<DirVO>>getDataForSecGrid(List<DirVO>dirVO);
 	
 }

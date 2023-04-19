@@ -8,6 +8,10 @@ public interface DirMapper {
 
 	public List<DirVO>getPlanList();
 	
-	public List<DirVO>getDataForGrid(String[] DirVO);
+	public List<DirVO>getDataForGrid(String dirVo);
+	
+	public DirVO getPrcsEndCnt(DirVO dirVO);
+	
+	public List<DirVO> getDataForSecGrid(DirVO dirVO);
 	
 }

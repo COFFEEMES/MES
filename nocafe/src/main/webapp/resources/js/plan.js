@@ -219,48 +219,48 @@ const gridFormat = {
 let grid = new tui.Grid(gridFormat);
 
 // 		↓↓↓↓↓↓ 제품별 주문수량 생산수량
-const gridData2 = [];
-const grid2 = new tui.Grid({
-  el: document.getElementById("grid2"),
-  data: gridData2,
-  scrollX: false,
-  scrollY: true,
-  bodyHeight: 243,
-  columns: [
-    {
-      header: "제품명",
-      name: "proNm",
-      align: "center",
-    },
-    {
-      header: "주문 수량",
-      name: "orderCnt",
-      align: "right",
-    },
-
-    {
-      header: "생산 수량",
-      name: "proCnt",
-      align: "right",
-      editor: {
-        type: "text",
-      },
-    },
-    {
-      header: "재고량",
-      name: "stockCnt",
-      align: "right",
-    },
-  ],
-  onGridUpdated(ev) {
-    // 				기본값
-    let gridData = grid2.getData();
-    // 				↓↓↓↓
-    getPrcs(gridData[0].proNm);
-    // 				↓↓↓↓grid3에 제품의 공정과 공정별 불량류 표시
-    mkgrid3();
-  },
-});
+		const gridData2 = [];
+		const grid2 = new tui.Grid({
+			el : document.getElementById('grid2'),
+			data : gridData2,
+			scrollX : false,
+			scrollY : true,
+			bodyHeight : 243,
+			columns : [{
+				header 	: '제품명',
+				name	: 'proNm',
+				align	: 'center'
+			},{
+				header 	: '주문 수량',
+				name	: 'orderCnt', 
+				align	: 'right',
+			},
+		
+			{
+				header 	: '생산 수량',
+				name	: 'proCnt', 
+				align	: 'right',
+				editor 	: 
+					{
+						type: 'text'
+					},
+					
+			},
+			{
+				header 	: '재고량',
+				name	: 'stockCnt',
+				align	: 'right'
+			}
+			],
+			onGridUpdated(ev){
+// 				기본값
+				let gridData = grid2.getData()
+// 				↓↓↓↓
+				getPrcs(gridData[0].proNm);
+// 				↓↓↓↓grid4에 제품의 공정과 공정별 불량류 표시
+				mkgrid3()
+			}
+		});
 
 // 		↓↓↓↓grid2바탕으로 제품별 공정, 불량률 출력grid
 const gridData3 = [];
@@ -469,51 +469,52 @@ function dateChange(date) {
 }
 
 // 		    ↓↓↓↓↓↓↓제품 공정 받아오는 Ajax
-function getPrcs(data) {
-  $.ajax({
-    url: "getBom",
-    method: "GET",
-    data: { proNm: data },
-    success: function (result) {
-      console.log(result);
-      bom = result;
-
-      $.ajax({
-        url: "getInfer",
-        method: "GET",
-        data: { proNm: data },
-        success: function (res) {
-          console.log(res);
-
-          for (let i = 0; i < bom.length; i++) {
-            bom[i].inferPct = res[i].inferPct;
-          }
-          console.log(bom);
-          grid3.resetData(bom);
-        },
-      });
-    },
-    error: function (err) {
-      console.log(err);
-    },
-  });
-}
-function getPlanCd(data) {
-  //	 			↓↓↓↓↓ 계획번호 생성
-  $.ajax({
-    url: "getPlanCd",
-    method: "GET",
-    data: { planDt: data },
-    success: function (result) {
-      code = result.planCd;
-      console.log(code);
-    },
-    error: function (err) {
-      console.log(err);
-    },
-  });
-}
-
+		function getPrcs(data){
+			console.log(data)
+			$.ajax({
+				url : 'getBom',
+				method : 'GET',
+				data : {proNm : data},
+				success : function(result){
+					console.log(result);
+					bom=result;
+					
+					$.ajax({
+						url : 'getInfer',
+						method : 'GET',
+						data : {proNm : data},
+						success : function(res){
+							console.log(res);
+							
+							
+							for(let i=0;i<bom.length;i++){
+								bom[i].inferPct = res[i].inferPct;
+							}
+							console.log(bom);
+							grid3.resetData(bom);
+						}
+					})
+				},error: function(err){
+					console.log(err);
+				}
+			})
+};
+		    function getPlanCd(data){
+//	 			↓↓↓↓↓ 계획번호 생성
+				$.ajax({
+					url : 'getPlanCd',
+					method : 'GET',
+					data : {planDt: data},
+					success: function (result){
+						code = result.planCd;
+						console.log(code)
+					},
+					error: function(err){
+						console.log(err);
+					}
+				})
+		    };
+		    
 // 		    필요자재와 사용가능 자재 불러오기
 function getRscInfo(data) {
   console.log(data);

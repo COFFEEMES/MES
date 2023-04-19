@@ -31,8 +31,22 @@ public List<DirVO> getPlanList() {
 
 @PostMapping("getDataForGrid")
 @ResponseBody
-public List<DirVO>getDataForGrid(@RequestBody String[] DirVO){
-	return dir.getDataForGrid(DirVO);
+public List<DirVO>getDataForGrid(@RequestBody String dirVO){
+	 System.out.println(dirVO);
+	 List<DirVO>origin  =  dir.getDataForGrid(dirVO);
+	 System.out.println(origin);
+	 List<DirVO>afterProcs = dir.getPrcsEndcnt(origin);
+	 for(int i=0;i<origin.size();i++) {
+		 origin.get(i).setPlanCnt(origin.get(i).getPlanCnt()-afterProcs.get(i).getOutput());
+	 }
+	
+	 return origin;
+}
+
+@PostMapping("getDataForSecGrid")
+@ResponseBody
+public List<List<DirVO>> getDataForSecGrid(@RequestBody List<DirVO> dirVO){
+	return dir.getDataForSecGrid(dirVO);
 }
 	
 }
