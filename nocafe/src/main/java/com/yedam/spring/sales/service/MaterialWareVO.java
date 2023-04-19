@@ -46,6 +46,20 @@ public class MaterialWareVO {
 	private String empCode; //사원코드
 	private String empName; //사원명
 	
+	private int inferCnt; //불량량
+	
+	//입고등록
+	private String istCd; //입고코드
+	private String istCnt; //입고수량
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date istDt; //입고일자
+	
+	//lot관리 
+	private String rscLotCd; //lot번호
+	private String rscInspCd; //검사코드
+	private int lotCnt; //lot수량
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date expDt; //유통기한
 	
 	
 }

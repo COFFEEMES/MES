@@ -17,8 +17,24 @@ public interface MaterialWareService {
 	public List<MaterialWareVO> empList();
 	
 	//검사코드 만들기
-	public String makeTr();
+	public String makeCd();
 	
 	//검사상세 저장
 	public int saveDetail(List<MaterialWareVO> materialWareVO);
+	
+	//불량
+	public int errorData(List<MaterialWareVO> materialWareVO);
+	
+	
+	//입고등록 페이지 시작
+	//검사완료 조회 
+	public  List<MaterialWareVO> comSearch();
+		
+	//입고완료 조회
+	public  List<MaterialWareVO> comInput();
+	
+	//입고등록저장
+	public int allSave(List<MaterialWareVO> materialWareVO);
+	
+	
 }

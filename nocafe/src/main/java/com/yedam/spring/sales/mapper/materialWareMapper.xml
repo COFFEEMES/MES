@@ -12,6 +12,7 @@
 				WHERE vend_cd = o.vend_cd) AS "vend_nm"
 		FROM rsc_ordr o , rsc_ordr_dtl d
 		WHERE o.ordr_cd = d.ordr_cd
+		AND ordr_ck ='0'
 		<if test="vendNm!=null and !vendNm.equals('')">
 		AND vend_cd = 
 		               (SELECT vend_cd 
@@ -51,18 +52,98 @@
 	
 <!--검사코드 생성  -->
    <select id= "makeCd" resultType="String">
-     SELECT 'RSC'||SUBSTR(TO_CHAR(sysdate, 'yyyyMMdd'),3) ||     -- 출고번호 생성
+     SELECT 'RSC'||SUBSTR(TO_CHAR(sysdate, 'yyyyMMdd'),3) ||     
             (SELECT LPAD(NVL(MAX(SUBSTR(insp_cd,12,2)+1),1),4,'0')
              FROM rsc_insp
-             WHERE TO_CHAR(insp_tstr,'yyyyMMdd')=TO_CHAR(sysdate,'yyyyMMdd'))
+             WHERE TO_CHAR(insp_dt,'yy/MM/dd')=TO_CHAR(sysdate,'yy/MM/dd'))
     	FROM dual
    </select>
    
    <!--디테일 저장  -->
 	<insert id="saveDetail"   parameterType="MaterialWareVO">
 	INSERT INTO rsc_insp_dtl
-	VALUES #{rscInspCd}, #{ordrCd}, #{rscCd}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt}
+	VALUES (#{inspCd}, #{ordrCd}, #{rscCd}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt})
+	</insert>
+	
+	 <!--전체저장 저장  -->
+	<insert id="saveTotal"   parameterType="MaterialWareVO">
+	INSERT INTO rsc_insp
+	VALUES (#{inspCd}, sysdate, #{inspTstr})
+	</insert>
+	
+	<!-- 검사여부 업데이트 -->
+	<update id= "rscUp" parameterType="String">
+	  UPDATE rsc_ordr
+	  SET ordr_ck = '1'
+	  WHERE ordr_cd = #{ordrCd}
+	</update>
+	
+	<!--에러데이터  -->
+	<insert id="errorData"   parameterType="MaterialWareVO">
+	INSERT INTO infer (infer_cd, infer_cnt, infer_thi, infer_nm, infer_sq)
+	VALUES (#{fullCode}, #{inferCnt}, #{rscCd}, (
+												 SELECT detail_explain 
+												 FROM detail_code
+												 WHERE full_code = #{fullCode}
+												 ),
+												 (
+												 SELECT NVL(MAX(infer_sq)+1,1)
+    											 FROM infer
+    											 WHERE infer_cd = #{fullCode}
+    											 ))
 	</insert>
 
+
+	<!-- 입고등록 페이지 시작  -->
+	
+	<!-- 검사완료 조회  -->
+	<select id="comSearch" resultType="MaterialWareVO">
+	  SELECT insp_cd, ordr_cd, rsc_cd, insp_pass_cnt 
+	  FROM rsc_insp_dtl
+	  ORDER BY 1 DESC
+	</select>
+	
+	<!-- 입고완료 조회  -->
+	<select id="comInput" resultType="MaterialWareVO">
+	  SELECT ist_cd, rsc_cd, ist_cnt, ist_dt
+	  FROM rsc_ist
+	  ORDER BY 1 DESC
+	</select>
+	
+	<!--입고코드 만들기  -->
+	<select id= "istCd" resultType="String">
+     SELECT 'IST'||SUBSTR(TO_CHAR(sysdate, 'yyyyMMdd'),3) ||     
+            (SELECT LPAD(NVL(MAX(SUBSTR(ist_cd,12,2)+1),1),4,'0')
+             FROM rsc_ist
+             WHERE TO_CHAR(ist_dt,'yy/MM/dd')=TO_CHAR(sysdate,'yy/MM/dd'))
+    	FROM dual
+   </select>
+   
+   <!--입고테이블에 insert -->
+   	<insert id="istInput"   parameterType="MaterialWareVO">
+	  INSERT INTO rsc_ist (ist_cd, rsc_cd, ist_cnt, ist_dt)
+	  VALUES(#{istCd}, #{rscCd}, #{inspPassCnt}, sysdate)
+	</insert>
+
+	<!-- LOT번호 생성 -->
+	<select id= "lotNm" resultType="String">
+     SELECT 'LOT' || SUBSTR(TO_CHAR(sysdate, 'yyyyMMdd'),3) || #{rscCd}
+	 FROM dual
+   </select>  
+   
+    <!-- 자재 LOT테이블  -->
+   <update id="lotInput" parameterType="MaterialWareVO">
+   	MERGE INTO rsc_lot r
+	USING dual
+    ON (r.rsc_lot_cd = #{rscLotCd})
+	WHEN MATCHED THEN 
+    	UPDATE SET 
+    	r.lot_cnt = r.lot_cnt + #{inspPassCnt}
+	WHEN NOT MATCHED THEN
+    	INSERT (rsc_lot_cd, rsc_cd, rsc_insp_cd, ordr_cd, ist_cd, lot_cnt, exp_dt)
+    	VALUES(#{rscLotCd}, #{rscCd}, #{inspCd}, #{ordrCd}, #{istCd}, #{inspPassCnt}, sysdate+7)
+   </update>
+     
+   
 </mapper>
   
