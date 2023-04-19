@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
@@ -153,6 +154,76 @@
                     ]
                 });
 
+<!-- Modal for resource search -->
+<div
+  class="modal fade"
+  id="rscModal"
+  tabindex="-1"
+  aria-labelledby="rscModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">자재검색</h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="rscSchForm">
+          <table>
+            <colgroup>
+              <col style="width: 400px" />
+              <col style="width: 10px" />
+              <col style="width: 50px" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    type="text"
+                    id="rscNmInMod"
+                    name="rscNm"
+                    class="form-control"
+                    placeholder="자재명"
+                  />
+                </td>
+                <td></td>
+                <td rowspan="2">
+                  <button
+                    id="rscSch"
+                    class="btn btn-primary"
+                    type="button"
+                    style="height: 90px"
+                  >
+                    <i class="fas fa-search"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    type="text"
+                    id="rscCdInMod"
+                    name="rscCd"
+                    class="form-control"
+                    placeholder="자재코드"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+        <br />
+        <div id="rsc-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
                 let rscGrid = new tui.Grid({
                     el: document.getElementById('rsc-grid'),
@@ -175,6 +246,48 @@
                     ]
                 })
 
+  const grid = new tui.Grid({
+    el: document.getElementById("grid"),
+    bodyHeight: 450,
+    scrollX: false,
+    scrollY: true,
+    columns: [
+      {
+        header: "자재코드",
+        name: "rscCd",
+        sortingType: "asc",
+        sortable: true,
+      },
+      {
+        header: "자재명",
+        name: "rscNm",
+        sortingType: "asc",
+        sortable: true,
+      },
+      {
+        header: "자재구분",
+        name: "rscTyp",
+        sortingType: "asc",
+        sortable: true,
+      },
+      {
+        header: "규격",
+        name: "rscSpec",
+      },
+      {
+        header: "재고수량",
+        name: "lotCnt",
+      },
+      {
+        header: "단위",
+        name: "rscUnit",
+      },
+      {
+        header: "안전재고",
+        name: "safRtc",
+      },
+    ],
+  });
 
                 let rModal;
                 rscModBtn.addEventListener('click', function () {
