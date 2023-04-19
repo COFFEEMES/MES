@@ -264,7 +264,7 @@
 				let gridData = grid2.getData()
 // 				↓↓↓↓
 				getPrcs(gridData[0].proNm);
-// 				↓↓↓↓grid3에 제품의 공정과 공정별 불량류 표시
+// 				↓↓↓↓grid4에 제품의 공정과 공정별 불량류 표시
 				mkgrid3()
 			}
 		});
@@ -482,6 +482,7 @@
 		
 // 		    ↓↓↓↓↓↓↓제품 공정 받아오는 Ajax
 		function getPrcs(data){
+			console.log(data)
 			$.ajax({
 				url : 'getBom',
 				method : 'GET',

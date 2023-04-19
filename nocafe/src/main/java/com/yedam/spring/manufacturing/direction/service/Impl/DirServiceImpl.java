@@ -1,5 +1,6 @@
 package com.yedam.spring.manufacturing.direction.service.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,33 @@ public class DirServiceImpl implements DirService {
 
 
 	@Override
-	public List<DirVO> getDataForGrid(String[] DirVO) {
-		return dirMap.getDataForGrid(DirVO);
+	public List<DirVO> getDataForGrid(String dirVO) {
+		return dirMap.getDataForGrid(dirVO);
+	}
+
+
+	
+	@Override
+	public List<DirVO> getPrcsEndcnt(List<DirVO>dirVO) {
+		
+		List<DirVO> result = new ArrayList<>() ;
+		
+		for(int i = 0; i<dirVO.size();i++) {
+			 result.add(dirMap.getPrcsEndCnt(dirVO.get(i)));
+		}
+		return result;
+	}
+
+
+	@Override
+	public List<List<DirVO>> getDataForSecGrid(List<DirVO> dirVO) {
+		List<List<DirVO>>result = new ArrayList<>();
+		
+		for(int i = 0; i<dirVO.size();i++) {
+			  result.add(dirMap.getDataForSecGrid(dirVO.get(i)));              
+		}
+		
+		return result;
 	}
 	
 	
