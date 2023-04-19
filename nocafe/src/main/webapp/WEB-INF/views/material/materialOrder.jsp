@@ -17,6 +17,10 @@
 		.tui-grid-cell.cell-red{
 			background-color:rgba(255,0,0,0.3)
 		}
+		.tui-grid-cell.cell-green{
+			background-color:rgba(0, 255, 0, 0.3)
+		}
+		
 	</style>
 </head>
 
@@ -296,8 +300,6 @@
 				        	  let dateVal = '';
 				        	  if(data.value != null ){
 				        		  dateVal = dateChange(data.value);
-				        	  }else{
-				        		  dateVal = getToday();
 				        	  }
 				              return dateVal;
 				            },
@@ -374,10 +376,31 @@
 					grid2.setValue(ev.rowKey, 'allStc', allStc)
 					if(allStc<safRtcValue){
 						grid2.addRowClassName(ev.rowKey, 'cell-red')
-					}
+					} 
+						
 					if(allStc>=safRtcValue){
 						grid2.removeRowClassName(ev.rowKey, 'addClass')
 					}
+				})
+				
+				
+				grid2.on('editingFinish', function (ev) {
+					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
+					var lotCnt = grid2.getValue(ev.rowKey, 'lotCnt')
+					var safRtc = grid2.getValue(ev.rowKey, 'safRtc')
+					var safRtcValue = parseFloat(safRtc.replace(/[^0-9.-]/g, '').replace(/(\.*)\./g, '$1'));
+					var isValid = true;
+
+					ordrCnt = Number(ordrCnt);
+					lotCnt = Number(lotCnt);
+
+					var allStc = ordrCnt + lotCnt
+					
+					grid2.setValue(ev.rowKey, 'allStc', allStc)
+					if(allStc>safRtcValue){
+						grid2.addRowClassName(ev.rowKey, 'cell-green')
+					} 
+					
 				})
 				
 				
@@ -407,17 +430,9 @@
 						return false;
 					}
 					
-					for (i = 0; i < data.length; i++) {
-						if (Number(data[i].allStc)<Number(data[i].safRtc)) {
-							alert('안전재고 이상으로 발주를 진행해주세요.');
-							isValid = false;
-							return false;
-
-						}} 
-					
 
 					for (i = 0; i < data.length; i++) {
-						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].ordrCnt == '') {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].ordrCnt == '' || data[i].paprdCmndDt == null || data[i].paprdCmndDt == '0' || data[i].paprdCmndDt == '') {
 							alert('발주신청 내역 내 공란이 존재합니다.');
 							isValid = false;
 							return false;
