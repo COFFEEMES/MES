@@ -2,12 +2,6 @@
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
 ="http://java.sun.com/jsp/jstl/fmt" %>
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>주문서 관리</title>
     <link
       rel="stylesheet"
       href="https://uicdn.toast.com/grid/latest/tui-grid.css"
@@ -35,8 +29,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       }
      .tui-grid-cell.not-allow-row {background-color : red}
     </style>
-  </head>
-  <body>
     <div class="container-fluid px-4">
       <h1 class="mt-4">주문서관리</h1>
       <ol class="breadcrumb mb-4">
@@ -61,29 +53,15 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                   <i class="bi bi-file-excel"></i> 엑셀
                 </button>
               </div>
-              <form name="searchFrm" id="searchFrm" >
-                <table class="table" style="vertical-align: middle">
-                  <colgroup>
-                    <col style="width: 150px" />
-                    <col />
-                    <col style="width: 150px" />
-                    <col />
-                    <col style="width: 150px" />
-                    <col />
-                  </colgroup>
-                  <tbody>
-                    <tr>
-                      <th>거래처명</th>
-                      <td style="width: 150px">
-                        <input
+                   <div>
+                      거래처명
+                      <input
                           type="text"
                           class="form-control"
                           id="vendNm"
                           name="vendNm"
                           style="width: 150px"
                         />
-                      </td>
-                      <td>
                         <button
                           type="button"
                           class="btn btn-primary"          
@@ -92,6 +70,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                           data-bs-target="#exampleModal">
                           <i class="fas fa-search"></i>
                         </button>
+                        </div>
                         
                             <!-- 거래처 검색 Modal -->
          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -180,14 +159,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
             </div>
         </div>    
         <!-- 제품명 Modal 끝-->
-        
-                      </td>
-                      <th></th>
-                      <td></td>
-                      <th></th>
-                      <td></td>
-                    </tr>
-                    <tr>
+        <br>
                       <th style="border-bottom-width: 0px">주문일자</th>
                       <td style="border-bottom-width: 0px" colspan="3">
                         <input
@@ -206,10 +178,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                           style="width: 150px; display: inline-block"
                         />
                       </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </form>
             </div>
           </div>
         </div>
@@ -227,16 +195,13 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       <br />
       
       <div class="row">
-      	<div class= "card">
+      	<div class= "card mb-4">
 	      	<div class="card-body">
 	      		<div id="order"></div>
 	      	</div>
 	      </div>
-      </div>
-      
-      
+      </div>     
     </div>
-  </body>
 
   <script>
     let ordrBtn = document.getElementById("ordrBtn"); //조회버튼

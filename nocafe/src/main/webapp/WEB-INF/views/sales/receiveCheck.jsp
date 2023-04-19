@@ -6,6 +6,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<style>
+   label {
+      width: 150px;
+      }
+</style>
 <body>
 <div class="container-fluid px-4">
 		<h1 class="mt-4">제품 입/출고 조회</h1>
@@ -23,7 +28,7 @@
 							<button type="button" class="btn btn-primary" id="optionSearchBtn"><i class="fas fa-search"></i> 조회</button></td>
 							<button class="btn btn-primary" id="ReBtn"><i class="fas fa-file"></i> 초기화</button>
 						</div>
-                     <form name="IstSearchFrm" id="IstSearchFrm">
+<!--                      <form name="IstSearchFrm" id="IstSearchFrm">
                      <table class="table" style="vertical-align : middle;">
                      	<colgroup>
                      	<col style="width: 150px;">
@@ -36,27 +41,32 @@
                      	<col>
                      	</colgroup>
                      	<tbody>  
-	                     	<tr>  	
-								<th style="border-bottom-width: 0px" ><label><input type="radio" id ="receive"  name="radio" value="receive" checked="checked">입고</label><!-- </th> -->
-								<label><input type="radio" id="release" name="radio" value="release">출고</label></th>
-							<tr>
-                     		<tr>
-                     			<th style="border-bottom-width: 0px">제품명</th>
-                     			<td style="border-bottom-width: 0px"><input type="text" class="form-control" id="proName" name="proName" style="width:200px;">
+	                     	<tr>   -->	
+								<label style="width:80px;"><input type="radio" id ="receive"  name="radio" value="receive" checked="checked">입고</label>
+								<label><input type="radio" id="release" name="radio" value="release">출고</label>
+<!-- 							<tr>
+                     		<tr> -->
+                     		<br>
+                     		<br>
+                     			<label>제품명</label>
+                     			<input type="text" class="form-control" id="proName" name="proName" style="width:200px;">
 		    						<!-- 모달버튼 -->
-		    						<button type="button" class="btn btn-primary" id="lotSearchBtn" data-bs-toggle="modal" data-bs-target="#proModal" style="margin-bottom: 3px;"><i class="fas fa-search"></i></button></td>
-		    				</tr>
-		    				<tr>		
-								<th style="border-bottom-width: 0px" >제품 입고일자</th>
-								<td style="border-bottom-width: 0px"><input type="date" id="start" name="start" class="form-control" style="width:150px;"> - <input type="date" id="end" name="end" class="form-control" style="width:150px;">                 			
-                     		</tr>
+		    						<button type="button" class="btn btn-primary" id="lotSearchBtn" data-bs-toggle="modal" data-bs-target="#proModal" style="margin-bottom: 3px;"><i class="fas fa-search"></i></button>
+<!-- 		    				</tr>
+		    				<tr>	 -->	
+		    				<br>
+		    				<br>
+								<label>제품 입고일자</label>
+								<input type="date" id="start" name="start" class="form-control" style="width:150px;"> - <input type="date" id="end" name="end" class="form-control" style="width:150px;">                 			
+<!--                      		</tr>
                      	</tbody>
                      </table>
-                     </form>
+                     </form> -->
                      </div>   
             	</div>
 			</div>
         </div>
+        
             <div id="grid" class="card mb-4"></div>
             <div id="grid2" class="card mb-4"></div>
       		 <!-- 제품명 Modal -->
@@ -165,7 +175,7 @@ var gridRe = new tui.Grid({
   el: document.getElementById("grid"),
   scrollX: false,
   scrollY: true,
-  //bodyHeight: 500,
+  bodyHeight: 500,
 
   columns: [
     {
@@ -209,12 +219,6 @@ var gridRe = new tui.Grid({
    	 hidden: true
     }
   ],
-  bodyHeight: 450,
-  pageOptions: {
-      useClient: true,
-      type: 'scroll',
-      perPage: 30
-   }
 });
 
 //페이지뜨자마자 입고 조회
@@ -304,7 +308,7 @@ var gridRel = new tui.Grid({
   el: document.getElementById("grid2"),
   scrollX: false,
   scrollY: true,
-  bodyHeight: 243,
+  bodyHeight: 500,
 
   columns: [
     {
@@ -339,12 +343,6 @@ var gridRel = new tui.Grid({
     },
     
   ],
-  bodyHeight: 300,
-  pageOptions: {
-      useClient: true,
-      type: 'scroll',
-      perPage: 30
-   }
 });
  
 

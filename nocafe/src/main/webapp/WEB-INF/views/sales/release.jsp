@@ -26,7 +26,7 @@ pageEncoding="UTF-8"%>
       <div style="flex: 2">
         <div class="container-fluid px-4">
           <div class="col-md-8">
-            <div class="card mb-4" style="width:900px; height:700px;">
+            <div class="card mb-4" style="width:800px; height:700px;">
               <div class="card-header">진행중 주문서</div>
               <div class="card-body">
                 <div id="order"></div>
@@ -38,7 +38,7 @@ pageEncoding="UTF-8"%>
 
         <div style="flex: 1">
           <div class="col-md-4">
-            <div class="card mb-4" style="width:900px; height:700px;">
+            <div class="card mb-4" style="width:800px; height:700px;">
               <div class="card-header">출고 등록 현황</div>
               <div class="card-body">
                 <div id="release"></div>
