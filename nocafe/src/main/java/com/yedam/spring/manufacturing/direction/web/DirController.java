@@ -48,5 +48,15 @@ public List<DirVO>getDataForGrid(@RequestBody String dirVO){
 public List<List<DirVO>> getDataForSecGrid(@RequestBody List<DirVO> dirVO){
 	return dir.getDataForSecGrid(dirVO);
 }
+
+@PostMapping("insertAll")
+@ResponseBody
+public void insertAll (@RequestBody List<List<DirVO>>dirVO) {
+	for(int i=0;i< dirVO.size()  ;i++) {
+		dir.insertAll(dirVO.get(i));
+	}
 	
+}
+
+
 }

@@ -52,6 +52,15 @@ public class DirServiceImpl implements DirService {
 		
 		return result;
 	}
+
+
+	@Override
+	public void insertAll(List<DirVO> dirVO) {
+		for(int i=0;i<dirVO.size();i++) {
+			
+			dirMap.insertAll(dirVO.get(i));
+		}
+	}
 	
 	
 }

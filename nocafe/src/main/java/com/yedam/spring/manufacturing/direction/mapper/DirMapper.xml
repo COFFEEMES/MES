@@ -101,5 +101,9 @@
 	
 	
 	</select>
+	
+	<insert id="insertAll" statementType="CALLABLE" parameterType="DirVO">
+		{CALL insert_all_data_for_direction(#{prOrderCd},#{planCd},#{proCd},#{prOrderDt},#{dirStartDt},#{dirEndDt},#{orderOutput},#{prcsCd},#{bomSq})}
+	</insert>
 
 </mapper>

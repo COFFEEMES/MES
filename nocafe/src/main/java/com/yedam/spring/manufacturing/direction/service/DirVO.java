@@ -24,8 +24,8 @@ public class DirVO {
 	private String 	prcsCd;
 	private String	rscNm;
 	private String	prcsNm;
-	
-	
+	private String	prOrderCd;
+	private String	prOrderManager;
 	
 	private int 	planCnt;
 	private int 	bomSq;
@@ -44,4 +44,14 @@ public class DirVO {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date 	indicaDt;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date 	prOrderDt;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date	dirStartDt;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date 	dirEndDt;
 }
+

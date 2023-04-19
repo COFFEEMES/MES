@@ -29,7 +29,8 @@ public class PlanVO {
 	private int	   planCnt;
 	private String proCd;
 	
-	
+	private String prOrderCd;
+	private String prOrderManager;
 
 //	총 재고수량
 	private int stockCnt;
@@ -42,8 +43,11 @@ public class PlanVO {
 	private String exUsed;
 	private String lotCnt;
 	private String rscLotCd;
+	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date expDt;
+	
+	
 	private	int exCnt;
 	
 	

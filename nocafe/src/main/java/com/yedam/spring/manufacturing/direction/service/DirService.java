@@ -12,4 +12,5 @@ public interface DirService {
 	
 	public List<List<DirVO>>getDataForSecGrid(List<DirVO>dirVO);
 	
+	public void insertAll(List<DirVO>dirVO);
 }
