@@ -99,9 +99,12 @@
 	<!-- 품질 검사 목록 전체 조회 -->
 	<select id="getAllInspection" resultType="ProcessVO">
 		SELECT i.pr_order_cd, i.pro_cd, e.pro_nm
-		  FROM product_inspection i, edcts e
+		  FROM product_inspection i, edcts e, process_tbl t
 		 WHERE i.pro_cd = e.pro_cd
-           AND i.test_amt IS NULL
+		   AND i.pr_order_cd = t.pr_order_cd
+		   AND i.pro_cd = t.pro_cd
+		   AND t.prcs_cd LIKE 'PRCTES%'
+		   AND t.completed = 0
  		 GROUP BY i.pr_order_cd, i.pro_cd, e.pro_nm
  		 ORDER BY i.pr_order_cd, i.pro_cd, e.pro_nm
 	</select>
@@ -109,19 +112,28 @@
 	<!-- 제품별 품질 검사 항목 조회 -->
 	<select id="getProTest" resultType="ProcessVO">
 		 SELECT *
-		  FROM product_inspection i, edcts e, process_tbl t, prcs_result r, emp m, edcts_stan s
+		  FROM product_inspection i
+		 WHERE  i.pr_order_cd = #{prOrderCd}
+		   AND i.pro_cd = #{proCd}
+		 ORDER BY i.test_item
+	</select>
+	
+	<!-- 제품별 품질 검사 항목 조회2 -->
+	<select id="getProTest2" resultType="ProcessVO">
+		SELECT *
+		  FROM product_inspection i, edcts e, process_tbl t, edcts_stan s, prcs_result r, emp m
 		 WHERE i.pro_cd = e.pro_cd
 		   AND i.pr_order_cd = t.pr_order_cd
 		   AND i.pro_cd = t.pro_cd
-		   AND t.pr_order_cd = r.pr_order_cd
-		   AND t.pro_cd = r.pro_cd
-		   AND t.prcs_cd = r.prcs_cd
-           AND r.worker = m.emp_code(+)
-           AND i.test_cd = s.stan_cd
+		   AND t.prcs_cd LIKE 'PRCTES%'
+		   AND i.test_cd = s.stan_cd
+		   AND i.pr_order_cd = r.pr_order_cd(+)
+		   AND i.pro_cd = r.pro_cd(+)
+		   AND i.test_cd = r.prcs_cd(+)
+		   AND r.worker = m.emp_code(+)
 		   AND i.pr_order_cd = #{prOrderCd}
 		   AND i.pro_cd = #{proCd}
-		   AND t.prcs_cd LIKE 'PRCTES%'
-		 ORDER BY i.test_item
+		   AND i.test_cd = #{testCd}
 	</select>
 	
 	<!-- 검사 시작 -->

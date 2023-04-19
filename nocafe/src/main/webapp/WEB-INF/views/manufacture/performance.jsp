@@ -104,45 +104,6 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
     <li class="breadcrumb-item">> 생산관리</li>
     <li class="breadcrumb-item active">> 생산실적</li>
   </ol>
-  <div class="row">
-    <div class="card col-xl-11">
-      <div class="card-body">
-        <div id="lineb">
-          <div id="planDate">
-            <label>생산지시일자</label>
-            <input
-              type="date"
-              id="ex-strat"
-              name="tui-date-picker-target"
-              class="form-control tragetDate"
-              style="width: 150px"
-            />
-            -
-            <input
-              type="date"
-              id="ex-end"
-              name="tui-date-picker-target"
-              class="form-control tragetDate"
-              style="width: 150px"
-            />
-          </div>
-        </div>
-        <div class="linelist">
-          <button id="clearBtn" class="btn btn-primary" form="">
-            <i class="fas fa-file"></i> 초기화
-          </button>
-          <button
-            data-bs-toggle="modal"
-            class="btn btn-primary"
-            id="modalBtn"
-            data-bs-target="#exampleModal"
-          >
-            <i class="fas fa-search"></i> 조회
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="row">
     <div class="card col-xl-4">
@@ -416,7 +377,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       },
       {
         header: '진행상태',
-        name: 'prEndtDt',
+        name: 'prEndDt',
         align: 'center',
         formatter: function (data) {
           if (data.row.prStartDt == null){
@@ -728,29 +689,57 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 
     if( grid3.getValue(rowKey, 'wkFrDttm') != null && grid3.getValue(rowKey, 'wkToDttm') != null) {
-      alert('완료된 공정입니다')
+      Swal.fire({
+        icon: "error",
+        title: '이미 완료된 공정입니다',
+        text: '',
+      });
     } else if( rowKey == 0 || grid3.getValue(rowKey - 1, 'wkFrDttm') != null && grid3.getValue(rowKey - 1, 'wkToDttm') != null){
       if(grid3.getRow(rowKey).prcsCd.indexOf('PRCTES') != -1){
-        if(confirm('픔질 검사중인 제품입니다\n품질 검사 페이지로 이동하시겠습니까?')){
-          location.href = "inspection";
-        } else {
-          return;
-        }
+        Swal.fire({
+          title: '픔질 검사중인 제품입니다',
+          text: '품질 검사 페이지로 이동하시겠습니까?',
+          icon: 'warning',
+
+          showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+          confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+          cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+          confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+          cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+          reverseButtons: true, // 버튼 순서 거꾸로
+        }).then(result => {
+          if(result.isConfirmed){
+            location.href = "inspection";
+          } else if (result.isDismissed){
+            return;
+          }
+        })
+      } else {
+
+        $('#proNm').val(grid2.getValue(selectedRowKey2, 'proNm'));
+        $('#proCd').val(proCd);
+        $('#prcsNm').val(grid3.getValue(rowKey, 'prcsNm'));
+        $('#prcsCd').val(prcsCd);
+        $('#stock').val(grid3.getValue(rowKey, 'stock'));
+        $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'));
+        $('#empCode').val(grid3.getValue(rowKey, 'empCode'));
+        $('#empName').val(grid3.getValue(rowKey, 'empName'));
+        $('#eqmCd').val(grid3.getValue(rowKey, 'eqmCd'));
+        $('#prcsResult').modal('show');
       }
-      $('#proNm').val(grid2.getValue(selectedRowKey2, 'proNm'));
-      $('#proCd').val(proCd);
-      $('#prcsNm').val(grid3.getValue(rowKey, 'prcsNm'));
-      $('#prcsCd').val(prcsCd);
-      $('#stock').val(grid3.getValue(rowKey, 'stock'));
-      $('#bomSq').val(grid3.getValue(rowKey, 'bomSq'));
-      $('#empCode').val(grid3.getValue(rowKey, 'empCode'));
-      $('#empName').val(grid3.getValue(rowKey, 'empName'));
-      $('#eqmCd').val(grid3.getValue(rowKey, 'eqmCd'));
-      $('#prcsResult').modal('show');
     } else if( grid3.getData().length == 0) {
-      alert('제품이 선택되지 않았습니다')
+      Swal.fire({
+        icon: "error",
+        title: '제품이 선택되지 않았습니다',
+        text: '',
+      });
     } else {
-      alert('이전 공정이 완료되지 않았습니다')
+      Swal.fire({
+        icon: "error",
+        title: '이전 공정이 완료되지 않았습니다',
+        text: '',
+      });
     }
   })
 
@@ -875,9 +864,17 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   //작업 시작 버튼
   $('#prcsStart').on('click', () => {
     if($('#empCode').val() == null || $('#empCode').val() == ''){
-      alert('담당자가 선택되지 않았습니다')
+      Swal.fire({
+        icon: "error",
+        title: '담당자가 선택되지 않았습니다',
+        text: '',
+      });
     } else if($('#eqmCd').val() == null ||  $('#eqmCd').val() == ''){
-      alert('설비가 선택되지 않았습니다')
+      Swal.fire({
+        icon: "error",
+        title: '설비가 선택되지 않았습니다',
+        text: '',
+      });
     } else {
       let data = grid5.getData();
       for(let temp of data){
@@ -931,13 +928,21 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
     for( let temp of grid5.getData()){
       if( temp.rscUse == null || temp.rscUse == ''){
         endAble = false;
-        alert('자재 사용량을 입력해 주세요');
+        Swal.fire({
+          icon: "error",
+          title: '자재 사용량을 입력해 주세요',
+          text: '',
+        });
         return;
       }
     }
 
     if( grid3.getValue(selectedRowKey3, 'wkFrDttm') == null ){
-      alert('시작되지 않은 공정입니다!');
+      Swal.fire({
+        icon: "error",
+        title: '시작되지 않은 공정입니다!',
+        text: '',
+      });
       return;
     }
 
@@ -956,12 +961,13 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
       temp.inferCnt = $('#inferCnt').val();
     }
 
-    for(let i = 1; i < data.length; i++){
+    for(let i = data.length - 2; i >= 0; i--){
       data[i].inferCnt = 0;
     }
 
     if( endAble ){
       $('#prcsResult').modal('hide');
+
       $.ajax({
         url: "prcsEnd",
         method: "POST",
@@ -979,6 +985,21 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
             } else {
               grid3.removeRowClassName(i, 'highlight2');
             }
+          }
+          if (grid3.getData()[grid3.getData().length-1].wkToDttm != null){
+            grid2.setValue(selectedRowKey2, 'prEndDt', grid3.getData()[grid3.getData().length-1].wkToDttm);
+            grid2.refreshLayout()
+          }
+          let reload = true;
+          for(let temp of grid2.getData()){
+            if(temp.prEndDt == null){
+              reload = false;
+            }
+          }
+          if(reload){
+            grid.removeRow(selectedRowKey);
+            grid2.clear();
+            grid3.clear();
           }
         },
         error: function (reject) {

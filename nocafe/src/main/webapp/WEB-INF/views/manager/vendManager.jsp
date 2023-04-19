@@ -313,7 +313,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //조회 버튼 모달창
   $('#searchBtn').on('click', function(){
     if($("#vendCd").val() == null || $("#vendCd").val() == ''){
-      alert('선택된 거래처가 없습니다');
+      Swal.fire({
+        icon: "error",
+        title: '선택된 거래처가 없습니다',
+        text: '',
+      });
     } else {
       $('#vendModal').modal('show');
     }
@@ -373,7 +377,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //저장
   $("#saveBtn").click((ev) => {
     if( $("select[name='vendTyp']").eq(0).val() == '' ) {
-      alert('거래처 유형을 입력해주세요')
+      Swal.fire({
+        icon: "error",
+        title: '거래처 유형을 입력해주세요',
+        text: '',
+      });
     } else {
       $.ajax({
         url: "mergeVend",
@@ -381,7 +389,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         data: $("#dataForm").serialize(),
         dataType: "json",
         success: function (result) {
-          alert("정상적으로 저장되었습니다.");
+          Swal.fire({
+            icon: "success",
+            title: '정상적으로 저장되었습니다.',
+            text: '',
+          });
           grid.resetData(result);
           closeModal();
         },
@@ -392,7 +404,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //삭제
   $("#delBtn").click((ev) => {
     if( $("#vendCd").val() == '' || $("#vendCd").val() == null) {
-      alert('선택된 거래처가 없습니다')
+      Swal.fire({
+        icon: "error",
+        title: '선택된 거래처가 없습니다',
+        text: '',
+      });
     } else {
       $.ajax({
         url: "delVend",
@@ -400,7 +416,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         data: $("#dataForm").serialize(),
         dataType: "json",
         success: function (result) {
-          alert("비활성화되었습니다.");
+          Swal.fire({
+            icon: "success",
+            title: '비활성화되었습니다.',
+            text: '',
+          });
           grid.resetData(result);
           closeModal();
         },
