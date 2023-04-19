@@ -244,8 +244,6 @@ tr {
             location.reload();
         })
 
-        
-
 
         grid.on('onGridUpdated', function (ev) {
             var rowCnt = grid.getRowCount();
@@ -258,8 +256,6 @@ tr {
                 }
             }
         })
-
-
         
     	//엑셀 그리드 다운
 			$("#excelBtn").click((ev) => {
