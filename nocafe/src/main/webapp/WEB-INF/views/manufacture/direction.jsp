@@ -1,34 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<head>
-<meta charset="UTF-8">
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+pageEncoding="UTF-8"%>
+<link
+  rel="stylesheet"
+  href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"
+/>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 
 <style>
-#container {
-	width: 98%;
-	margin: 0 auto;
-}
+  #container {
+    width: 98%;
+    margin: 0 auto;
+  }
 
+  #lineb {
+    display: inline-block;
+  }
+  .col {
+    width: 700px;
+  }
 
-#lineb{
-	display : inline-block;
-}
-.col {
-	width: 700px
-}
-
-.linelist {
-	float: right;
-	margin: 0 20px 20px 0;
-}
-label {
-	width : 100px;
-	
-}
-.tui-grid-cell.select-allow-row {background-color : rgb(239, 246, 230)}
+  .linelist {
+    float: right;
+    margin: 0 20px 20px 0;
+  }
+  label {
+    width: 100px;
+  }
+  .tui-grid-cell.select-allow-row {
+    background-color: rgb(239, 246, 230);
+  }
 </style>
 </head>
 <body>

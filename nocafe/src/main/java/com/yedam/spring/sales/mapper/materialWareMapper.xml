@@ -100,6 +100,9 @@
 	<select id="comSearch" resultType="MaterialWareVO">
 	  SELECT insp_cd, ordr_cd, rsc_cd, insp_pass_cnt 
 	  FROM rsc_insp_dtl
+	   WHERE (SELECT COUNT(*) 
+       		  FROM rsc_lot r
+      		  WHERE r.rsc_insp_cd = insp_cd)=0
 	  ORDER BY 1 DESC
 	</select>
 	
