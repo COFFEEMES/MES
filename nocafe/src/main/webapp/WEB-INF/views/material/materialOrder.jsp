@@ -121,6 +121,10 @@
                 name: 'lotCnt'
             },
             {
+                header: '단위',
+                name: 'rscUnit'
+            },
+            {
             	header: '안전재고',
             	name: 'safRtc'
         		
@@ -137,19 +141,17 @@
 		dataType: 'JSON',
 		success: 
 			function (result) {
+		    grid.resetData(result);
 		    for (res in result){
 		        var lotCnt = result[res].lotCnt;
-		        grid.resetData(result);
 		        if(lotCnt == null || lotCnt == '' || lotCnt == 0){
 		            result[res].lotCnt = 0;
-		            var lotCntValue = parseFloat(lotCnt);
-		            var safRtc = grid.getValue(res, 'safRtc');
-		            var safRtcValue = parseFloat(safRtc.replace(/[^0-9.-]/g, ''));
-		            
-		            if(lotCntValue < safRtcValue){
-		                grid.addRowClassName(res, 'cell-red');
-		            }
 		        }
+		      var safRtc = grid.getValue(res, 'safRtc');
+		      var safRtcValue = parseFloat(safRtc.replace(/[^0-9.-]/g, '').replace(/(\.*)\./g, '$1'));
+		      if(lotCnt < safRtcValue){
+		        grid.addRowClassName(res, 'cell-red');
+		      }
 		    }
 		}
 	})
@@ -170,6 +172,7 @@
 					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
 					var vendNm = grid.getValue(ev.rowKey, 'vendNm')
 					var lotCnt = grid.getValue(ev.rowKey, 'lotCnt')
+					var rscUnit = grid.getValue(ev.rowKey, 'rscUnit')
 					if (lotCnt==0 || lotCnt==null || lotCnt == ''){
 						lotCnt =0;} 
 					var safRtc = grid.getValue(ev.rowKey, 'safRtc')
@@ -198,6 +201,7 @@
 						"vendCd": vendCd,
 						"vendNm": vendNm,
 						"lotCnt": lotCnt,
+						"rscUnit": rscUnit, 
 						"safRtc": safRtc,
 					})
     
@@ -273,9 +277,17 @@
 						align: 'right',
 						name: 'lotCnt'
 					}, {
+						header: '단위',
+						align: 'right',
+						name: 'rscUnit'
+					},{
 						header: '안전재고',
 						align: 'right',
 						name: 'safRtc'
+					},  {
+						header: '예상재고',
+						align: 'right',
+						name: 'allStc'
 					}, {
 						header: '납기요청일',
 						align: 'center',
@@ -351,6 +363,7 @@
 					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
 					var lotCnt = grid2.getValue(ev.rowKey, 'lotCnt')
 					var safRtc = grid2.getValue(ev.rowKey, 'safRtc')
+					var safRtcValue = parseFloat(safRtc.replace(/[^0-9.-]/g, '').replace(/(\.*)\./g, '$1'));
 					var isValid = true;
 
 					ordrCnt = Number(ordrCnt);
@@ -359,15 +372,16 @@
 					var allStc = ordrCnt + lotCnt
 					
 					grid2.setValue(ev.rowKey, 'allStc', allStc)
-					if(Number(allStc)<Number(safRtc)){
-						grid2.addRowClassName(ev.rowKey, 'addClass')
+					if(allStc<safRtcValue){
+						grid2.addRowClassName(ev.rowKey, 'cell-red')
 					}
-					if(Number(allStc)>=Number(safRtc)){
+					if(allStc>=safRtcValue){
 						grid2.removeRowClassName(ev.rowKey, 'addClass')
 					}
 				})
 				
 				
+		
 				
 				$('#minusBtn').on('click', function (ev) {
 					var data = grid2.getCheckedRows();

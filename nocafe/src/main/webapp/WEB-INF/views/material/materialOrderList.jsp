@@ -81,7 +81,7 @@
 		          {	  ordrCd :  '${material.ordrCd}',
 		        	  vendCd :  '${material.vendCd}',
 		        	  vendNm : 	'${material.vendNm}',
-		        	  ordrReqDt : '${material.ordrReqDt}'
+		        	  ordrReqDt : '${material.formedDate}'
 		          },
 		        </c:forEach>
 		      ];
@@ -111,9 +111,9 @@
 					}, {
 						header: '발주신청일',
 						align: 'center',
-						name: 'ordrReqDt',
+						name: 'formedDate',
 						formatter: function(data) {
-							return dateChange(data.value);
+							return dateChange(data.row.ordrReqDt);
 						}
 				    }]
 				});
@@ -133,6 +133,15 @@
 				})
 			})
 			
+			
+$('#grid').mouseleave(ev => {
+     grid.finishEditing();
+ })
+ 
+ $('#grid2').mouseleave(ev => {
+     grid2.finishEditing();
+ })
+
 					grid.on('dblclick', ev => {
 					var ordrCd = grid.getValue(ev.rowKey, 'ordrCd')
 					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
@@ -162,7 +171,6 @@
 							setTimeout(function() {
 								grid2.refreshLayout()	
 							},300);
-							
 							
 						}
 					})
@@ -283,7 +291,7 @@
   				$("#excelBtn").click((ev) => {
     				const options = {
       				includeHiddenColumns: false,
-      				fileName: "vend_list",
+      				fileName: "materialOrder_List",
     				};
     				grid2.export("xlsx", options);
   				});

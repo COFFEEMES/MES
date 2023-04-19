@@ -13,6 +13,7 @@ public class MaterialOrderVO {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date ordrReqDt;		//발주신청일
+	private String formedDate;
 	
 	private String vendCd;		//거래처코드
 	
@@ -24,7 +25,7 @@ public class MaterialOrderVO {
 	private String ordrCnt;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private String paprdCmndDt;
+	private Date paprdCmndDt;
 	
 	private String ordrSCnt;
 }
