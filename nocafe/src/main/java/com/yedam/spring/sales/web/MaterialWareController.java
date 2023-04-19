@@ -62,4 +62,40 @@ public class MaterialWareController {
 			return materialWareService.saveDetail(materialWareVO);
 		}
 	
+	@PostMapping("/error")
+	@ResponseBody
+	public int error(@RequestBody List<MaterialWareVO> materialWareVO) {
+		return materialWareService.errorData(materialWareVO);
+	}
+	
+	
+	
+	//입고등록 페이지 시작
+	//자재입고검사 페이지
+	@GetMapping("/inputPage")
+	public String inputPage() {
+		return "sales/materialInput";
+	}
+	
+	//검사완료 조회
+	@GetMapping("/comSearch")
+	@ResponseBody
+	public List<MaterialWareVO> comSearch() {
+		return materialWareService.comSearch();
+		}
+	
+	//입고완료 조회
+	@GetMapping("/comInput")
+	@ResponseBody
+	public List<MaterialWareVO> comInput() {
+		return materialWareService.comInput();
+		}
+	
+	//저장
+	@PostMapping("/allSave")
+	@ResponseBody
+	public int allSave(@RequestBody List<MaterialWareVO> materialWareVO) {
+		return materialWareService.allSave(materialWareVO);
+	}
+	
 }

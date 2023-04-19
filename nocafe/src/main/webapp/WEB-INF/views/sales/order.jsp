@@ -102,7 +102,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                         <br><br>                    
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
-                    <div>
+                    <div style="display:inline-block;">
                     <label style="margin-left: 20px;">거래처명</label>                    
                      <input
                           type="text"
@@ -225,7 +225,16 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       </button>
       <br />
       <br />
-      <div id="order"></div>
+      
+      <div class="row">
+      	<div class= "card">
+	      	<div class="card-body">
+	      		<div id="order"></div>
+	      	</div>
+	      </div>
+      </div>
+      
+      
     </div>
   </body>
 

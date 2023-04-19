@@ -2,13 +2,18 @@
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core"%> <%@ taglib prefix="fmt"
 uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-<script
-  src="https://code.jquery.com/jquery-3.6.4.js"
-  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-  crossorigin="anonymous"
-></script>
-<style>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+  <style>
   #container {
     width: 98%;
     margin: 0 auto;
@@ -37,7 +42,9 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
   label {
     width: 150px;
   }
-</style>
+</style>  
+  </head>
+  <body>
 <div class="container-fluid px-4">
   <h1 class="mt-4">자재입고검사</h1>
   <ol class="breadcrumb mb-4">
@@ -117,10 +124,10 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         <h3 style="width: 100px; display: inline; padding-left: 15px">
          입고검사
         </h3>
-        <button class="btn btn-primary" id="savePrcs" style="float: right">
+        <button class="btn btn-primary" id="saveBtn" style="float: right">
           <i class="fas fa-save"></i> 저장
         </button>
-        <button
+        <!-- <button
           class="btn btn-primary"
           id="newPrcs"
           style="float: right; margin: 0 16px"
@@ -129,7 +136,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         </button>
         <button class="btn btn-primary" id="delPrcs" style="float: right">
           <i class="fas fa-trash"></i> 삭제
-        </button>
+        </button> -->
       </div>
       <div class="card-body">
         <div id="grid3"></div>
@@ -321,7 +328,14 @@ grid.on('click', (ev) => {
 	     data: {ordrCd: ordrCd },
 	     success: function(data) {  
 	  	   grid2.resetData(data);
+	  	   setTimeout(function () {
+	  		 grid2.refreshLayout()
+ 	    		}, 300);  
+	  	   
 	  	   grid3.resetData(data);
+	  	   setTimeout(function () {
+	  		 grid3.refreshLayout()
+ 	    		}, 300);
 	     },
 	     error: function (reject) {
 	       console.log(reject);
@@ -350,6 +364,7 @@ var grid2 = new tui.Grid({
         {
             header: '미입고잔량',
             name: 'rmnCnt',
+            hidden: true,
         },
         {
             header: '납기요청일',
@@ -372,7 +387,20 @@ function search() {
       method: "post",
       data: { start: start, end: end, vendNm: vendNm },
       success: function (data) {
-          grid.resetData(data);      	
+          grid.resetData(data);
+		  setTimeout(function () {
+			  grid.refreshLayout()
+    	    		}, 300);  
+		  
+		  setTimeout(function () {
+			  grid2.refreshLayout()
+    	    		}, 300); 
+		  
+		  setTimeout(function () {
+			  grid3.refreshLayout()
+    	    		}, 300); 
+		  
+          
       },
       error: function (reject) {
         console.log(reject);
@@ -510,6 +538,7 @@ var grid3 = new tui.Grid({
 
 let rowTest = 0; //검사클릭
 let rowEmp = 0; //검사자 클릭 
+let errorData = []; //불량 데이터
 grid3.on('click', (ev) => {
 	//검사 클릭하면
   	if(ev.targetType=='cell' && ev.columnName =='test') {
@@ -562,15 +591,23 @@ document.getElementById('inputBtn').addEventListener("click", function(){
 		sum += Number(grid4.getData()[i].inferCnt)
 	}
 	
-	//console.log(sum);
+	
+	for(let i=0; i<grid4.getData().length; i++) {
+		let data = grid4.getData()[i];
+		data.rscCd = grid3.getData()[rowTest].rscCd;
+		errorData.push(data);
+	}
+	
+	
 	$('#testModal').modal('hide');
 	grid4.clear();
-	//grid3.getData()[rowTest].inspFailCnt = sum;
+	
 	
 	gridData = grid3.getData();	
 	gridData[rowTest].inspFailCnt = sum;
 	gridData[rowTest].inspPassCnt = Number(gridData[rowTest].inspCnt) -Number(gridData[rowTest].inspFailCnt);
 	grid3.resetData(gridData); 
+	
 	
 });
 	
@@ -601,9 +638,34 @@ var grid4 = new tui.Grid({
 	
 
 //저장버튼 누르면
-document.getElementById('savePrcs').addEventListener("click", function(){
+document.getElementById('saveBtn').addEventListener("click", function(){
+	for(let i=0; i<grid3.getData().length; i++) {
+		if(grid3.getData()[i].inspCnt == 0 || grid3.getData()[i].inspPassCnt == 0 ||  grid3.getData()[i].empNm == null) {
+			Swal.fire({
+                icon: 'error',
+                title: '작성을 완료해 주세요',
+              });
+			return;
+		}	
+	}
+	
 	$.ajax({
-        url: "saveRsc",
+        url: "error",
+        method: "post",
+        dataType : 'json',
+        contentType : 'application/json',
+        data: JSON.stringify(errorData),
+        success: function (data) {
+        	//console.log("성공");
+        	errorData=[];
+        },
+        error: function (reject) {
+          console.log(reject);
+        },
+      });
+	
+	$.ajax({
+        url: "saveDetail",
         method: "post",
         dataType : 'json',
         contentType : 'application/json',
@@ -613,12 +675,17 @@ document.getElementById('savePrcs').addEventListener("click", function(){
                     icon: 'success',
                     title: '저장되었습니다.',
                   });
+				
+				search();
+				grid2.clear();
+				grid3.clear();
 	    		   
         },
         error: function (reject) {
           console.log(reject);
         },
       });	
+	
 })
 
 //사원 그리드
@@ -638,7 +705,8 @@ var gridEmp = new tui.Grid({
             name: 'empName',
         },     
     ],
-}); 
+});
+//사원그리드에서 더블클릭하면
 gridEmp.on('dblclick', (ev) => {
 	
 	let empCode = gridEmp.getData()[ev.rowKey].empCode;
@@ -651,5 +719,7 @@ gridEmp.on('dblclick', (ev) => {
 	 $('#empModal').modal('hide');
 
 })
+
+
 
 </script>

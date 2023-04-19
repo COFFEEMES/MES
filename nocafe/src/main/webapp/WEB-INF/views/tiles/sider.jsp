@@ -130,9 +130,9 @@ pageEncoding="UTF-8"%>
           <nav class="sb-sidenav-menu-nested nav">
           <a class="nav-link" href="materialOrder">자재발주관리</a>
             <a class="nav-link" href="materialOrderList">자재발주조회</a>
-            <a class="nav-link" href="materialList"
-              >자재재고조회</a
-            >
+            <a class="nav-link" href="materialList">자재재고조회</a>
+            <a class="nav-link" href="materialReceivingTest">자재입고검사</a>
+            <a class="nav-link" href="inputPage">자재입고등록</a>
           </nav>
         </div>
       </div>
