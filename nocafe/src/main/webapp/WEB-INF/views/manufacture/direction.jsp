@@ -28,7 +28,7 @@ label {
 	width : 100px;
 	
 }
-.tui-grid-cell.not-allow-row {background-color : rgb(239, 246, 230)}
+.tui-grid-cell.select-allow-row {background-color : rgb(239, 246, 230)}
 </style>
 </head>
 <body>
@@ -51,10 +51,10 @@ label {
 				<div id="pDate">
 					
 					<label>생산기간</label> <input type="date"
-						id="tui-date-picker-target" name="tui-date-picker-target"
+						id="ex-start" name="tui-date-picker-target"
 						class="form-control" style="width: 150px">
 					-
-					<input type="date"	id="ex-start" name="tui-date-picker-target"	class="form-control tragetDate" style="width: 150px">
+					<input type="date"	id="ex-end" name="tui-date-picker-target"	class="form-control tragetDate" style="width: 150px">
 					
 				</div>
 				
@@ -132,18 +132,19 @@ label {
 	let cntt = 0;
 	let secGridData;
 	let totalData;
-
+	let nom;
 	//		↓↓↓↓↓오늘 날짜
 	let todayForgrid = new Date();
 //         console.log(todayForgrid);
-		let threeMonthsLater = new Date();
-		threeMonthsLater.setMonth(todayForgrid.getMonth() + 3);
+		let threeDateLater = new Date();
+		threeDateLater.setDate(todayForgrid.getDate() + 3);
 	
 	    let today = dateChange(todayForgrid);
-	    let after = dateChange(threeMonthsLater);
+	    let after = dateChange(threeDateLater);
 
 
-
+	    $("#ex-start").attr({ max: after, min: today });
+	    $("#ex-end").attr({ max: after, min: today });
 
 	 $('#grid').mouseleave(ev => {
 			grid.finishEditing();
@@ -153,8 +154,10 @@ label {
 	   	$("#modalBtn").on("click", function() {
 	   		modGrid.clear()
 	   		modGrid.on('dblclick', ev => {
+	   				if(modGrid.getCheckedRows().length == 1){
+						modGrid.uncheckAll()
+	   				}
 					modGrid.check(ev.rowKey);
-					//$("#exampleModal").modal('hide')	
 				})  
 	   		$.ajax({
 	   			url : 'getPlanList',
@@ -477,10 +480,29 @@ label {
 		 }
 		 
 		 grid.on('dblclick',function(ev){
+			 nom = ev.rowKey
 			 let gridData = grid.getRow(ev.rowKey)
 			 grid2.resetData(secGridData[ev.rowKey])
 			 
 		 })
 		 
+		 grid.on("afterChange",function(ev){
+			
+			 console.log(ev.changes)
+			 console.log(ev.changes[0].rowKey)
+			 console.log(ev.changes[0].value)
+			 
+			 let rowKey = ev.changes[0].rowKey
+			 let rowVal = ev.changes[0].value
+			 
+			 for(let i=0;i<secGridData[rowKey].length;i++){
+				 secGridData[rowKey][i].exCnt = rowVal
+			 }
+			 
+			 if(rowKey == nom){
+				 grid2.resetData(secGridData[nom])
+			 }
+
+		 })
 
 	</script>
