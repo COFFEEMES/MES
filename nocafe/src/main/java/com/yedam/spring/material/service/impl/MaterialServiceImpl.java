@@ -1,6 +1,9 @@
 package com.yedam.spring.material.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,6 @@ import com.yedam.spring.material.service.MaterialLOTVO;
 import com.yedam.spring.material.service.MaterialOrderDetailVO;
 import com.yedam.spring.material.service.MaterialOrderVO;
 import com.yedam.spring.material.service.MaterialService;
-import com.yedam.spring.material.service.MaterialTestDetailVO;
 import com.yedam.spring.material.service.MaterialVO;
 
 @Service
@@ -19,6 +21,9 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Autowired
 	MaterialMapper materialMapper;
+	
+	
+	
 	
 	//자재조회
 	@Override
@@ -29,7 +34,19 @@ public class MaterialServiceImpl implements MaterialService {
 	//발주조회
 	@Override
 	public List<MaterialOrderVO> getMaterialOrderList() {
-		return materialMapper.selectMaterialOrderList();
+		SimpleDateFormat tranSimpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+		List<MaterialOrderVO> list = materialMapper.selectMaterialOrderList();;
+		try {
+			for(MaterialOrderVO temp : list) {
+				String strDate = null;
+				Date data = temp.getOrdrReqDt();
+				strDate = tranSimpleFormat.format(data);
+				temp.setFormedDate(strDate);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	//발주디테일
@@ -45,13 +62,7 @@ public class MaterialServiceImpl implements MaterialService {
 		return materialMapper.selectMaterialLOTList();
 	}
 	
-	//자재입고검사조회
-	@Override
-	public List<MaterialTestDetailVO> getMaterialTestList() {
-		return materialMapper.selectMaterialTestList();
-	}
 
-	
 	//자재검색
 	@Override
 	public List<MaterialLOTVO> materalSearch(@Param("rscNm") String rscNm) {
@@ -108,5 +119,10 @@ public class MaterialServiceImpl implements MaterialService {
 	public List<MaterialLOTVO> rscCOrdrList(MaterialLOTVO materialLOTVO) {
 		return materialMapper.rscCOrdrList(materialLOTVO);
 	}
+	
+	@Override
+	 public List<MaterialVO> getRscStcList(MaterialVO materialVO) {
+	    return materialMapper.getRscStcList(materialVO);
+	    }
 	
 }

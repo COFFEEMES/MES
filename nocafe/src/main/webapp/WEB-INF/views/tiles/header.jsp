@@ -3,7 +3,7 @@ pageEncoding="UTF-8"%>
 
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
   <!-- Navbar Brand-->
-  <a class="navbar-brand ps-3">No Cafein No pain</a>
+  <a class="navbar-brand ps-3">No Cafein No gain</a>
   <!-- Sidebar Toggle-->
   <button
     class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"

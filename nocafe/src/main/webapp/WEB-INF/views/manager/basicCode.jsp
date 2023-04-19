@@ -199,11 +199,15 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       type: "POST",
       data: $('#BcodeInfo').serialize(),
       success: function(result) {
-          setTimeout(function () {
-            grid.refreshLayout()
-          }, 300);
-          grid.resetData(result);
-          alert('성공적으로 추가되었습니다.');
+        setTimeout(function () {
+          grid.refreshLayout()
+        }, 300);
+        grid.resetData(result);
+        Swal.fire({
+          icon: "success",
+          title: "성공적으로 추가되었습니다.",
+          text: '',
+        });
       }
     })
   })
@@ -274,9 +278,17 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //상세 코드 추가 버튼
   $('#newDcode').click(ev => {
     if (basicName == '' || basicName == null) {
-      alert('공통코드를 먼저 선택해주세요!')
+      Swal.fire({
+        icon: "error",
+        title: "공통코드를 먼저 선택해주세요!",
+        text: '',
+      });
     } else if (grid2.getRow(grid2.getRowCount() - 1).detailCode == null || grid2.getRow(grid2.getRowCount() - 1).detailCode == ''){
-      alert('입력이 미완료된 추가건이 있습니다.')
+      Swal.fire({
+        icon: "error",
+        title: '입력이 미완료된 추가건이 있습니다.',
+        text: '',
+      });
     } else {
       //그리드 추가
       grid2.appendRow();
@@ -290,7 +302,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     const { columnName, rowKey } = ev;
     if (columnName == 'detailCode') {
       if (grid2.getModifiedRows().createdRows.length == 0 || rowKey < rowCount - 1 ) {
-        alert('이미 저장된 코드ID는 변경할 수 없습니다.');
+        Swal.fire({
+          icon: "error",
+          title: '이미 저장된 코드ID는 변경할 수 없습니다.',
+          text: '',
+        });
         return;
       }
     }
@@ -310,7 +326,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   $('#saveDcode').click(ev => {
     var data = grid2.getCheckedRows();
     if (data.length == 0){
-      alert("선택된 행이 없습니다")
+      Swal.fire({
+        icon: "error",
+        title: '선택된 행이 없습니다',
+        text: '',
+      });
     } else {
       for(let temp of data) {
         temp.basicCode = basicCode
@@ -326,7 +346,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
             grid2.uncheckAll()
           }, 300);
           grid2.resetData(result);
-          alert('성공적으로 저장되었습니다.');
+          Swal.fire({
+            icon: "success",
+            title: '성공적으로 저장되었습니다.',
+            text: '',
+          });
         }
       })
     }

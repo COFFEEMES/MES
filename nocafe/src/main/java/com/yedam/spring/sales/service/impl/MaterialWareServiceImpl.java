@@ -36,7 +36,7 @@ public class MaterialWareServiceImpl implements MaterialWareService {
 	}
 
 	@Override
-	public String makeTr() {
+	public String makeCd() {
 		return materialWareMapper.makeCd();
 	}
 
@@ -46,10 +46,53 @@ public class MaterialWareServiceImpl implements MaterialWareService {
 		int result = 0;
 		for(int i=0; i<materialWareVO.size(); i++) {
 			materialWareVO.get(i).setInspCd(cd);
+			materialWareMapper.rscUp(materialWareVO.get(i).getOrdrCd());
+			if(i==0) {
+				materialWareMapper.saveTotal(materialWareVO.get(i));
+			}
 			result += materialWareMapper.saveDetail(materialWareVO.get(i));	
 		}
 		return result;
 	}
+
+	@Override
+	public int errorData(List<MaterialWareVO> materialWareVO) {
+		for(int i=0; i<materialWareVO.size(); i++) {
+			if(materialWareVO.get(i).getInferCnt()!= 0)  {
+				materialWareMapper.errorData(materialWareVO.get(i));
+			}
+		}
+		return 1;
+	}
+
+	@Override
+	public List<MaterialWareVO> comSearch() {
+		return materialWareMapper.comSearch();
+	}
+
+	@Override
+	public List<MaterialWareVO> comInput() {
+		return materialWareMapper.comInput();
+	}
+
+	@Override
+	public int allSave(List<MaterialWareVO> materialWareVO) {
+		String istCd = materialWareMapper.istCd();
+		
+		for(int i=0; i<materialWareVO.size(); i++) {
+			materialWareVO.get(i).setIstCd(istCd);
+			materialWareMapper.istInput(materialWareVO.get(i));
+			
+			String rscCd = materialWareVO.get(i).getRscCd();
+			String rscLotCd = materialWareMapper.lotNm(rscCd);
+			materialWareVO.get(i).setRscLotCd(rscLotCd);
+			
+			materialWareMapper.lotInput(materialWareVO.get(i));
+		}
+		return 1;
+	}
+
+
 
 
 }

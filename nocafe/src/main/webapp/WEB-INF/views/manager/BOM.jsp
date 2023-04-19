@@ -205,9 +205,6 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         <h3 style="width: 100px; display: inline; padding-left: 15px">
           공정 순서
         </h3>
-        <button class="btn btn-primary" id="savePrcs" style="float: right">
-          <i class="fas fa-save"></i> 저장
-        </button>
         <button
           class="btn btn-primary"
           id="newPrcs"
@@ -512,7 +509,6 @@ uri="http://java.sun.com/jsp/jstl/core"%>
           header: '공정내용',
           name: 'prcsExplain',
           align: 'center',
-          editor: 'text',
         },
       ]
     });
@@ -736,7 +732,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //제품 저장 버튼
   $('#savePro').click(ev => {
     if( $("#proTyp").val() == '' || $("#proNm").val() == null || $('#proNm').val() == '' ) {
-      alert('필수 입력 사항을 입력해 주세요')
+      Swal.fire({
+        icon: "error",
+        title: '필수 입력 사항을 입력해 주세요',
+        text: '',
+      });
     } else {
       $("#proTyp").attr('disabled', false);
       $.ajax({
@@ -759,7 +759,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
           grid3.clear();
           selProCd = '';
           grid.removeRowClassName(selectedRowKey, 'highlight');
-          alert('성공적으로 저장되었습니다.');
+          Swal.fire({
+            icon: "success",
+            title: '성공적으로 저장되었습니다.',
+            text: '',
+          });
         }
       })
       $("#proTyp").attr('disabled', true);
@@ -769,7 +773,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //제품 비활성화
   $("#delBtn").click((ev) => {
     if( $("#proCd").val() == '' || $("#proCd").val() == null) {
-      alert('선택된 제품이 없습니다')
+      Swal.fire({
+        icon: "error",
+        title: '선택된 제품이 없습니다',
+         text: '',
+      });
     } else {
       $.ajax({
         url: "delPro",
@@ -784,7 +792,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
               proNm : result[i].detailExplain,
             }
           }
-          alert("비활성화되었습니다.");
+          Swal.fire({
+            icon: "success",
+            title: '비활성화되었습니다.',
+            text: '',
+          });
           grid.resetData(fixedData);
           $('body').find('form')[1].reset();
           $("#proTyp").attr('disabled', false);
@@ -844,7 +856,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   $('#delPrcs').on('click', () => {
     var data = grid3.getCheckedRows();
     if (data.length == 0){
-      alert("선택된 공정이 없습니다");
+      Swal.fire({
+        icon: "error",
+        title: '선택된 공정이 없습니다',
+        text: '',
+      });
     } else {
       for(let temp of data) {
         temp.proCd = selProCd;
@@ -869,7 +885,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
           });
           gridData3 = result;
           grid3.resetData(gridData3);
-          alert('삭제되었습니다.');
+          Swal.fire({
+            icon: "success",
+            title: '삭제되었습니다.',
+            text: '',
+          });
         }
       })
     }
@@ -880,9 +900,17 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     var data = grid3.getCheckedRows();
 
     if( selProCd == '' ) {
-      alert('제품을 선택해주세요')
+      Swal.fire({
+        icon: "error",
+        title: '제품을 선택해주세요',
+        text: '',
+      });
     } else if( data.length == 0) {
-      alert('선택된 공정이 없습니다')
+      Swal.fire({
+        icon: "error",
+        title: '선택된 공정이 없습니다',
+        text: '',
+      });
     } else {
       for(let temp of data){
         temp.proCd = selProCd;
@@ -894,7 +922,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         contentType: 'application/json',
         success: function (result) {
           grid3.resetData(result)
-          alert('성공적으로 저장되었습니다.');
+          Swal.fire({
+            icon: "success",
+            title: '성공적으로 저장되었습니다.',
+            text: '',
+          });
         }
       })
     }
@@ -903,7 +935,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //새 공정 버튼
   $("#newPrcs").on('click', () => {
     if( selProCd == ''){
-      alert('제품을 선택해 주세요')
+      Swal.fire({
+        icon: "error",
+        title: '제품을 선택해 주세요',
+         text: '',
+      });
     } else {
       setTimeout(function () {
         grid5.refreshLayout()
@@ -1012,14 +1048,22 @@ uri="http://java.sun.com/jsp/jstl/core"%>
           gridData3 = result;
           grid3.resetData(gridData3);
           $('#newPrcsModal').modal('hide');
-          alert('성공적으로 저장되었습니다')
+          Swal.fire({
+            icon: "success",
+            title: '성공적으로 저장되었습니다',
+            text: '',
+          });
         },
         error: function (reject) {
           console.log(reject);
         },
       });
     } else {
-      alert('자재 사용량을 입력해주세요')
+      Swal.fire({
+        icon: "error",
+        title: '자재 사용량을 입력해주세요',
+        text: '',
+      });
     }
   })
 
@@ -1086,7 +1130,11 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   //새 공정 자재 선택 행추가 버튼
   $('#newRscRow').on('click', () => {
     if (grid5.getRow(grid5.getRowCount() - 1).rscCd == null || grid5.getRow(grid5.getRowCount() - 1).rscCd == ''){
-      alert('입력이 미완료된 추가건이 있습니다.')
+      Swal.fire({
+        icon: "error",
+        title: '입력이 미완료된 추가건이 있습니다.',
+        text: '',
+      });
     } else {
       grid5.appendRow();
     }

@@ -21,5 +21,6 @@ public interface PerformanceMapper {
 	public List<ProcessVO> getProTest(ProcessVO processVO);
 	public void testStart(ProcessVO processVO);
 	public void testEnd(ProcessVO processVO);
+	public ProcessVO getProTest2(ProcessVO processVO);
 
 }
