@@ -33,6 +33,9 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       	left: 30%;
   		margin-left: 10px;
       }
+      label {
+      width: 100px;
+      }
     </style>
   </head>
   <body>
@@ -58,7 +61,7 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                 </button>
               </div>
               <!-- onsubmit="return false" -->
-              <form name="searchFrm" id="searchFrm" >
+             <%--  <form name="searchFrm" id="searchFrm" >
                 <table class="table" style="vertical-align: middle">
                   <colgroup>
                     <col style="width: 150px" />
@@ -69,9 +72,8 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                     <col />
                   </colgroup>
                   <tbody>
-                    <tr>
-                      <th>제품명</th>
-                      <td style="width: 150px">
+                    <tr> --%>
+                     <label> 제품명 </label>
                         <input
                           type="text"
                           class="form-control"
@@ -79,8 +81,6 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
                           name="proNm"
                           style="width: 150px"
                         />
-                      </td>
-                      <td>
                         <button
                           type="button"
                           class="btn btn-primary"          
@@ -125,15 +125,16 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
         </div>    
         <!-- 제품명 Modal 끝-->
         
-                      </td>
+          <!--             </td>
                       <th></th>
                       <td></td>
                       <th></th>
                       <td></td>
                     </tr>
-                    <tr>
-                      <th style="border-bottom-width: 0px">제조일자</th>
-                      <td style="border-bottom-width: 0px" colspan="3">
+                    <tr> -->
+                    <br>
+                    <br>
+                      <label>제조일자</label>
                         <input
                           type="date"
                           id="start"
@@ -163,7 +164,16 @@ uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt" uri
       </button>
       <br />
       <br />
-      <div id="lot"></div>
+      
+      <div class="row">
+      	<div class= "card">
+	      	<div class="card-body">
+      			<div id="lot"></div>
+      	   </div>
+	    </div>
+     </div>
+      		
+      
     </div>
   </body>
   <script>

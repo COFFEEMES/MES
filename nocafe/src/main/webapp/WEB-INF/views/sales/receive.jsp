@@ -22,18 +22,14 @@
       <div id="cont" style="padding-bottom:0px">
             <div class="col">
 				<div class="card-body">
-				<div class="mb-4">
-                           
-                                           
-                        </div>
 				<div class="linelist" style="float:right;">
                           <!--  <button type="button" class="btn btn-primary" id="dtSearchBtn"><i class="fas fa-search"></i> 조회</button> -->
                            <button type="button" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 등록</button>
                            <button class="btn btn-primary" id="ReBtn"><i class="fas fa-file"></i> 초기화</button>
                        </div> 
-                     <form name="IstSearchFrm" id="IstSearchFrm">
-                    <!--  <label for="edctsIstDt" class="form-label">제품 입고일자</label> 
-                           <input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;"> -->
+<!--                      <form name="IstSearchFrm" id="IstSearchFrm">
+                     <label for="edctsIstDt" class="form-label">제품 입고일자</label> 
+                           <input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;">
                      <table class="table" style="vertical-align : middle;">
                      <colgroup>
                      	<col style="width: 150px;">
@@ -44,7 +40,7 @@
                      	<col>
                      	<col style="width: 150px;">
                      	<col>
-                     </colgroup>
+                     </colgroup> -->
                      <tbody>
                      	<tr> 
                      		<th style="border-bottom-width: 0px">포장완료제품</th>
@@ -52,15 +48,15 @@
                      			<!-- 모달버튼 -->
     							<button type="button" class="btn btn-primary" id="comSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
                      </tbody>
-                       </div>
-                       </table>
+<!--                        </table>
                       
-                     </form>
+                     </form> -->
                   </div>
             </div>
 		
       </div>
     </div>
+    
       <div id="grid" class="card mb-4"></div>
       
    </div>
@@ -82,8 +78,13 @@
 		    </div>
 		  </div>
 		</div> <!-- 모달 div끝 -->
-		
-		<div id="complete"  style="margin: 30px;"></div>
+		<div class="row">
+			<div class="card col-xl-11">
+				<div class="card-body">
+					<div id="complete"></div>
+				</div>
+			</div>
+		</div>
 </body>
 <script>
 //검사완료 제품 모달 그리드
@@ -154,7 +155,6 @@ var gridRe = new tui.Grid({
   el: document.getElementById("complete"),
   scrollX: false,
   scrollY: true,
-  //bodyHeight: 243,
 
   columns: [
     {
