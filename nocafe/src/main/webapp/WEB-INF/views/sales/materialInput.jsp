@@ -149,9 +149,8 @@ var grid2 = new tui.Grid({
             name: 'istDt',
             formatter: function (data) {
                 return dateChange(data.value);
-              },
-        },
-       
+             },
+        }, 
     ],
 });  	
 
