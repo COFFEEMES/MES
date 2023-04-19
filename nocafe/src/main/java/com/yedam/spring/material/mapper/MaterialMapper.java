@@ -7,13 +7,13 @@ import org.apache.ibatis.annotations.Param;
 import com.yedam.spring.material.service.MaterialLOTVO;
 import com.yedam.spring.material.service.MaterialOrderDetailVO;
 import com.yedam.spring.material.service.MaterialOrderVO;
-import com.yedam.spring.material.service.MaterialTestDetailVO;
 import com.yedam.spring.material.service.MaterialVO;
 
 public interface MaterialMapper {
 	
 	//자재관리
 	public List<MaterialVO> selectMaterialList();
+	
 	
 	public List<MaterialLOTVO> rscCOrdrList(MaterialLOTVO materialLOTVO);
 	
@@ -46,8 +46,6 @@ public interface MaterialMapper {
 	//자재LOT조회
 	public List<MaterialLOTVO> selectMaterialLOTList();
 
-	//자재입고검사조회
-	public List<MaterialTestDetailVO> selectMaterialTestList();
 
 	
 	//자재조회페이지

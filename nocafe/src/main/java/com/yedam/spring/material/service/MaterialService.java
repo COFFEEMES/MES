@@ -11,6 +11,8 @@ public interface MaterialService {
 	
 	public List<MaterialLOTVO> rscCOrdrList(MaterialLOTVO materialLOTVO);
 	
+	public List<MaterialVO> getRscStcList(MaterialVO materialVO);
+	
 	//자재검색
 	public List<MaterialLOTVO> materalSearch(@Param("rscNm") String rscNm);
 	
@@ -35,8 +37,6 @@ public interface MaterialService {
 	//자재LOT조회
 	public List<MaterialLOTVO> getMaterialLOTList();
 	
-	//자재입고검사조회
-	public List<MaterialTestDetailVO> getMaterialTestList();
 	
 	
 	public List<MaterialVO> getResources(MaterialVO materialVO);

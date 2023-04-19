@@ -14,6 +14,7 @@ public class MaterialLOTVO {
 	private String ordrCd;		//발주번호
 	private String istCd;		//입고코드
 	private int lotCnt;			//LOT수량
+	private String rscUnit;		//단위
 	
 	private Date expDt ;		//유통기한
 	

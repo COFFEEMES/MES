@@ -104,14 +104,6 @@ public class MaterialController {
 	
 	
 	
-	//자재입고검사조회
-	@GetMapping("/materialTestList")
-	public String getMaterialTestList(Model model) {
-		model.addAttribute("materialTestList", materialService.getMaterialTestList());
-		return "material/materialTestList";
-	}
-	
-	
     @RequestMapping("getResources")
     @ResponseBody
     public List<MaterialVO> getResources(@ModelAttribute MaterialVO materialVO) {
@@ -124,6 +116,13 @@ public class MaterialController {
 		materialService.rscOrdrInsert(OrdrList);
 		return OrdrList;
 	}
+	
+	  @RequestMapping("getRscStcList")
+	    @ResponseBody
+	    public List<MaterialVO> getRscStcList(@ModelAttribute MaterialVO materialVO) {
+	        return materialService.getRscStcList(materialVO);
+	    }
+	
 	
 	}
 
