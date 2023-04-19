@@ -259,45 +259,7 @@ label {
 //    }) 
    	
    	//그리드에 띄운 데이터들을 저장 버튼을 눌렀을 때 테이블 두 개에 저장하기+ 지시가 내려졌으므로 계획 테이블 상태 업데이트
-   	$("#regiBtn").on("click", function() {
-//    		let gridData = grid.getData()
-//    		console.log(gridData)
-   		
-//    		let linePsch = grid.getData()[0].linePsch
-// 		console.log(linePsch)
-// 		let indicaDt = grid.getData()[0].indicaDt
-// 		console.log(indicaDt)
-   			
-// 		gridData[0].linePsch = linePsch 
-// 		gridData[0].indicaDt = indicaDt
-//    		console.log(JSON.stringify(gridData))
-   		
-//    		let planCd = grid.getData()[0].planCd;
-   		
-//    		$.ajax({
-//    			url : 'indInsert',
-//    			method : 'post',
-//    			contentType : 'application/json',
-//    			data : JSON.stringify(gridData),
-//    			error : function(error){
-//    				console.log("error!")
-//    			},
-//    			success : function() {
-//    				toastr.success("저장되었습니다.")  
-//    				modGrid.clear()
-//         		grid.clear()
-// 		   		grid2.clear()
-// // 		   		grid3.clear()
-// 		   		grid4.clear()
-// 		   		grid5.clear()
-//    			}
-//    		})
-//    		$.ajax({
-//    			url : 'updatePlan',
-//    			data : {"planCd" : planCd}
-//    		})
-   		
-   	})
+   	
    	
    	 const modGrid = new tui.Grid({
                 el: document.getElementById('modGrid'),
@@ -325,7 +287,6 @@ label {
    	$("#clearBtn").on("click", function(){
    		grid.clear()
    		grid2.clear()
-//    		grid3.clear()
    		modGrid.clear()
    	})  	
    	
@@ -347,8 +308,8 @@ label {
 	          header: '마감일자',
 	          name: 'exEndDt',
 	          align : 'center',
-						formatter: function(data){
-							return dateChange(data.value)
+			  formatter: function(data){
+				return dateChange(data.value)
 						}
 	        },
 	        {
@@ -504,5 +465,58 @@ label {
 			 }
 
 		 })
+		 $("#regiBtn").on("click", function() {
+			 let gridData = grid.getData(); 
+			 let startDt = $("#ex-start").val();
+			 let endDt = $("#ex-end").val();
+			 let cntSum = 0;
+			  if (startDt == "" || endDt == "") {
+			    Swal.fire({
+			      icon: "error",
+			      title: "데이터 없음!",
+			      text: "생산기간을 지정해 주세요!",
+			    });
+			    return;
+			  }
+			 for(let i = 0; i<gridData.length;i++){
+				 cntSum += gridData[i].orderOutput
+			 }
+			 if (cntSum == 0) {
+				    Swal.fire({
+				      icon: "error",
+				      title: "미입력!!!",
+				      text: "생산지시 수량을 입력해 주세요!",
+				    });
+				    return;
+				  }
+			 
+			 
+		for(let i = 0;i<secGridData.length;i++){
+   			for(let j = 0;j<secGridData[i].length;j++){
+   				
+   		       secGridData[i][j].prOrderCd 	 = null
+   		       secGridData[i][j].planCd 	 = gridData[i].planCd
+   		       secGridData[i][j].prOrderDt 	 = gridData[i].indicaDt
+   		       secGridData[i][j].dirStartDt  = startDt
+   		       secGridData[i][j].dirEndDt 	 = endDt
+   		       secGridData[i][j].orderOutput = gridData[i].orderOutput
+   				
+   			}
+   		}
+		console.log(secGridData)
+		 $.ajax({
+				url : 'insertAll',
+				method : 'POST',
+				dataType: 'json',
+		        contentType: 'application/json; charset=utf-8',
+				data : JSON.stringify(secGridData),
+				success : function(res){
+					console.log(res)
+				},error: function(err){
+					console.log(err);
+				}
+			})
+   		
+   	})
 
 	</script>

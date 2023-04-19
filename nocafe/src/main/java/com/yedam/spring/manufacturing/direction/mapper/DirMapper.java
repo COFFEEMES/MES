@@ -14,4 +14,5 @@ public interface DirMapper {
 	
 	public List<DirVO> getDataForSecGrid(DirVO dirVO);
 	
+	public void insertAll(DirVO dirVO);
 }
