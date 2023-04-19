@@ -40,193 +40,187 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     <li class="breadcrumb-item">> 기준정보관리</li>
     <li class="breadcrumb-item active">> 거래처관리</li>
   </ol>
-  <div class="card mb-4">
-    <div class="card-body">
-      <div class="linelist" style="float: left">
-        <label for="" autofocus="autofocus">거래처명</label>
+  <div class="row">
+    <div class="card col-xl-11">
+      <div class="card-body">
+        <div class="linelist" style="float: left">
+          <label for="" autofocus="autofocus">거래처명</label>
+          <input
+            type="text"
+            class="form-control"
+            id="searchVend"
+            name="searchVend"
+            style="width: 150px; margin-top: 0px"
+          />
+          <button class="btn btn-primary" id="searchVendBtn">
+            <i class="fas fa-search"></i> 검색
+          </button>
+        </div>
+        <div class="linelist" style="float: right">
+          <button class="btn btn-primary" id="searchBtn">
+            <i class="fas fa-search"></i> 조회
+          </button>
+          <button
+            class="btn btn-primary"
+            id="newBtn"
+            data-toggle="modal"
+            data-target="#vendModal"
+          >
+            <i class="fas fa-file"></i> 새자료
+          </button>
+          <!-- <a href="vendExelView">-->
+          <button class="btn btn-primary" id="excelBtn">
+            <i class="fas fa-download"></i>Excel
+          </button>
+          <br />
+          <br />
+        </div>
+        <div id="grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 거래처 등록/수정 Modal -->
+<div
+  class="modal fade"
+  id="vendModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog"
+    role="document"
+    style="margin: 28px auto; width: 800px"
+  >
+    <div class="modal-content">
+      <div class="modal-body">
+        <form id="dataForm" name="dataForm" onsubmit="return false">
+          <ul id="vendUl">
+            <li>
+              <label style="height: 25px">거래처 유형</label>
+              <input
+                class="form-control"
+                type="hidden"
+                id="vendCd"
+                name="vendCd"
+                maxlength="50"
+              />
+              <select class="dataTable-selector" name="vendTyp" id="vendTyp">
+                <option selected value="">==등록시필수선택==</option>
+                <option value="SAL">매입처</option>
+                <option value="PUR">납품처</option>
+                <option value="TRA">운송업체</option>
+              </select>
+            </li>
+            <li>
+              <label>거래처명</label>
+              <input
+                class="form-control"
+                type="text"
+                id="vendNm"
+                name="vendNm"
+                maxlength="50"
+              />
+            </li>
+            <li>
+              <label>사업자등록번호</label>
+              <input
+                class="form-control"
+                type="text"
+                id="bizno"
+                name="bizno"
+                maxlength="50"
+              />
+            </li>
+            <li>
+              <label>전화번호</label>
+              <input
+                class="form-control"
+                type="text"
+                id="telno"
+                name="telno"
+                maxlength="50"
+              />
+            </li>
+            <li>
+              <label>소재지</label>
+              <input
+                type="text"
+                id="vendAddr"
+                name="vendAddr"
+                class="form-control"
+                maxlength="50"
+              />
+            </li>
+            <li>
+              <label>담당자</label>
+              <input
+                type="text"
+                id="empName"
+                name="empName"
+                class="form-control"
+                maxlength="50"
+                readonly
+              />
+            </li>
+          </ul>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="closeBtn"
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+        >
+          닫기
+        </button>
+        <button type="button" class="btn btn-primary" id="saveBtn">
+          <i class="fas fa-save"></i> 저장
+        </button>
+        <button class="btn btn-primary" id="delBtn">
+          <i class="fas fa-trash"></i> 비활성화
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 담당사원 선택 Modal -->
+<div
+  class="modal fade"
+  id="empModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document" style="width: 500px">
+    <div class="modal-content">
+      <div class="modal-header">
         <input
           type="text"
+          id="searchEmpInput"
+          name="searchEmpInput"
           class="form-control"
-          id="searchVend"
-          name="searchVend"
-          style="width: 150px; margin-top: 0px"
+          placeholder="사원이름 검색"
         />
-        <button class="btn btn-primary" id="searchVendBtn">
+        <button class="btn btn-primary" id="searchEmp" style="margin-top: 20px">
           <i class="fas fa-search"></i> 검색
         </button>
       </div>
-      <div class="linelist" style="float: right">
-        <button class="btn btn-primary" id="searchBtn">
-          <i class="fas fa-search"></i> 조회
-        </button>
+      <div class="modal-body" id="grid2"></div>
+      <div class="modal-footer">
         <button
-          class="btn btn-primary"
-          id="newBtn"
-          data-toggle="modal"
-          data-target="#vendModal"
+          id="closeEmpBtn"
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
         >
-          <i class="fas fa-file"></i> 새자료
+          닫기
         </button>
-        <!-- <a href="vendExelView">-->
-        <button class="btn btn-primary" id="excelBtn">
-          <i class="fas fa-download"></i>Excel
-        </button>
-        <br />
-        <br />
       </div>
-      <!-- 거래처 등록/수정 Modal -->
-      <div
-        class="modal fade"
-        id="vendModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div
-          class="modal-dialog"
-          role="document"
-          style="margin: 28px auto; width: 800px"
-        >
-          <div class="modal-content">
-            <div class="modal-body">
-              <form id="dataForm" name="dataForm" onsubmit="return false">
-                <ul id="vendUl">
-                  <li>
-                    <label style="height: 25px">거래처 유형</label>
-                    <input
-                      class="form-control"
-                      type="hidden"
-                      id="vendCd"
-                      name="vendCd"
-                      maxlength="50"
-                    />
-                    <select
-                      class="dataTable-selector"
-                      name="vendTyp"
-                      id="vendTyp"
-                    >
-                      <option selected value="">==등록시필수선택==</option>
-                      <option value="SAL">매입처</option>
-                      <option value="PUR">납품처</option>
-                      <option value="TRA">운송업체</option>
-                    </select>
-                  </li>
-                  <li>
-                    <label>거래처명</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      id="vendNm"
-                      name="vendNm"
-                      maxlength="50"
-                    />
-                  </li>
-                  <li>
-                    <label>사업자등록번호</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      id="bizno"
-                      name="bizno"
-                      maxlength="50"
-                    />
-                  </li>
-                  <li>
-                    <label>전화번호</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      id="telno"
-                      name="telno"
-                      maxlength="50"
-                    />
-                  </li>
-                  <li>
-                    <label>소재지</label>
-                    <input
-                      type="text"
-                      id="vendAddr"
-                      name="vendAddr"
-                      class="form-control"
-                      maxlength="50"
-                    />
-                  </li>
-                  <li>
-                    <label>담당자</label>
-                    <input
-                      type="text"
-                      id="empName"
-                      name="empName"
-                      class="form-control"
-                      maxlength="50"
-                      readonly
-                    />
-                  </li>
-                </ul>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button
-                id="closeBtn"
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                닫기
-              </button>
-              <button type="button" class="btn btn-primary" id="saveBtn">
-                <i class="fas fa-save"></i> 저장
-              </button>
-              <button class="btn btn-primary" id="delBtn">
-                <i class="fas fa-trash"></i> 비활성화
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 담당사원 선택 Modal -->
-      <div
-        class="modal fade"
-        id="empModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog" role="document" style="width: 500px">
-          <div class="modal-content">
-            <div class="modal-header">
-              <input
-                type="text"
-                id="searchEmpInput"
-                name="searchEmpInput"
-                class="form-control"
-                placeholder="사원이름 검색"
-              />
-              <button
-                class="btn btn-primary"
-                id="searchEmp"
-                style="margin-top: 20px"
-              >
-                <i class="fas fa-search"></i> 검색
-              </button>
-            </div>
-            <div class="modal-body" id="grid2"></div>
-            <div class="modal-footer">
-              <button
-                id="closeEmpBtn"
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                닫기
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="grid"></div>
     </div>
   </div>
 </div>
