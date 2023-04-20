@@ -6,13 +6,14 @@
 	namespace="com.yedam.spring.manufacturing.direction.mapper.DirMapper">
 
 	<select id="getPlanList" resultType="DirVO">
-		select  plan_cd,
-				plan_cnt, 
+		select  p.plan_cd,
+				p.plan_cnt, 
 				(select detail_explain
 				 from detail_code
 				 where full_code = pro_cd) as pro_nm
-		from plans
-		where dir_status is null or dir_status = '진행중'
+		from plans p, plans_header h
+		where p.plan_cd = h.plan_cd
+		  and dir_status is null or dir_status = '진행중'
 		order by 1
 	</select>
 	

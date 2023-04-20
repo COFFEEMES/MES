@@ -231,7 +231,7 @@
 	</select>
 	
 	<!-- 공정 삭제 -->
-	<update id="delPrsc" statementType="CALLABLE" parameterType="BomVO">
+	<update id="delPrcs" statementType="CALLABLE" parameterType="BomVO">
 		{ CALL del_prcs(
 			  #{proCd}
 			, #{prcsCd}

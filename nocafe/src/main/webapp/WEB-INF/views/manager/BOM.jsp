@@ -955,7 +955,20 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       url: "getAllPrcs",
       method: "POST",
       success: function(data) {
-        gridData6 = data
+        let newData = [];
+        for( let temp of data){
+          let able = true;
+          for(let temp2 of gridData3){
+            if(temp.prcsCd == temp2.prcsCd){
+              able = false;
+            }
+          }
+          if(able){
+            newData.push(temp);
+          }
+        };
+
+        gridData6 = newData;
         grid6.resetData(gridData6);
         setTimeout(()=> grid6.refreshLayout() , 300);
         $('#selNewPrcsModal').modal('show');
