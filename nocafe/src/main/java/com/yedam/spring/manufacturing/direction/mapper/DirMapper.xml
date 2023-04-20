@@ -12,6 +12,7 @@
 				 from detail_code
 				 where full_code = pro_cd) as pro_nm
 		from plans
+		where dir_status is null or dir_status = '진행중'
 		order by 1
 	</select>
 	
