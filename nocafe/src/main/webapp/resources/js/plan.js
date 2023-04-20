@@ -563,7 +563,7 @@ function mkCal() {
   console.log(grData);
   while (rowCnt < grData.length) {
     if (rowCnt != 0) {
-      exCnt -= grData[rowCnt].lotCnt;
+      exCnt -= grData[rowCnt-1].lotCnt;
     }
     if (exCnt < 0) {
       exCnt = 0;
