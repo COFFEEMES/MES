@@ -11,9 +11,9 @@
 				(select detail_explain
 				 from detail_code
 				 where full_code = pro_cd) as pro_nm
-		from plans p join plans_header h
-        on p.plan_cd = h.plan_cd
-		where h.dir_status is null or h.dir_status = '진행중'
+		from plans p, plans_header h
+		where p.plan_cd = h.plan_cd
+		  and dir_status is null or dir_status = '진행중'
 		order by 1
 	</select>
 	
