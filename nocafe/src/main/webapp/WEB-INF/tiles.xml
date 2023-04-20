@@ -11,7 +11,7 @@
 	</definition>
 	
 	<definition name="home" extends="mainTemplate">
-		<put-attribute name="main" value="/WEB-INF/views/home.jsp"/>
+		<put-attribute name="main" value="/WEB-INF/views/manager/basicCode.jsp"/>
 	</definition>
 	
 	<definition name="modal/*" template="/WEB-INF/views/modal/layout.jsp">
