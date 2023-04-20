@@ -235,31 +235,6 @@ pageEncoding="UTF-8"%>
         
      })
      
-     
-//    	//grid2에 내용 띄우기 grid에서 엔터(keyCode=13) 누르면 넘어감
-//    	$("#grid").on("keyup", function(key) {
-//    		let edctsCd = grid.getData()[0].edctsCd;
-   		
-//    		if(key.keyCode == 13) {
-//    			$.ajax({
-//    				url : 'getRsc',
-//    				method : 'GET',
-//    				data : {"edctsCd" : edctsCd},
-//    				success: function (result) {
-//    					$.each(result, function(index, item) {
-// 						item.useCnt = item.useCnt * grid.getData()[0].indicaCnt
-// 					})
-					
-// 					console.log(result)
-//    					grid2.resetData(result); 
-// //    					grid3.resetData(result);
-//    				}
-//    			})
-//    		}
-//    }) 
-   	
-   	//그리드에 띄운 데이터들을 저장 버튼을 눌렀을 때 테이블 두 개에 저장하기+ 지시가 내려졌으므로 계획 테이블 상태 업데이트
-   	
    	
    	 const modGrid = new tui.Grid({
                 el: document.getElementById('modGrid'),
@@ -511,7 +486,20 @@ pageEncoding="UTF-8"%>
 		        contentType: 'application/json; charset=utf-8',
 				data : JSON.stringify(secGridData),
 				success : function(res){
-					console.log(res)
+					if(res == 1){
+						 Swal.fire({
+						      icon: "success",
+						      title: "저장",
+						      text: "생산지시가 완료되었습니다!",
+						    });
+						$("clearBtn").click()
+					}else{
+						Swal.fire({
+						      icon: "error",
+						      title: "에러",
+						      text: "생산지시가 정상적으로 완료되지 않았습니다!",
+						    });
+					}
 				},error: function(err){
 					console.log(err);
 				}
