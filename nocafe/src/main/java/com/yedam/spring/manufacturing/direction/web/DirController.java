@@ -51,11 +51,12 @@ public List<List<DirVO>> getDataForSecGrid(@RequestBody List<DirVO> dirVO){
 
 @PostMapping("insertAll")
 @ResponseBody
-public void insertAll (@RequestBody List<List<DirVO>>dirVO) {
+public int insertAll (@RequestBody List<List<DirVO>>dirVO) {
 	for(int i=0;i< dirVO.size()  ;i++) {
 		dir.insertAll(dirVO.get(i));
 	}
 	
+	return 1;
 }
 
 
