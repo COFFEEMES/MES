@@ -59,7 +59,8 @@
 		ON	 	b.rsc_cd = d.full_code
 								 JOIN detail_code e
 								 ON b.prcs_cd = e.full_code
-		WHERE 	b.pro_cd = (select full_code from detail_code where detail_explain = #{proNm}) AND b.rsc_cd != 'RSCNOT001'
+		WHERE 	b.pro_cd = (select full_code from detail_code where detail_explain = #{proNm})
+<!-- 		 AND b.rsc_cd != 'RSCNOT001' -->
 		ORDER BY 1) n
         join
         (
